@@ -1,0 +1,164 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 210 40% 98%;
+    --foreground: 222 47% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 142 76% 36%;
+    --secondary-foreground: 0 0% 100%;
+
+    --brand-purple: 280 53% 51%;
+    --brand-blue-purple: 242 62% 60%;
+    --brand-blue-turquoise: 203 76% 50%;
+    --brand-blue-dark: 214 70% 53%;
+    --brand-pink-red: 353 92% 68%;
+
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+
+    --accent: 210 40% 94%;
+    --accent-foreground: 222 47% 11%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 217 91% 60%;
+
+    --radius: 0.75rem;
+
+    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%), hsl(200 95% 65%));
+    --gradient-secondary: linear-gradient(135deg, hsl(142 76% 36%), hsl(158 80% 45%));
+    --gradient-brand-purple: linear-gradient(90deg, hsl(280 53% 51%), hsl(242 62% 60%));
+    --gradient-brand-blue: linear-gradient(90deg, hsl(242 62% 60%), hsl(203 76% 50%));
+    --shadow-card: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-elevated: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  }
+
+  .dark {
+    --background: 222 47% 7%;
+    --foreground: 210 40% 98%;
+
+    --card: 222 47% 11%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222 47% 11%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 142 76% 36%;
+    --secondary-foreground: 0 0% 100%;
+
+    --brand-purple: 280 53% 51%;
+    --brand-blue-purple: 242 62% 60%;
+    --brand-blue-turquoise: 203 76% 50%;
+    --brand-blue-dark: 214 70% 53%;
+    --brand-pink-red: 353 92% 68%;
+
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;
+
+    --accent: 217 33% 20%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217 33% 17%;
+    --input: 217 33% 17%;
+    --ring: 217 91% 60%;
+
+    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%), hsl(200 95% 65%));
+    --gradient-secondary: linear-gradient(135deg, hsl(142 76% 36%), hsl(158 80% 45%));
+    --gradient-brand-purple: linear-gradient(90deg, hsl(280 53% 51%), hsl(242 62% 60%));
+    --gradient-brand-blue: linear-gradient(90deg, hsl(242 62% 60%), hsl(203 76% 50%));
+    --shadow-card: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+    --shadow-elevated: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html,
+  body {
+    direction: rtl;
+    unicode-bidi: plaintext;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family:
+      "Noto Sans Hebrew",
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      "Roboto",
+      "Helvetica Neue",
+      Arial,
+      sans-serif;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-semibold;
+  }
+}
+
+@layer utilities {
+  .gradient-primary {
+    background: var(--gradient-primary);
+  }
+
+  .gradient-secondary {
+    background: var(--gradient-secondary);
+  }
+
+  .gradient-brand-purple {
+    background: var(--gradient-brand-purple);
+  }
+
+  .gradient-brand-blue {
+    background: var(--gradient-brand-blue);
+  }
+
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+
+  .shadow-elevated {
+    box-shadow: var(--shadow-elevated);
+  }
+}
+/* FORCE REBUILD FIX */
+.lovable-rebuild-v2 {
+  content: "2025-11-13";
+}
+body {
+  padding-top: 80px;
+}

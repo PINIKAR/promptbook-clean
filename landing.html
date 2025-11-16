@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>PromptBook – 101 פרומפטים בעברית</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@400;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- PayPal SDK -->
+    <script src="https://www.paypal.com/sdk/js?client-id=BAA9pb84hA96YyS3MdA-7E4ocZULj8P9L0FNewFBJZ8fMY-Z7Sl17R6RwOGIN2vPVLCgVNKiohWbCbg2Jw&components=hosted-buttons&disable-funding=venmo&currency=ILS"></script>
+
+    <style>
+      /* צבעי מותג */
+      :root{
+        --font:'Noto Sans Hebrew','Assistant','Arial',sans-serif;
+        --c1:#933ec7;
+        --c2:#1e95df;
+        --c3:#337cdc;
+        --c4:#5f5ad7;
+        --danger:#f86173;
+        --text:#111;
+        --bg:#fcfcff;
+        --card-bg:#ffffff;
+        --alt-bg:#f8f9ff;
+        --shadow-color: rgba(147, 62, 199, 0.5);
+      }
+      @keyframes colorChange {
+          0% { background-color: var(--c1); }
+          33% { background-color: var(--c2); }
+          66% { background-color: var(--c3); }
+          100% { background-color: var(--c1); }
+      }
+      @keyframes pulseDanger {
+          0% { background-color: var(--danger); box-shadow: 0 0 10px rgba(248, 97, 115, 0.9); }
+          50% { background-color: rgba(248, 97, 115, 0.6); box-shadow: none; }
+          100% { background-color: var(--danger); box-shadow: 0 0 10px rgba(248, 97, 115, 0.9); }
+      }
+
+      html,body{font-family:var(--font);margin:0;background:var(--bg);color:var(--text)}
+      .wrap{max-width:1050px;margin:0 auto;padding:20px}
+      header{padding:15px 0;border-bottom:3px solid var(--c2);background:var(--card-bg)}
+      header img{height:50px}
+      header div{font-size: 24px; font-weight: 700; color: var(--c3);}
+
+      /* פס הטיימר */
+      .bar{
+        position:sticky;top:0;z-index:10;background:var(--c1);
+        animation: colorChange 15s infinite alternate;
+        color:white;
+        display:flex;gap:10px;align-items:center;justify-content:center;padding:14px 12px;
+        font-size:18px;
+        font-weight:700;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+      }
+      .bar .time{font-weight:900;color:yellow}
+      .bar .badge{
+        background:rgba(255,255,255,0.2);
+        border:1px solid rgba(255,255,255,0.5);
+        border-radius:30px;
+        padding:6px 15px;
+      }
+
+      .promo-bar-static{
+          background-color: var(--danger);
+          color: white;
+          text-align: center;
+          font-size: 18px;
+          font-weight: 800;
+          padding: 12px 20px;
+          border-radius: 30px;
+          margin: 20px auto 30px;
+          width: fit-content;
+          line-height: 1.4;
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+          animation: pulseDanger 3s infinite alternate;
+      }
+
+      .hero{
+          display:grid;grid-template-columns:1fr;
+          gap:30px;align-items:center;padding:40px 0 30px;
+          text-align: center;
+          background: var(--card-bg);
+      }
+      .hero h1{
+          margin:0 auto 15px;max-width: 900px; font-size:48px;line-height:1.1;color:var(--c1);font-weight:900;
+          text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.4);
+      }
+      .hero p{margin:0 auto 30px;max-width: 700px; color:#444;font-size:18px;font-weight: 600;}
+
+      /* PayPal Button Container */
+      .paypal-button-wrapper {
+        max-width: 400px;
+        margin: 30px auto;
+        padding: 20px;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      }
+      .paypal-button-wrapper h3 {
+        text-align: center;
+        color: var(--c1);
+        margin: 0 0 15px;
+        font-size: 20px;
+      }
+
+      .secure-payment {
+        margin-top: 20px;
+        font-size: 14px;
+        color: #666;
+        text-align: center;
+      }
+      .secure-payment strong {
+        color: var(--c1);
+      }
+
+      .micro{display: none;}
+      .sec{border-radius:20px;padding:30px;margin:25px 0;box-shadow:0 6px 15px rgba(0,0,0,0.05)}
+      .sec:nth-child(even){background:var(--alt-bg);border-color:rgba(30,149,223,0.2);}
+      .sec:nth-child(odd){background:var(--card-bg);}
+      .sec h2{margin:0 0 15px;font-size:26px;color:var(--c3);border-bottom:1px solid #eee;padding-bottom:10px;font-weight:700}
+
+      #testimonials .card{
+          border-left: 5px solid var(--c1);
+          border-top: none;
+          box-shadow: 2px 4px 10px rgba(0,0,0,0.1);
+          padding: 20px 15px 20px 20px;
+          background: white;
+          font-style: italic;
+      }
+      .star-rating{font-size:20px;color:gold;margin-bottom:10px}
+
+      .teaser{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:15px; padding: 15px 0;}
+      .card{
+          border:2px solid transparent;
+          border-radius:16px;padding:18px;
+          box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+          color: var(--text);
+          transition: transform 0.3s;
+      }
+      .card:hover{
+          transform: translateY(-2px);
+      }
+      .card:nth-child(6n+1) { background-color: #E6E0F1; border-color: rgba(147, 62, 199, 0.5); }
+      .card:nth-child(6n+2) { background-color: #E0F5FF; border-color: rgba(30, 149, 223, 0.5); }
+      .card:nth-child(6n+3) { background-color: #FFE0E5; border-color: rgba(248, 97, 115, 0.5); }
+      .card:nth-child(6n+4) { background-color: #F0F4E8; border-color: rgba(153, 172, 114, 0.5); }
+      .card:nth-child(6n+5) { background-color: #F8F9FF; border-color: rgba(95, 90, 215, 0.5); }
+      .card:nth-child(6n+6) { background-color: #FFF9E0; border-color: rgba(255, 204, 0, 0.5); }
+
+      .btn-row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:20px;justify-content:center;}
+      .btn, .btn.alt{
+          display: inline-block;
+          padding:12px 18px;
+          border-radius:30px;
+          text-decoration:none;
+          font-weight:600;
+          transition: background 0.2s;
+          text-align: center;
+          box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      }
+      .btn{background:var(--c3);color:#fff;}
+      .btn.alt{background:var(--card-bg);color:var(--c2);border:1px solid var(--c2);}
+
+      .price-block{text-align: center; background:var(--alt-bg); border-radius:20px; padding: 40px;}
+      .price-block h2{
+          font-size: 32px;
+          font-weight: 900;
+          color: var(--c1);
+          border-bottom: none;
+          padding-bottom: 0;
+          margin-bottom: 25px;
+      }
+      .price-block .price {display: block; padding-top: 20px;}
+      .price-block .price .strikethrough-price{font-size: 30px; text-decoration: line-through; color: var(--danger); opacity: 0.7; margin-bottom: -15px; display: block;}
+      .price-block .price .num{font-size: 100px; font-weight: 900; color: var(--c2); line-height: 1;display: block;}
+      .price-block .price .savings{font-size: 26px; font-weight: 700; color: var(--danger); margin-top: 15px;display: block;}
+      .price-block .value-line {font-size: 16px;font-weight: 500;color: var(--c3);margin-top: 30px;}
+
+      .faq summary{font-weight:700;cursor:pointer;color:var(--c1);padding-right:10px; outline: none; list-style: none;}
+      .faq summary::-webkit-details-marker {display: none;}
+      .faq summary:before {content: '▶'; margin-inline-end: 10px; color: var(--c2); display: inline-block; transition: transform 0.2s;}
+      .faq details[open] summary:before {content: '▼'; transform: rotate(90deg);}
+      .faq details div{padding-top:10px;padding-right:10px;color:#444}
+
+      .bullets{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:15px}
+      .bullets li{list-style:none;font-weight:700;color:var(--text);padding: 10px; background: #fff; border:2px solid #e0e0e0; border-radius:12px;}
+      .bullets li:before{content:"✨";margin-inline-end:8px;}
+      .about img{width:100px;height:100px;border:4px solid var(--c1);border-radius:50%;object-fit:cover;box-shadow: 0 0 0 2px white, 0 0 0 5px var(--c2);}
+      footer{color:#666;font-size:13px;text-align:center;padding:16px 0}
+      footer a{color:var(--c3);text-decoration:none}
+
+      @media (max-width:900px){
+        .hero{grid-template-columns:1fr}
+        .hero h1{font-size:32px;}
+        .bar{font-size:14px;padding:10px;}
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bar">
+      <span class="badge">🎁 חודש היומולדת שלי!</span>
+      <span>כל הידע בפרומפטבוק ב-68% הנחה! נגמר בעוד</span>
+      <span class="time" id="timer">00:00:00</span>
+    </div>
+
+    <header class="wrap">
+      <a href="index.html" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
+        <img src="logo.png" alt="PromptBook" />
+        <div>PromptBook – 101 פרומפטים בעברית</div>
+      </a>
+    </header>
+
+    <main class="wrap">
+      <section class="hero">
+        <div class="promo-bar-static">מבצע יום הולדת בלעדי - חוסכים 268 ₪! 🔥</div>
+
+        <div>
+          <h1>הקץ לטקסטים רובוטיים: 101 הפרומפטים שמוסיפים נשמה ל-AI שלך (ובאמת מוכרים בעברית)</h1>
+          <p><strong>אם ה-AI כותב לכם טקסטים קרים שפשוט לא ממירים, אתם לא לבד.</strong></p>
+
+          <!-- PayPal Button - מיקום עליון -->
+          <div class="paypal-button-wrapper">
+            <h3>🚀 קבלו גישה מיידית - רק 129 ₪</h3>
+            <div id="paypal-container-top"></div>
+          </div>
+
+          <p class="secure-payment">💳 תשלום מאובטח דרך <strong>PayPal</strong> | גישה מיידית | ללא מנוי חודשי</p>
+        </div>
+      </section>
+
+      <section class="sec">
+        <h2>מה בפנים</h2>
+        <ul class="bullets">
+          <li>101 פרומפטים בתוך <strong>אפליקציה אינטראקטיבית</strong> ב־10 קטגוריות</li>
+          <li>חיפוש + סינון לפי קהל יעד</li>
+          <li>כפתור "העתק" + מועדפים</li>
+          <li>ייצוא PDF בעברית</li>
+          <li>עדכונים שוטפים ללא תוספת תשלום</li>
+        </ul>
+      </section>
+
+      <section class="sec">
+        <h2>טעימה מהכלי</h2>
+        <div class="teaser">
+          <div class="card"><b>כותרת ממירה לדף נחיתה</b><br />יצירת 10 וריאציות עם הבטחת תוצאה וטון רגשי.</div>
+          <div class="card"><b>פתיח אמפתי קצר</b><br />נוסחה של 70 מילים לזיהוי כאב, תקווה ופתרון לקהל שלך.</div>
+          <div class="card"><b>קמפיין 7 ימים להשקה רכה</b><br />בניית רצף 7 ימי טיזר, עדות ודחיפות להשקות מוצרים.</div>
+          <div class="card">
+            <b>Retargeting השארת עגלה</b><br />3 מודעות רימרקטינג אפקטיביות למבקרים שלא המירו (רגשי, חברתי, רציונלי).
+          </div>
+          <div class="card">
+            <b>פירוק התנגדות עיקרית</b><br />מענה בשלושה חלקים להתנגדות הגדולה ביותר למוצר שלך (אמפתיה→הוכחה).
+          </div>
+          <div class="card"><b>FAQ ממיר</b><br />6 שאלות ותשובות שמסירות התנגדויות ומכניסות CTA עדין.</div>
+        </div>
+      </section>
+
+      <section class="sec">
+        <h2>איך זה עובד</h2>
+        <ol style="font-size: 18px; line-height: 1.8;">
+          <li>רכישה מאובטחת דרך PayPal (תשלום חד-פעמי)</li>
+          <li>מייל אוטומטי עם קישור גישה מיידית לאפליקציה</li>
+          <li>נכנסים, מסננים, מעתיקים – ומתחילים לייצר תוכן שמוכר</li>
+        </ol>
+      </section>
+
+      <section class="sec" id="testimonials">
+        <h2>מה אומרים מי שכבר קראו</h2>
+        <div class="teaser">
+          <div class="card">
+            <div class="star-rating">★★★★★</div>
+            "הכלי הזה חסך לי לפחות 5 שעות כתיבה שבועיות. במקום לשבור את הראש, אני פשוט מעתיקה ומדביקה."
+            <br /><strong>- יעל כץ, מנהלת סושיאל</strong>
+          </div>
+          <div class="card">
+            <div class="star-rating">★★★★★</div>
+            "פנינה, תודה! זה מרגיש כמו ששכרתי קופירייטר צמוד לעסק, אבל שילמתי פחות משיחת ייעוץ אחת."
+            <br /><strong>- רן לוי, מאמן אישי</strong>
+          </div>
+          <div class="card">
+            <div class="star-rating">★★★★★</div>
+            "התוצאות הן עברית נקייה וטבעית. סוף סוף ה-AI מדבר בשפה שמתאימה לקהל הישראלי."
+            <br /><strong>- מירב דהן, פרילנסרית</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="sec price-block">
+        <h2>למה עכשיו? 💰</h2>
+
+        <p style="font-size: 18px;">
+          לכבוד חודש היומולדת שלי (אני חוגגת 50!), אתם מקבלים גישה מיידית לכלי האינטראקטיבי במחיר מיוחד:
+        </p>
+
+        <div class="price">
+          <div class="strikethrough-price">397 ₪</div>
+          <div class="num">129 ₪</div>
+          <div class="savings">חוסכים 268 ₪!</div>
+        </div>
+
+        <p class="value-line">זהו כלי שמחירו האמיתי הוא ערך מצטבר של אלפי שקלים בזמן עבודה שנחסך</p>
+
+        <!-- PayPal Button - מיקום תחתון -->
+        <div class="paypal-button-wrapper" style="margin-top: 40px;">
+          <h3>כן, אני רוצה את הכלי עכשיו! 🎯</h3>
+          <div id="paypal-container-bottom"></div>
+        </div>
+
+        <p class="secure-payment" style="margin-top: 20px;">
+          💳 <strong>תשלום מאובטח</strong> דרך PayPal | ✅ גישה מיידית | 🔒 ללא מנוי חודשי
+        </p>
+      </section>
+
+      <section class="sec faq">
+        <h2>שאלות נפוצות</h2>
+        <details>
+          <summary>איך מקבלים גישה?</summary>
+          <div>
+            מיד אחרי התשלום, קישור גישה ישלח אוטומטית למייל שהזנת ב-PayPal. הגישה היא מיידית ואפשר להתחיל להשתמש מיד.
+          </div>
+        </details>
+        <details>
+          <summary>אפשר לקבל קבלה?</summary>
+          <div>כן, קבלה מס מתקבלת אוטומטית למייל אחרי התשלום מ-PayPal.</div>
+        </details>
+        <details>
+          <summary>זה עובד גם בנייד?</summary>
+          <div>כן! האפליקציה מותאמת לכל המכשירים - מחשב, טאבלט וסמארטפון.</div>
+        </details>
+        <details>
+          <summary>אפשר לשתף עם עוד אנשים?</summary>
+          <div>זהו רישיון אישי. לצוותים או עסקים - צרו איתי קשר לתמחור מיוחד.</div>
+        </details>
+      </section>
+
+      <section class="sec about">
+        <img src="pnina-profile.jpg" alt="Pnina Karayoff" />
+        <div>
+          <h2>עליי - פנינה קריוף</h2>
+          <p style="font-size: 16px; line-height: 1.7;">
+            שלום, אני פנינה. כמוך, הייתי מתוסכלת מהפער בין כוחו של ה-AI לצורך האמיתי שלנו:
+            <strong>לכתוב תוכן שהוא גם חכם וגם מרגש.</strong> את PromptBook בניתי כדי לגשר על הפער הזה – זו שיטה שמשלבת
+            אסטרטגיה, עיצוב (UI/UX), וטכנולוגיה, שהופכת אותך לקופירייטר/ית עם רגש. המטרה שלי? שתכתוב/י פחות, ותמכור/י
+            יותר.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      © 2025 PromptBook by Pnina Karayoff •
+      <a href="mailto:pninakar@gmail.com">צור קשר</a> •
+      <a href="https://wa.me/972548383451" target="_blank" rel="noopener">ווטסאפ</a> •
+      <a href="terms.html">תנאי שימוש</a> • <a href="privacy.html">מדיניות פרטיות</a> •
+      <a href="accessibility.html">הצהרת נגישות</a>
+    </footer>
+
+    <script>
+      // Timer
+      const deadline = new Date(2025, 10, 30, 23, 59, 59).getTime();
+      const $timer = document.getElementById('timer');
+
+      function pad(n){ return n.toString().padStart(2,'0'); }
+      function tick(){
+        const now = Date.now();
+        let diff = Math.max(0, deadline - now);
+        const s = Math.floor(diff/1000)%60;
+        const m = Math.floor(diff/1000/60)%60;
+        const h = Math.floor(diff/1000/60/60)%24;
+        const d = Math.floor(diff/1000/60/60/24);
+        const out = (d>0? d+' ימים ' : '') + [pad(h),pad(m),pad(s)].join(':');
+        $timer.textContent = out;
+
+        if(diff===0){
+          document.querySelector('.bar').style.background = 'var(--c3)';
+          $timer.style.color = 'white';
+          document.querySelector('.bar span:nth-child(2)').textContent = 'ההצעה הסתיימה';
+          clearInterval(iv);
+        }
+      }
+      tick();
+      const iv = setInterval(tick, 1000);
+
+      // PayPal Buttons - כפתור עליון
+      paypal.HostedButtons({
+        hostedButtonId: "TWSW6SFMDNR72",
+      }).render("#paypal-container-top");
+
+      // PayPal Buttons - כפתור תחתון
+      paypal.HostedButtons({
+        hostedButtonId: "TWSW6SFMDNR72",
+      }).render("#paypal-container-bottom");
+    </script>
+  </body>
+</html>
