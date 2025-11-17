@@ -49,7 +49,7 @@ const Index = () => {
         const formattedPrompts = data.map((p) => ({
           id: p.id,
           title: p.title || "ללא כותרת",
-          content: p.prompt || p.content || "ללא תוכן",
+          content: p.content || "ללא תוכן",
           category: p.category || "כללי",
         }));
 
