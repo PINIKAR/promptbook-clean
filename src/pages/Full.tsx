@@ -7,10 +7,13 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import {
+  Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter
+} from "@/components/ui/dialog";
+import {
   Tooltip, TooltipContent, TooltipProvider, TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { 
-  Copy, Search, Heart, Grid, List, Download
+  Copy, Search, Heart, Grid, List, Download, PartyPopper, Sparkles
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { CATEGORY_COLORS } from "@/lib/constants";
@@ -136,6 +139,9 @@ interface ExternalPrompt {
 const ITEMS_PER_PAGE = 200;
 
 const Full = () => {
+  // --- דיאלוג ברוכים הבאים ---
+  const [showWelcome, setShowWelcome] = useState(false);
+
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [prompts, setPrompts] = useState<ExternalPrompt[]>([]);
   const [loading, setLoading] = useState(true);
@@ -144,24 +150,51 @@ const Full = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("הכל");
   const [favorites, setFavorites] = useState<string[]>([]);
   const [copiedId, setCopiedId] = useState<string | number | null>(null);
+  const [isDark, setIsDark] = useState(false);
+  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   
   const [categories, setCategories] = useState<string[]>([]);
   const [audiences, setAudiences] = useState<string[]>([]);
 
   useEffect(() => {
     setPrompts(STATIC_DATA);
-    
     const uniqueCategories = [...new Set(STATIC_DATA.map(p => p.category).filter(Boolean))];
     setCategories(uniqueCategories.sort());
-    
     const uniqueAudiences = [...new Set(STATIC_DATA.map(p => p.audience).filter(Boolean))];
     setAudiences(uniqueAudiences.sort());
-    
     setLoading(false);
     
     const savedFavorites = localStorage.getItem("pb_favorites");
     if (savedFavorites) setFavorites(JSON.parse(savedFavorites));
+    const savedTheme = localStorage.getItem("prompts-theme");
+    if (savedTheme === "dark") {
+      setIsDark(true);
+      document.documentElement.classList.add("dark");
+    }
+
+    // --- בדיקה האם זו כניסה ראשונה ---
+    const hasSeenWelcome = localStorage.getItem('hasSeenWelcome');
+    if (!hasSeenWelcome) {
+      setShowWelcome(true);
+    }
   }, []);
+
+  // סגירת חלון ברוכים הבאים ושמירה בזיכרון
+  const handleCloseWelcome = () => {
+    setShowWelcome(false);
+    localStorage.setItem('hasSeenWelcome', 'true');
+  };
+
+  const toggleTheme = () => {
+    setIsDark(!isDark);
+    if (!isDark) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("prompts-theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("prompts-theme", "light");
+    }
+  };
 
   const copyToClipboard = (prompt: ExternalPrompt) => {
     navigator.clipboard.writeText(prompt.prompt);
@@ -179,11 +212,8 @@ const Full = () => {
     localStorage.setItem("pb_favorites", JSON.stringify(newFavorites));
   };
 
-  // --- פונקציית הייצוא ל-PDF ---
   const exportToPDF = () => {
     toast({ title: "מכין את הקובץ...", description: "ההורדה תתחיל מיד." });
-
-    // יצירת תוכן ה-HTML להדפסה
     const element = document.createElement('div');
     element.innerHTML = `
       <div style="direction: rtl; font-family: Arial, sans-serif; padding: 20px;">
@@ -198,12 +228,9 @@ const Full = () => {
             <p style="color: #555; line-height: 1.6; white-space: pre-wrap;">${p.prompt}</p>
           </div>
         `).join('')}
-        <div style="text-align: center; margin-top: 30px; font-size: 12px; color: #999;">
-          © PromptBook 2025 | פנינה קריוף
-        </div>
+        <div style="text-align: center; margin-top: 30px; font-size: 12px; color: #999;">© PromptBook 2025 | פנינה קריוף</div>
       </div>
     `;
-
     const opt = {
       margin: 10,
       filename: 'PromptBook-Full.pdf',
@@ -211,26 +238,59 @@ const Full = () => {
       html2canvas: { scale: 2 },
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
-
     html2pdf().set(opt).from(element).save();
   };
 
   const filteredPrompts = useMemo(() => {
-    return prompts.filter(p => {
-      const matchesSearch = searchQuery === "" || 
-        p.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-        p.prompt.toLowerCase().includes(searchQuery.toLowerCase());
-      
-      const matchesAudience = selectedAudience === "הכל" || p.audience === selectedAudience;
-      const matchesCategory = selectedCategory === "הכל" || p.category === selectedCategory;
-      
-      return matchesSearch && matchesAudience && matchesCategory;
-    }).sort((a, b) => a.order - b.order);
-  }, [prompts, selectedAudience, selectedCategory, searchQuery]);
+    let filtered = prompts;
+    if (showFavoritesOnly) filtered = filtered.filter(p => favorites.includes(String(p.id)));
+    
+    return filtered.filter(p => 
+      (selectedAudience === "הכל" || p.audience === selectedAudience) &&
+      (selectedCategory === "הכל" || p.category === selectedCategory) &&
+      (p.title.toLowerCase().includes(searchQuery.toLowerCase()) || p.prompt.toLowerCase().includes(searchQuery.toLowerCase()))
+    );
+  }, [prompts, showFavoritesOnly, selectedAudience, searchQuery, favorites, selectedCategory]);
 
   return (
     <div className="min-h-screen bg-gray-50">
       <AppHeader />
+
+      {/* --- חלון ברוכים הבאים --- */}
+      <Dialog open={showWelcome} onOpenChange={setShowWelcome}>
+        <DialogContent className="sm:max-w-md text-center" dir="rtl">
+          <DialogHeader>
+            <div className="mx-auto w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-4">
+              <PartyPopper className="h-6 w-6 text-purple-600" />
+            </div>
+            <DialogTitle className="text-2xl text-center">ברוכים הבאים ל-PromptBook! 🥂</DialogTitle>
+            <DialogDescription className="text-center pt-2 text-lg">
+              איזה כיף שהצטרפתם! הנה איך להפיק את המקסימום מהכלי:
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4 py-4 text-right">
+            <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+              <Search className="text-purple-500" />
+              <span><strong>1. סננו וחפשו:</strong> מצאו בדיוק מה שאתם צריכים לפי קטגוריה או קהל יעד.</span>
+            </div>
+            <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+              <Copy className="text-blue-500" />
+              <span><strong>2. העתיקו בקליק:</strong> כפתור "העתק" שומר את הפרומפט ללוח מיד.</span>
+            </div>
+            <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+              <Heart className="text-red-500" />
+              <span><strong>3. שמרו מועדפים:</strong> בנו את רשימת הפרומפטים המנצחת שלכם.</span>
+            </div>
+          </div>
+
+          <DialogFooter className="sm:justify-center">
+            <Button onClick={handleCloseWelcome} className="w-full gradient-primary text-white font-bold text-lg py-6">
+              קדימה, בואו נתחיל ליצור! 🚀
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <main className="container mx-auto px-4 py-8">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
@@ -245,30 +305,13 @@ const Full = () => {
           </div>
           
           <div className="flex gap-2 w-full md:w-auto justify-end flex-wrap">
-             {/* כפתור PDF חדש! */}
-             <Button 
-                onClick={exportToPDF}
-                className="bg-black hover:bg-gray-800 text-white text-sm flex items-center gap-2"
-             >
-               <Download className="h-4 w-4" />
-               הורד PDF
+             <Button onClick={exportToPDF} className="bg-black hover:bg-gray-800 text-white text-sm flex items-center gap-2">
+               <Download className="h-4 w-4" /> הורד PDF
              </Button>
 
              <div className="bg-white border rounded-md p-1 flex items-center">
-                <Button 
-                  variant="ghost" size="sm" 
-                  className={viewMode === 'grid' ? 'bg-purple-100 text-purple-700' : 'text-gray-500'}
-                  onClick={() => setViewMode('grid')}
-                >
-                  <Grid className="h-4 w-4" />
-                </Button>
-                <Button 
-                  variant="ghost" size="sm" 
-                  className={viewMode === 'list' ? 'bg-purple-100 text-purple-700' : 'text-gray-500'}
-                  onClick={() => setViewMode('list')}
-                >
-                  <List className="h-4 w-4" />
-                </Button>
+                <Button variant="ghost" size="sm" className={viewMode === 'grid' ? 'bg-purple-100 text-purple-700' : 'text-gray-500'} onClick={() => setViewMode('grid')}><Grid className="h-4 w-4" /></Button>
+                <Button variant="ghost" size="sm" className={viewMode === 'list' ? 'bg-purple-100 text-purple-700' : 'text-gray-500'} onClick={() => setViewMode('list')}><List className="h-4 w-4" /></Button>
              </div>
 
              <Select value={selectedCategory} onValueChange={setSelectedCategory}>
@@ -287,14 +330,7 @@ const Full = () => {
                 </SelectContent>
               </Select>
               
-              <Button 
-                variant="ghost" 
-                size="sm"
-                onClick={() => { setSearchQuery(''); setSelectedCategory('הכל'); setSelectedAudience('הכל'); }}
-                className="text-blue-600"
-              >
-                אפס
-              </Button>
+              <Button variant="ghost" size="sm" onClick={() => { setSearchQuery(''); setSelectedCategory('הכל'); setSelectedAudience('הכל'); }} className="text-blue-600">אפס</Button>
           </div>
         </div>
 
