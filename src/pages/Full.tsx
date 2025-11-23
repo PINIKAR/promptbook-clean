@@ -1,817 +1,372 @@
 import { useState, useEffect, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Textarea } from "@/components/ui/textarea";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
+  Tooltip, TooltipContent, TooltipProvider, TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { 
-  Copy, 
-  Search, 
-  Heart, 
-  Download, 
-  Moon, 
-  Sun,
-  AlertCircle,
-  ChevronLeft,
-  ChevronRight,
-  Grid,
-  List
+  Copy, Search, Heart, Grid, List, Download
 } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
+import { CATEGORY_COLORS } from "@/lib/constants";
+import AppHeader from "@/components/AppHeader";
 import html2pdf from "html2pdf.js";
-import { AUDIENCE_OPTIONS, CATEGORY_COLORS, ExternalPrompt } from "@/lib/constants";
 
-const ITEMS_PER_PAGE = 25;
+// --- המאגר המלא של 101 הפרומפטים ---
+const STATIC_DATA = [
+  { id: 1, category: "דפי נחיתה", title: "כותרת ממירה לדף נחיתה", prompt: "כתוב 10 וריאציות כותרת ל[מוצר] עבור [קהל יעד] בטון [טון כתיבה]. בכל וריאציה: הבטחת תוצאה ברורה + סיבה להאמין + מילה רגשית אחת.", audience: "כללי", isSample: true, visible: true, order: 1 },
+  { id: 2, category: "דפי נחיתה", title: "פתיח אמפתי קצר", prompt: "כתוב פתיח של 70–100 מילים שמזהה כאב אחד, תקווה אחת ופתרון אחד ל[קהל יעד]. סיים ב-CTA יחיד.", audience: "מטפלים", isSample: true, visible: true, order: 2 },
+  { id: 3, category: "דפי נחיתה", title: "תועלות בשלוש רמות", prompt: "ערוך רשימת 6 תועלות ל[מוצר]: 2 רגשיות, 2 תפקודיות, 2 תוצאות מדידות עבור [קהל יעד].", audience: "עסקים קטנים", isSample: true, visible: true, order: 3 },
+  { id: 4, category: "דפי נחיתה", title: "פירוק התנגדות עיקרית", prompt: "זהה את ההתנגדות הגדולה ל[מוצר] וכתוב מענה בשלושה חלקים: אמפתיה → הסבר → הוכחה, עם דוגמה ישראלית.", audience: "כללי", isSample: true, visible: true, order: 4 },
+  { id: 5, category: "דפי נחיתה", title: "סיפורי מיקרו", prompt: "כתוב 3 עדויות קצרות (40–60 מילים) עם נתון לפני/אחרי אחד לכל עדות.", audience: "כללי", isSample: true, visible: true, order: 5 },
+  { id: 6, category: "דפי נחיתה", title: "FAQ ממיר", prompt: "צור 6 שאלות ותשובות לדף הנחיתה עבור [מוצר], כשכל תשובה מסתיימת בהזמנה עדינה לפעולה.", audience: "כללי", isSample: true, visible: true, order: 6 },
+  { id: 7, category: "דפי נחיתה", title: "הצעת ערך במשפט אחד", prompt: "נסח USP חד של עד 14 מילים: למי, מה, ולמה זה חשוב. ספק 5 וריאציות.", audience: "כללי", isSample: true, visible: true, order: 7 },
+  { id: 8, category: "דפי נחיתה", title: "למי זה לא מתאים", prompt: "כתוב 4 נקודות שמסננות בעדינות לקוחות לא מתאימים ומחזקות אמון.", audience: "כללי", isSample: true, visible: true, order: 8 },
+  { id: 9, category: "דפי נחיתה", title: "CTA ראשי ושני", prompt: "צור 2 קריאות לפעולה: ראשי ורך; שני משלים. הוסף מיקרו-קופי על אחריות/החזר.", audience: "כללי", isSample: true, visible: true, order: 9 },
+  { id: 10, category: "דפי נחיתה", title: "תקציר לנייד", prompt: "כתוב דף נחיתה מקוצר לנייד: כותרת, 3 תועלות, עדות, מחיר, CTA – עד 180 מילים.", audience: "כללי", isSample: true, visible: true, order: 10 },
+  { id: 11, category: "קמפיינים", title: "קמפיין 7 ימים להשקה רכה", prompt: "בנה רצף של 7 ימים: טיזר, סיפור לקוח, פירוק התנגדות, הצעה, בונוס, דחיפות, סיכום. לכל יום כותרת, מסר, CTA אחד.", audience: "עסקים קטנים", isSample: true, visible: true, order: 11 },
+  { id: 12, category: "קמפיינים", title: "Retargeting השארת עגלה", prompt: "כתוב 3 מודעות רימרקטינג למבקרים שלא המירו: מסר רגשי, חברתי, רציונלי.", audience: "איקומרס", isSample: true, visible: true, order: 12 },
+  { id: 13, category: "קמפיינים", title: "קמפיין עדות מובילה", prompt: "בחר עדות חזקה אחת ובנה סביבה 3 פוסטים שונים + מודעה אחת.", audience: "כללי", isSample: false, visible: true, order: 13 },
+  { id: 14, category: "קמפיינים", title: "קמפיין מחיר עולה", prompt: "כתוב סדרה של 3 מסרים שמדגישה עליית מחיר עתידית בלי לחץ אגרסיבי; לכל מסר סיבה אמיתית.", audience: "כללי", isSample: false, visible: true, order: 14 },
+  { id: 15, category: "קמפיינים", title: "שאלות מהקהל", prompt: "אסוף 5 שאלות נפוצות וכתוב 5 פוסטים שמתחילים בציטוט הלקוח.", audience: "כללי", isSample: false, visible: true, order: 15 },
+  { id: 16, category: "קמפיינים", title: "תוצאה ב-24 שעות", prompt: "הבטח תוצאה קטנה ומהירה. בנה 2 אימיילים + מודעה אחת עם דד-ליין רך.", audience: "כללי", isSample: false, visible: true, order: 16 },
+  { id: 17, category: "קמפיינים", title: "שדרוג ללקוחות קיימים", prompt: "כתוב 3 אימיילים ללקוחות קיימים: ערך נוסף + הצעת שדרוג עם בונוס מוקדם.", audience: "כללי", isSample: false, visible: true, order: 17 },
+  { id: 18, category: "קמפיינים", title: "שגר ושכח רבעוני", prompt: "תכנן 12 פוסטים – 1 לשבוע – לפי 4 תמות חוזרות. הכן לוח שנה קצר.", audience: "כללי", isSample: false, visible: true, order: 18 },
+  { id: 19, category: "קמפיינים", title: "קמפיין הדרכת לייב", prompt: "כתוב הזמנה ללייב, תזכורת, ופוסט סיכום עם CTA לרכישה/הצטרפות.", audience: "כללי", isSample: false, visible: true, order: 19 },
+  { id: 20, category: "קמפיינים", title: "סגירת עגלות – 48 שעות", prompt: "כתוב 2 הודעות קצרות + פוסט שמחדד דד-ליין, ערך ובונוס נעלם.", audience: "כללי", isSample: false, visible: true, order: 20 },
+  { id: 21, category: "אימיילים חכמים", title: "Onboarding בשלוש הודעות", prompt: "כתוב 3 אימיילים: ברוך הבא, איך מתחילים, שאלות נפוצות – עם קישורים מדידים.", audience: "כללי", isSample: false, visible: true, order: 21 },
+  { id: 22, category: "אימיילים חכמים", title: "לפני שמוותרים", prompt: "כתוב מייל אמפתי למי שאמר/ה 'יקר מדי' + הצע חלופה (מסלול בסיס/תשלומים).", audience: "כללי", isSample: false, visible: true, order: 22 },
+  { id: 23, category: "אימיילים חכמים", title: "ניוזלטר 3-חלקים", prompt: "כתוב טיפ קצר, סיפור לקוח, הזמנה עדינה. הוסף שורת נושא עד 45 תווים.", audience: "כללי", isSample: false, visible: true, order: 23 },
+  { id: 24, category: "אימיילים חכמים", title: "הוכחה חברתית במייל", prompt: "הצג 2 תוצאות לקוחות + קישור לתיק עבודות + CTA יחיד.", audience: "כללי", isSample: false, visible: true, order: 24 },
+  { id: 25, category: "אימיילים חכמים", title: "בונוס סודי ל-48 שעות", prompt: "כתוב מסר קצר עם בונוס זמני, דד-ליין ושאלות/תשובות בתחתית.", audience: "כללי", isSample: false, visible: true, order: 25 },
+  { id: 26, category: "אימיילים חכמים", title: "שדרוג לאחר 14 יום", prompt: "שלח למי שהשתמש ב[מוצר] 14+ ימים – הצעת שדרוג עם הדגמת ערך ותמחור.", audience: "כללי", isSample: false, visible: true, order: 26 },
+  { id: 27, category: "אימיילים חכמים", title: "הדרכה בחינם", prompt: "שלח לינק להדרכה קצרה + צ'קליסט מצורף להורדה.", audience: "כללי", isSample: false, visible: true, order: 27 },
+  { id: 28, category: "אימיילים חכמים", title: "בקשת פידבק קצרה", prompt: "כתוב 3 שאלות סגורות ושאלה פתוחה אחת + הצע תשורה קטנה למשיבים.", audience: "כללי", isSample: false, visible: true, order: 28 },
+  { id: 29, category: "אימיילים חכמים", title: "תזכורת רכה", prompt: "כתוב שתי שורות + לינק ישיר לרכישה + תאריך סגירה.", audience: "כללי", isSample: false, visible: true, order: 29 },
+  { id: 30, category: "אימיילים חכמים", title: "חתימת אימייל ממירה", prompt: "כתוב 3 גרסאות חתימה עם משפט ערך וקישור יחיד לפעולה.", audience: "כללי", isSample: false, visible: true, order: 30 },
+  { id: 31, category: "דפי מכירה", title: "AIDA מלאה", prompt: "כתוב דף מכירה לפי Attention-Interest-Desire-Action עבור [מוצר], 800–1200 מילים.", audience: "כללי", isSample: false, visible: true, order: 31 },
+  { id: 32, category: "דפי מכירה", title: "טבלת השוואה הוגנת", prompt: "כתוב 5 שורות השוואה בין [מוצר] לחלופות, בלי זלזול; הדגש ייחוד אמיתי.", audience: "כללי", isSample: false, visible: true, order: 32 },
+  { id: 33, category: "דפי מכירה", title: "פירוק 3 התנגדויות קשות", prompt: "טפל במחיר, זמן ואמון – פתרון ודוגמה לכל התנגדות.", audience: "כללי", isSample: false, visible: true, order: 33 },
+  { id: 34, category: "דפי מכירה", title: "הוכחה מספרית", prompt: "כתוב קטע עם 3 נתונים מדידים לפני/אחרי; ציין מקור או עדות.", audience: "כללי", isSample: false, visible: true, order: 34 },
+  { id: 35, category: "דפי מכירה", title: "סיפור מקרה", prompt: "כתוב Case Study: רקע, תהליך, תוצאה, ציטוט לקוח.", audience: "כללי", isSample: false, visible: true, order: 35 },
+  { id: 36, category: "דפי מכירה", title: "אחריות והחזר הוגנים", prompt: "נסח נוסח קצר וברור: מה נחשב שימוש הוגן, מתי מגיע החזר וכיצד לבקשו.", audience: "כללי", isSample: false, visible: true, order: 36 },
+  { id: 37, category: "דפי מכירה", title: "מה בפנים", prompt: "מנה מודולים/בונוסים של [מוצר] והוסף תועלת אחת ברורה לכל רכיב.", audience: "כללי", isSample: false, visible: true, order: 37 },
+  { id: 38, category: "דפי מכירה", title: "CTA בשלושה מקומות", prompt: "כתוב 3 CTA מותאמים: עליון, אמצע, תחתית, עם טון לא דוחף.", audience: "כללי", isSample: false, visible: true, order: 38 },
+  { id: 39, category: "דפי מכירה", title: "מקטע 'מי אני' אמין", prompt: "כתוב סיפור אישי קצר שמחבר ערכים לתועלת לקוח, בלי התרברבות.", audience: "כללי", isSample: false, visible: true, order: 39 },
+  { id: 40, category: "דפי מכירה", title: "Mini-FAQ ממוקד רכישה", prompt: "כתוב 5 תשובות קצרות על תשלום, גישה, תמיכה, פרטיות וקבלות.", audience: "כללי", isSample: false, visible: true, order: 40 },
+  { id: 41, category: "מודעות", title: "מודעת חיפוש – טקסט קצר", prompt: "כתוב 5 כותרות + 4 תיאורי מודעה ל[מוצר] עם מילות מפתח של [קהל יעד].", audience: "כללי", isSample: false, visible: true, order: 41 },
+  { id: 42, category: "מודעות", title: "מודעת תדמית לרחב", prompt: "כתוב 3 וריאציות של מסר-חזון-CTA לפיד רחב; שמור שפה פשוטה וצלולה.", audience: "כללי", isSample: false, visible: true, order: 42 },
+  { id: 43, category: "מודעות", title: "מודעת כאב-פתרון", prompt: "כתוב שתי שורות כאב + שורת פתרון אחת, עם קריאה לפעולה קצרה.", audience: "כללי", isSample: false, visible: true, order: 43 },
+  { id: 44, category: "מודעות", title: "מודעת עדות", prompt: "שלב ציטוט לקוח של שורה אחת + הבטחת תוצאה זהירה ואמינה.", audience: "כללי", isSample: false, visible: true, order: 44 },
+  { id: 45, category: "מודעות", title: "מודעת סקר", prompt: "כתוב שאלה אחת עם 3 תשובות אפשריות – והצג מסך תודה עם הצעה רלוונטית.", audience: "כללי", isSample: false, visible: true, order: 45 },
+  { id: 46, category: "מודעות", title: "מודעת לפני-אחרי", prompt: "כתוב תיאור שורה-אחת לפני, שורה-אחת אחרי, ו-CTA קצר עם לינק.", audience: "כללי", isSample: false, visible: true, order: 46 },
+  { id: 47, category: "מודעות", title: "דחיפות הוגנת", prompt: "כתוב מודעה עם דד-ליין אמיתי והנמקה אמינה (בונוס זמני/מלאי מוגבל).", audience: "כללי", isSample: false, visible: true, order: 47 },
+  { id: 48, category: "מודעות", title: "רימרקטינג – 3 מסרים", prompt: "כתוב 3 מסרים שונים למבקרים שלא המירו: ערך, חברתיות, מחיר.", audience: "כללי", isSample: false, visible: true, order: 48 },
+  { id: 49, category: "מודעות", title: "מודעת וידאו קצרה", prompt: "כתוב תסריט 15 שניות: פתיח-בעיה-פתרון-CTA, עם טיימקוד משוער.", audience: "כללי", isSample: false, visible: true, order: 49 },
+  { id: 50, category: "מודעות", title: "קרוסלת 5 שקופיות", prompt: "כתוב טקסט ל-5 שקופיות: בעיה, פתרון, תועלת 1, תועלת 2, CTA.", audience: "כללי", isSample: false, visible: true, order: 50 },
+  { id: 51, category: "תרשימי חשיבה", title: "מפת תוכן רבעונית", prompt: "בנה Mind-Map ל-12 פוסטים (3 עמודי תוכן × 4 שבועות) עם רעיון קצר לכל פוסט.", audience: "כללי", isSample: false, visible: true, order: 51 },
+  { id: 52, category: "תרשימי חשיבה", title: "מפת מוצר", prompt: "פרק את [מוצר] למודולים; הוסף תועלת אחת ברורה לכל מודול ומטרת-על אחת.", audience: "כללי", isSample: false, visible: true, order: 52 },
+  { id: 53, category: "תרשימי חשיבה", title: "מפת קהל יעד", prompt: "פלח את [קהל יעד] ל-5 תתי-קהלים: צורך, התנגדות, ערוץ מועדף, מסר מרכזי.", audience: "כללי", isSample: false, visible: true, order: 53 },
+  { id: 54, category: "תרשימי חשיבה", title: "מפת התנגדויות", prompt: "רכז 8 התנגדויות מרכזיות וכתוב מענה של שורה אחת לכל התנגדות.", audience: "כללי", isSample: false, visible: true, order: 54 },
+  { id: 55, category: "תרשימי חשיבה", title: "מפת השקה", prompt: "צייר ציר זמן לפני→אחרי; הוסף פעולות לכל ערוץ תוכן (מייל, רשתות, מודעות).", audience: "כללי", isSample: false, visible: true, order: 55 },
+  { id: 56, category: "תרשימי חשיבה", title: "מפת מסרים רגשיים", prompt: "בחר 6 רגשות מרכזיים וכתוב מסר קצר לכל רגש ביחס ל[מוצר] ו[קהל יעד].", audience: "כללי", isSample: false, visible: true, order: 56 },
+  { id: 57, category: "תרשימי חשיבה", title: "מפת עדויות", prompt: "הגדר מה לבקש מכל לקוח כדי לקבל עדות חזקה: נתון, הקשר, ציטוט קצר.", audience: "כללי", isSample: false, visible: true, order: 57 },
+  { id: 58, category: "תרשימי חשיבה", title: "מפת Upsell/Cross-sell", prompt: "תכנן 3 מסלולי המשך אחרי רכישה – למתחילים, ביניים, מתקדמים – עם הצעה לכל מסלול.", audience: "כללי", isSample: false, visible: true, order: 58 },
+  { id: 59, category: "תרשימי חשיבה", title: "מפת משפך פשוט", prompt: "מפה את המסרים לאורך המשפך: מודעה → דף נחיתה → אימייל → מכירה.", audience: "כללי", isSample: false, visible: true, order: 59 },
+  { id: 60, category: "תרשימי חשיבה", title: "מפת תוכן לבלוג", prompt: "נסח 10 כותרות לבלוג, מסודרות לפי 3 קטגוריות נושא, עם תכלית לכל פוסט.", audience: "כללי", isSample: false, visible: true, order: 60 },
+  { id: 61, category: "טיקטוק-רילס-שורטס", title: "5 פתיחים שמחזיקים צפייה", prompt: "כתוב 5 הוקים בני 5–7 מילים לסרטונים על [נושא] לקהל [קהל יעד].", audience: "יוצרי תוכן", isSample: false, visible: true, order: 61 },
+  { id: 62, category: "טיקטוק-רילס-שורטס", title: "תסריט 30 שניות", prompt: "כתוב תסריט 30 שניות: פתיח-בעיה-פתרון-CTA, עם טיימקוד בסיסי לכל קטע.", audience: "יוצרי תוכן", isSample: false, visible: true, order: 62 },
+  { id: 63, category: "טיקטוק-רילס-שורטס", title: "טרנדים מותאמי נישה", prompt: "מנה 5 טרנדים שניתן להתאים ל[תחום] והצע רעיון קצר לכל אחד.", audience: "יוצרי תוכן", isSample: false, visible: true, order: 63 },
+  { id: 64, category: "טיקטוק-רילס-שורטס", title: "שובר התנגדות", prompt: "כתוב וידאו 20–30 שניות שמפרק התנגדות אחת עם דוגמה אחת.", audience: "כללי", isSample: false, visible: true, order: 64 },
+  { id: 65, category: "טיקטוק-רילס-שורטס", title: "לפני-אחרי", prompt: "בנה מסגרת צילום: לפני/אחרי עם טקסט מסך לכל שלב, ו-CTA קצר בסוף.", audience: "כללי", isSample: false, visible: true, order: 65 },
+  { id: 66, category: "טיקטוק-רילס-שורטס", title: "מאחורי הקלעים", prompt: "הצע 3 רעיונות אותנטיים שמגבירים אמון במותג האישי תוך שמירה על טבעיות.", audience: "כללי", isSample: false, visible: true, order: 66 },
+  { id: 67, category: "טיקטוק-רילס-שורטס", title: "טמפלט כתוביות", prompt: "כתוב טקסט עד 8 מילים לשקופית × 5 שקופיות; ודא נראות במובייל.", audience: "כללי", isSample: false, visible: true, order: 67 },
+  { id: 68, category: "טיקטוק-רילס-שורטס", title: "CTA לא-מכירתית", prompt: "נסח 4 קריאות רכות שמזמינות לשמור/לשתף/להגיב במקום לקנות.", audience: "כללי", isSample: false, visible: true, order: 68 },
+  { id: 69, category: "טיקטוק-רילס-שורטס", title: "סקר קצר בסרטון", prompt: "כתוב שאלה אחת עם 3 תשובות על המסך + CTA להמשך אינטראקציה.", audience: "כללי", isSample: false, visible: true, order: 69 },
+  { id: 70, category: "טיקטוק-רילס-שורטס", title: "תזמון פרסום", prompt: "הצע 3 זמנים טובים בשבוע לפי [קהל יעד] והרגלי גלישה, עם נימוק קצר.", audience: "כללי", isSample: false, visible: true, order: 70 },
+  { id: 71, category: "אינסטגרם", title: "קרוסלת ערך – 7 שקופיות", prompt: "כתוב טקסט ל-7 שקופיות: בעיה→ערך→ערך→ערך→עדות→הצעה→CTA; שמור פשטות ובהירות.", audience: "כללי", isSample: false, visible: true, order: 71 },
+  { id: 72, category: "אינסטגרם", title: "פוסט 'מכתב פתוח'", prompt: "כתוב 120–160 מילים בגוף ראשון – אמפתי וישיר, עם הזמנה לשתף תובנה שלקחו.", audience: "כללי", isSample: false, visible: true, order: 72 },
+  { id: 73, category: "אינסטגרם", title: "סטוריז 'שאלו אותי'", prompt: "תכנן 5 סטוריז עם סטיקר שאלות והבטחה לענות בכנות, ו-CTA להמשך מעורבות.", audience: "כללי", isSample: false, visible: true, order: 73 },
+  { id: 74, category: "אינסטגרם", title: "Reels מינימלי", prompt: "כתוב תסריט 20 שניות + כתוביות קצרות; שמור קצב קליט ולהוק חזק ב-3 שניות ראשונות.", audience: "כללי", isSample: false, visible: true, order: 74 },
+  { id: 75, category: "אינסטגרם", title: "פוסט עדות אמיתי", prompt: "שלב ציטוט לקוח + תמונת לפני/אחרי; הימנע מליטוש יתר, שמור אמינות.", audience: "כללי", isSample: false, visible: true, order: 75 },
+  { id: 76, category: "אינסטגרם", title: "לינק-אין-ביו מסודר", prompt: "כתוב טקסטים קצרים ל-3 קישורים עיקריים: חוברת, דף נחיתה, יצירת קשר.", audience: "כללי", isSample: false, visible: true, order: 76 },
+  { id: 77, category: "אינסטגרם", title: "תיאור פרופיל ממיר", prompt: "כתוב 3 גרסאות ב-150 תווים עם הצעת ערך ו-CTA עדין, כולל אימוג'י אחד.", audience: "כללי", isSample: false, visible: true, order: 77 },
+  { id: 78, category: "אינסטגרם", title: "10 האשטגים חכמים", prompt: "בחר 10 האשטגים: נישה, קהל, מיקוד, ישראל; שלב בין נפוצים לנישתיים.", audience: "כללי", isSample: false, visible: true, order: 78 },
+  { id: 79, category: "אינסטגרם", title: "סדרת 5 פוסטים שבועית", prompt: "בנה תכנית ל-4 שבועות × 5 פוסטים = 20 פוסטים מסודרים מראש.", audience: "כללי", isSample: false, visible: true, order: 79 },
+  { id: 80, category: "אינסטגרם", title: "הודעת DM רכה", prompt: "כתוב תבנית תשובה מנומסת לשאלה על מחיר/זמינות + הצעה לשיחה קצרה.", audience: "כללי", isSample: false, visible: true, order: 80 },
+  { id: 81, category: "לינקדאין", title: "פוסט תובנה מקצועית", prompt: "כתוב 120–180 מילים: סיפורון → תובנה → שאלה לקהל; שמור שפה עניינית אך אנושית.", audience: "בעלי עסקים", isSample: false, visible: true, order: 81 },
+  { id: 82, category: "לינקדאין", title: "מאמר קצר", prompt: "כתוב 400–600 מילים: כך פתרנו [בעיה] אצל [קהל יעד] עם [שיטה/מוצר] – מבנה ברור.", audience: "יועצים", isSample: false, visible: true, order: 82 },
+  { id: 83, category: "לינקדאין", title: "פוסט נתון ומסקנה", prompt: "פתח בנתון מפתיע, פרש השלכה, וסיים בהזמנה לשיחה או לשיתוף ניסיון.", audience: "בעלי עסקים", isSample: false, visible: true, order: 83 },
+  { id: 84, category: "לינקדאין", title: "שדרוג כותרת ו-About", prompt: "כתוב 3 גרסאות לכותרת פרופיל ו-About שמציגים הצעת ערך ברורה וממוקדת.", audience: "בעלי עסקים", isSample: false, visible: true, order: 84 },
+  { id: 85, category: "לינקדאין", title: "הודעת קונקשן לא דוחפת", prompt: "כתוב 3 תבניות של 2–3 משפטים ליצירת קשר לא מכירתי, עם הצעה עדינה לערך.", audience: "בעלי עסקים", isSample: false, visible: true, order: 85 },
+  { id: 86, category: "לינקדאין", title: "פוסט גיוס לקוח אידיאלי", prompt: "תאר פרויקט חלומי ומי מתאים; חבר הזמנה פרטית ל-DM ללא לחץ.", audience: "יועצים", isSample: false, visible: true, order: 86 },
+  { id: 87, category: "לינקדאין", title: "נראות מומחית", prompt: "מנה 6 רעיונות לפוסטים שמבססים סמכות: מפת חשיבה, דוגמה, תובנה, נתון, שאלה, טעות נפוצה.", audience: "בעלי עסקים", isSample: false, visible: true, order: 87 },
+  { id: 88, category: "לינקדאין", title: "סיקור כנס/לייב", prompt: "כתוב 5 מסקנות עיקריות + הזמנה לקריאה או לרכישה קשורה, בלי למכור אגרסיבי.", audience: "יועצים", isSample: false, visible: true, order: 88 },
+  { id: 89, category: "לינקדאין", title: "Case Study קצר", prompt: "כתוב לפני → תהליך → אחרי ב-180–220 מילים, עם CTA רך להמשך דיון.", audience: "בעלי עסקים", isSample: false, visible: true, order: 89 },
+  { id: 90, category: "לינקדאין", title: "CTA ללינקדאין", prompt: "נסח 4 קריאות לפעולה לא-מכירתיות: לשמור, להגיב, לשתף, לשאול.", audience: "בעלי עסקים", isSample: false, visible: true, order: 90 },
+  { id: 91, category: "שירותים מגוונים", title: "פרופיל עסק מהלב", prompt: "כתוב תיאור עסק של 120 מילים: מה אתה עושה, למי, ולמה זה חשוב – בשפה אנושית.", audience: "כללי", isSample: false, visible: true, order: 91 },
+  { id: 92, category: "שירותים מגוונים", title: "דף 'צרו קשר' שממיר", prompt: "הצע 5 שדות בלבד + משפט אמון קצר; הימנע מטקסט עודף ומסיחים.", audience: "כללי", isSample: false, visible: true, order: 92 },
+  { id: 93, category: "שירותים מגוונים", title: "סקר לקוחות מינימליסטי", prompt: "כתוב 6 שאלות חיוניות להבנת צורך והצלבה עם הצעה קיימת.", audience: "כללי", isSample: false, visible: true, order: 93 },
+  { id: 94, category: "שירותים מגוונים", title: "הצעת מחיר בהירה", prompt: "נסח מייל הצעת מחיר: פתיח, פירוט, תנאים, מחיר, ושורת סגירה אנושית.", audience: "כללי", isSample: false, visible: true, order: 94 },
+  { id: 95, category: "שירותים מגוונים", title: "דף תודה אפקטיבי", prompt: "כתוב טקסט תודה קצר + שני צעדים הבאים ברורים; הוסף CTA עדין.", audience: "כללי", isSample: false, visible: true, order: 95 },
+  { id: 96, category: "שירותים מגוונים", title: "צ'קליסט 'לפני פרסום'", prompt: "ערוך 10 בדיקות תוכן מהירות לפני עלייה לאוויר: כותרת, CTA, לינק, הוכחה, SEO בסיסי וכו'.", audience: "כללי", isSample: false, visible: true, order: 96 },
+  { id: 97, category: "שירותים מגוונים", title: "מפת יח\"צ בסיסית", prompt: "זהה 10 שיתופי פעולה פוטנציאליים והצע דרך פנייה קצרה לכל אחד.", audience: "כללי", isSample: false, visible: true, order: 97 },
+  { id: 98, category: "שירותים מגוונים", title: "תסריט שיחת מכירה רכה", prompt: "כתוב תסריט: פתיחה → בירור → התאמה → הצעה → סגירה עדינה; שמור אותנטיות.", audience: "כללי", isSample: false, visible: true, order: 98 },
+  { id: 99, category: "שירותים מגוונים", title: "עמוד 'עליי' אמיתי", prompt: "כתוב סיפור אישי קצר שמחבר ערכים לתועלת לקוח, בלי 'אני-אני'.", audience: "כללי", isSample: false, visible: true, order: 99 },
+  { id: 100, category: "שירותים מגוונים", title: "לוח זמנים להשקה", prompt: "בנה ציר 14 יום עם פעולות יומיות קצרות לכל ערוץ: תוכן, מייל, מודעות, שיתופים.", audience: "כללי", isSample: false, visible: true, order: 100 },
+  { id: 101, category: "Reverse Prompting-שכתוב", title: "שכתוב תוצר AI לרמה אנושית", prompt: "הדבק טקסט קיים ובקש: 'שכתב בטון [טון], קצר ב-20%, שמור מבנה, הסר ז'רגון, הוסף נגיעת רגש, RTL תקין.'", audience: "כללי", isSample: false, visible: true, order: 101 }
+];
+
+interface ExternalPrompt {
+  id: string | number;
+  category: string;
+  title: string;
+  prompt: string;
+  audience: string;
+  isSample: boolean;
+  visible: boolean;
+  order: number;
+}
+
+const ITEMS_PER_PAGE = 200;
 
 const Full = () => {
-  const navigate = useNavigate();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [prompts, setPrompts] = useState<ExternalPrompt[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedAudience, setSelectedAudience] = useState<string>("הכל");
-  const [favorites, setFavorites] = useState<string[]>([]);
-  const [notes, setNotes] = useState<Record<string, string>>({});
-  const [copiedId, setCopiedId] = useState<string | null>(null);
-  const [isDark, setIsDark] = useState(false);
-  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
-  const [categories, setCategories] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("הכל");
+  const [favorites, setFavorites] = useState<string[]>([]);
+  const [copiedId, setCopiedId] = useState<string | number | null>(null);
+  
+  const [categories, setCategories] = useState<string[]>([]);
+  const [audiences, setAudiences] = useState<string[]>([]);
 
   useEffect(() => {
-    // Check authentication and payment status with Supabase
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
-      if (!session) {
-        navigate("/auth");
-        return;
-      }
-      
-      // Check payment status
-      const { data: subscription } = await supabase
-        .from('user_subscriptions')
-        .select('has_paid, subscription_expires')
-        .eq('user_id', session.user.id)
-        .maybeSingle();
-      
-      const hasPaid = subscription?.has_paid && 
-                      (!subscription.subscription_expires || new Date(subscription.subscription_expires) > new Date());
-      
-      if (!hasPaid) {
-        // Not paid - redirect to home (will show paywall)
-        navigate("/");
-        return;
-      }
-      
-      setIsAuthenticated(true);
-      fetchPrompts();
-    });
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (!session) {
-        navigate("/auth");
-      }
-    });
-
-    // Load saved preferences from localStorage
-    const savedQuery = localStorage.getItem("pb_query");
-    const savedAudience = localStorage.getItem("pb_audience");
+    setPrompts(STATIC_DATA);
+    
+    const uniqueCategories = [...new Set(STATIC_DATA.map(p => p.category).filter(Boolean))];
+    setCategories(uniqueCategories.sort());
+    
+    const uniqueAudiences = [...new Set(STATIC_DATA.map(p => p.audience).filter(Boolean))];
+    setAudiences(uniqueAudiences.sort());
+    
+    setLoading(false);
+    
     const savedFavorites = localStorage.getItem("pb_favorites");
-    const savedNotes = localStorage.getItem("pb_notes");
-    const savedTheme = localStorage.getItem("prompts-theme");
-
-    if (savedQuery) setSearchQuery(savedQuery);
-    if (savedAudience) setSelectedAudience(savedAudience);
     if (savedFavorites) setFavorites(JSON.parse(savedFavorites));
-    if (savedNotes) setNotes(JSON.parse(savedNotes));
-    if (savedTheme === "dark") {
-      setIsDark(true);
-      document.documentElement.classList.add("dark");
-    }
-
-    return () => subscription.unsubscribe();
-  }, [navigate]);
-
-  useEffect(() => {
-    // Save search and audience to localStorage
-    localStorage.setItem("pb_query", searchQuery);
-    localStorage.setItem("pb_audience", selectedAudience);
-  }, [searchQuery, selectedAudience]);
-
-  const fetchPrompts = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const { data, error: fetchError } = await supabase
-        .from('prompts')
-        .select('id, category, title, prompt, audience, is_sample, visible, "order"')
-        .eq('is_published', true)
-        .eq('visible', true)
-        .order('order', { ascending: true });
-
-      if (fetchError) {
-        throw new Error(fetchError.message);
-      }
-
-      if (!data || data.length === 0) {
-        throw new Error("לא נמצאו פרומפטים");
-      }
-
-      // Map is_sample to isSample for compatibility
-      const mappedPrompts = data.map(p => ({
-        id: p.id,
-        category: p.category,
-        title: p.title,
-        prompt: p.prompt,
-        audience: p.audience,
-        isSample: p.is_sample,
-        visible: p.visible,
-        order: p.order
-      }));
-
-      setPrompts(mappedPrompts);
-      
-      // Extract unique categories
-      const uniqueCategories = [...new Set(data.map(p => p.category).filter(Boolean))];
-      setCategories(uniqueCategories.sort());
-      
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "שגיאה בטעינת הפרומפטים");
-      toast({
-        variant: "destructive",
-        title: "שגיאה",
-        description: err instanceof Error ? err.message : "שגיאה בטעינת הפרומפטים",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const toggleTheme = () => {
-    setIsDark(!isDark);
-    if (!isDark) {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("prompts-theme", "dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("prompts-theme", "light");
-    }
-  };
+  }, []);
 
   const copyToClipboard = (prompt: ExternalPrompt) => {
     navigator.clipboard.writeText(prompt.prompt);
     setCopiedId(prompt.id);
-    toast({
-      title: "הועתק!",
-      description: `הפרומפט "${prompt.title}" הועתק ללוח`,
-    });
     setTimeout(() => setCopiedId(null), 2000);
+    toast({ title: "הועתק!", description: "הפרומפט הועתק ללוח" });
   };
 
-  const toggleFavorite = (id: string) => {
-    const newFavorites = favorites.includes(id)
-      ? favorites.filter(fav => fav !== id)
-      : [...favorites, id];
-    
+  const toggleFavorite = (id: string | number) => {
+    const idStr = String(id);
+    const newFavorites = favorites.includes(idStr)
+      ? favorites.filter(fav => fav !== idStr)
+      : [...favorites, idStr];
     setFavorites(newFavorites);
     localStorage.setItem("pb_favorites", JSON.stringify(newFavorites));
-    
-    toast({
-      title: favorites.includes(id) ? "הוסר מהמועדפים" : "נוסף למועדפים",
-      description: favorites.includes(id) 
-        ? "הפרומפט הוסר מרשימת המועדפים שלך"
-        : "הפרומפט נוסף לרשימת המועדפים שלך",
-    });
   };
 
-  const updateNote = (id: string, note: string) => {
-    const newNotes = { ...notes, [id]: note };
-    setNotes(newNotes);
-    localStorage.setItem("pb_notes", JSON.stringify(newNotes));
-  };
+  // --- פונקציית הייצוא ל-PDF ---
+  const exportToPDF = () => {
+    toast({ title: "מכין את הקובץ...", description: "ההורדה תתחיל מיד." });
 
-  const exportToPDF = async () => {
-    const promptsToExport = showFavoritesOnly 
-      ? filteredPrompts.filter(p => favorites.includes(p.id))
-      : filteredPrompts;
-
-    // Create HTML content with Hebrew support and RTL
-    const htmlContent = `
-      <!DOCTYPE html>
-      <html dir="rtl" lang="he">
-      <head>
-        <meta charset="UTF-8">
-        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@400;700&display=swap" rel="stylesheet">
-        <style>
-          * {
-            direction: rtl;
-            unicode-bidi: plaintext;
-          }
-          body, #pdfContent {
-            font-family: 'Noto Sans Hebrew', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-            padding: 40px;
-            direction: rtl;
-            text-align: right;
-            background: hsl(210 40% 98%);
-            color: hsl(222 47% 11%);
-          }
-          h1 {
-            font-size: 32px;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 30px;
-            background: linear-gradient(135deg, hsl(217 91% 60%), hsl(200 95% 65%));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-          }
-          .prompt-item {
-            margin-bottom: 25px;
-            page-break-inside: avoid;
-            break-inside: avoid;
-            border: 2px solid hsl(214 32% 91%);
-            border-radius: 12px;
-            padding: 20px;
-            background: hsl(0 0% 100%);
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-          }
-          .prompt-title {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 10px;
-            color: hsl(217 91% 60%);
-          }
-          .prompt-meta {
-            font-size: 12px;
-            background: hsl(142 76% 36%);
-            color: hsl(0 0% 100%);
-            padding: 4px 12px;
-            border-radius: 16px;
-            margin-bottom: 12px;
-            font-weight: 600;
-            display: inline-block;
-          }
-          .prompt-audience {
-            font-size: 12px;
-            background: hsl(217 91% 60%);
-            color: hsl(0 0% 100%);
-            padding: 4px 12px;
-            border-radius: 16px;
-            margin-bottom: 12px;
-            margin-right: 8px;
-            font-weight: 600;
-            display: inline-block;
-          }
-          .prompt-content {
-            font-size: 14px;
-            line-height: 1.8;
-            color: hsl(222 47% 11%);
-            white-space: pre-wrap;
-            word-wrap: break-word;
-          }
-          .page-break-avoid {
-            page-break-inside: avoid;
-            break-inside: avoid;
-          }
-          .page-break-before {
-            page-break-before: always;
-            break-before: page;
-          }
-          
-          @media print {
-            body { 
-              direction: rtl; 
-              font-family: 'Noto Sans Hebrew', sans-serif; 
-            }
-            .prompt-item {
-              page-break-inside: avoid;
-            }
-          }
-        </style>
-      </head>
-      <body>
-        <div id="pdfContent">
-          <h1>101 פרומפטים - החוברת המלאה ✨</h1>
-          ${promptsToExport.map((prompt, index) => `
-            <div class="prompt-item page-break-avoid">
-              <div class="prompt-title">${index + 1}. ${prompt.title}</div>
-              <div>
-                <span class="prompt-meta" style="background-color: ${CATEGORY_COLORS[prompt.category] || '#95a5a6'}">${prompt.category}</span>
-                <span class="prompt-audience">${prompt.audience}</span>
-              </div>
-              <div class="prompt-content">${prompt.prompt}</div>
+    // יצירת תוכן ה-HTML להדפסה
+    const element = document.createElement('div');
+    element.innerHTML = `
+      <div style="direction: rtl; font-family: Arial, sans-serif; padding: 20px;">
+        <h1 style="text-align: center; color: #6b21a8; margin-bottom: 30px;">PromptBook - החוברת המלאה</h1>
+        ${filteredPrompts.map(p => `
+          <div style="margin-bottom: 20px; border: 1px solid #eee; padding: 15px; border-radius: 8px; page-break-inside: avoid;">
+            <h3 style="color: #333; margin: 0 0 10px 0;">${p.order}. ${p.title}</h3>
+            <div style="margin-bottom: 10px;">
+              <span style="background: #eee; padding: 2px 8px; border-radius: 4px; font-size: 12px;">${p.category}</span>
+              <span style="background: #eee; padding: 2px 8px; border-radius: 4px; font-size: 12px;">${p.audience}</span>
             </div>
-          `).join('')}
+            <p style="color: #555; line-height: 1.6; white-space: pre-wrap;">${p.prompt}</p>
+          </div>
+        `).join('')}
+        <div style="text-align: center; margin-top: 30px; font-size: 12px; color: #999;">
+          © PromptBook 2025 | פנינה קריוף
         </div>
-      </body>
-      </html>
+      </div>
     `;
 
-    // Render inside offscreen iframe to ensure proper layout and fonts
-    const iframe = document.createElement('iframe');
-    iframe.style.position = 'fixed';
-    iframe.style.left = '-10000px';
-    iframe.style.top = '0';
-    iframe.width = '794';
-    iframe.height = '1123';
-    document.body.appendChild(iframe);
-
-    const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
-    if (!iframeDoc) {
-      toast({
-        title: "שגיאה",
-        description: "לא ניתן ליצור את ה-PDF",
-        variant: "destructive",
-      });
-      iframe.remove();
-      return;
-    }
-    
-    iframeDoc.open();
-    iframeDoc.write(htmlContent);
-    iframeDoc.close();
-
-    await new Promise<void>((resolve) => {
-      if (iframe.contentWindow?.document.readyState === 'complete') resolve();
-      else iframe.onload = () => resolve();
-    });
-
-    // Wait for fonts to load before rendering PDF
-    try {
-      await document.fonts.ready;
-      if (iframeDoc.fonts) {
-        await iframeDoc.fonts.ready;
-      }
-    } catch (e) {
-      console.warn('Font loading check failed:', e);
-    }
-    await new Promise((r) => setTimeout(r, 500));
-
-    // Configure html2pdf options
     const opt = {
-      margin: [16, 16, 16, 16] as [number, number, number, number],
-      filename: 'promptbook.pdf',
-      image: { type: 'jpeg' as const, quality: 0.98 },
-      html2canvas: { 
-        scale: 2,
-        useCORS: true,
-        letterRendering: true,
-        windowWidth: 1200
-      },
-      jsPDF: { 
-        unit: 'pt', 
-        format: 'a4', 
-        orientation: 'portrait' as const
-      }
+      margin: 10,
+      filename: 'PromptBook-Full.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
 
-    try {
-      const element = iframeDoc.getElementById('pdfContent');
-      if (element) {
-        await html2pdf().set(opt).from(element).save();
-        toast({
-          title: "הקובץ הורד בהצלחה!",
-          description: `ייצאת ${promptsToExport.length} פרומפטים ל-PDF`,
-        });
-      }
-    } catch (error) {
-      console.error('PDF export error:', error);
-      toast({
-        title: "שגיאה בייצוא",
-        description: "אירעה שגיאה בייצוא ה-PDF",
-        variant: "destructive",
-      });
-    } finally {
-      iframe.remove();
-    }
+    html2pdf().set(opt).from(element).save();
   };
 
-  // Filter prompts: only visible=true, sorted by order
   const filteredPrompts = useMemo(() => {
-    let filtered = prompts.filter(p => p.visible);
+    return prompts.filter(p => {
+      const matchesSearch = searchQuery === "" || 
+        p.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+        p.prompt.toLowerCase().includes(searchQuery.toLowerCase());
+      
+      const matchesAudience = selectedAudience === "הכל" || p.audience === selectedAudience;
+      const matchesCategory = selectedCategory === "הכל" || p.category === selectedCategory;
+      
+      return matchesSearch && matchesAudience && matchesCategory;
+    }).sort((a, b) => a.order - b.order);
+  }, [prompts, selectedAudience, selectedCategory, searchQuery]);
 
-    if (showFavoritesOnly) {
-      filtered = filtered.filter(p => favorites.includes(p.id));
-    }
-
-    const matchesSearch = (p: ExternalPrompt) =>
-      searchQuery === "" ||
-      p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      p.prompt.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    const matchesAudience = (p: ExternalPrompt) =>
-      selectedAudience === "הכל" || p.audience === selectedAudience;
-    
-    const matchesCategory = (p: ExternalPrompt) =>
-      selectedCategory === "הכל" || p.category === selectedCategory;
-
-    filtered = filtered.filter(p => matchesSearch(p) && matchesAudience(p) && matchesCategory(p));
-    
-    return filtered.sort((a, b) => a.order - b.order);
-  }, [prompts, showFavoritesOnly, selectedAudience, searchQuery, favorites, selectedCategory]);
-
-  // Pagination
-  const totalPages = Math.ceil(filteredPrompts.length / ITEMS_PER_PAGE);
-  const paginatedPrompts = filteredPrompts.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
-  );
-
-  useEffect(() => {
-    // Reset to page 1 when filters change
-    setCurrentPage(1);
-  }, [searchQuery, selectedAudience, showFavoritesOnly, selectedCategory]);
-
-  // Show loading while checking auth
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <Skeleton className="h-32 w-32 rounded-lg" />
-      </div>
-    );
-  }
-
-  // Main Content
   return (
-    <div className="min-h-screen bg-background pt-20">{/* Added pt-20 for fixed header spacing */}
-      {/* Header */}
-      <header className="border-b border-border bg-card shadow-card sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl gradient-primary flex items-center justify-center text-white font-bold text-lg">
-                101
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold text-foreground">החוברת המלאה</h1>
-                <p className="text-sm text-muted-foreground">כל הפרומפטים במקום אחד</p>
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
-                className={showFavoritesOnly ? "bg-accent" : ""}
-              >
-                <Heart className={`h-5 w-5 ${showFavoritesOnly ? "fill-current text-destructive" : ""}`} />
-              </Button>
-              
-              <Button variant="outline" size="icon" onClick={toggleTheme}>
-                {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-              </Button>
-              
-              <Button onClick={exportToPDF} className="gradient-primary text-white">
-                <Download className="h-4 w-4 ml-2" />
-                ייצוא ל-PDF
-              </Button>
-            </div>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-gray-50">
+      <AppHeader />
 
       <main className="container mx-auto px-4 py-8">
-        {/* Error Message */}
-        {error && (
-          <div className="mb-6 p-4 bg-destructive/10 border border-destructive rounded-lg flex items-center gap-3">
-            <AlertCircle className="h-5 w-5 text-destructive" />
-            <p className="text-destructive font-medium">{error}</p>
-          </div>
-        )}
-
-        {/* Search and Filters */}
-        <div className="mb-6 space-y-4">
-          <div className="relative">
-            <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
-            <Input
-              type="text"
-              placeholder="חיפוש פרומפטים..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pr-10 text-right"
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
+           <div className="relative w-full md:w-1/3">
+            <Search className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+            <Input 
+              placeholder="חיפוש פרומפטים..." 
+              value={searchQuery} 
+              onChange={(e) => setSearchQuery(e.target.value)} 
+              className="pr-10 text-right bg-white" 
             />
           </div>
+          
+          <div className="flex gap-2 w-full md:w-auto justify-end flex-wrap">
+             {/* כפתור PDF חדש! */}
+             <Button 
+                onClick={exportToPDF}
+                className="bg-black hover:bg-gray-800 text-white text-sm flex items-center gap-2"
+             >
+               <Download className="h-4 w-4" />
+               הורד PDF
+             </Button>
 
-          <div className="flex items-center justify-between gap-4 flex-wrap">
-            <div className="flex items-center gap-4 flex-1">
-              <Select value={selectedAudience} onValueChange={setSelectedAudience}>
-                <SelectTrigger className="text-right max-w-xs">
-                  <SelectValue placeholder="בחר קהל יעד" />
-                </SelectTrigger>
-                <SelectContent>
-                  {AUDIENCE_OPTIONS.map(audience => (
-                    <SelectItem key={audience} value={audience}>
-                      {audience}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+             <div className="bg-white border rounded-md p-1 flex items-center">
+                <Button 
+                  variant="ghost" size="sm" 
+                  className={viewMode === 'grid' ? 'bg-purple-100 text-purple-700' : 'text-gray-500'}
+                  onClick={() => setViewMode('grid')}
+                >
+                  <Grid className="h-4 w-4" />
+                </Button>
+                <Button 
+                  variant="ghost" size="sm" 
+                  className={viewMode === 'list' ? 'bg-purple-100 text-purple-700' : 'text-gray-500'}
+                  onClick={() => setViewMode('list')}
+                >
+                  <List className="h-4 w-4" />
+                </Button>
+             </div>
 
-              <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                <SelectTrigger className="text-right max-w-xs">
-                  <SelectValue placeholder="כל הקטגוריות" />
-                </SelectTrigger>
+             <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                <SelectTrigger className="w-[140px] bg-white"><SelectValue placeholder="כל הקטגוריות" /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="הכל">כל הקטגוריות</SelectItem>
-                  {categories.map(cat => (
-                    <SelectItem key={cat} value={cat}>
-                      {cat}
-                    </SelectItem>
-                  ))}
+                  {categories.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
                 </SelectContent>
               </Select>
 
-              <button 
-                onClick={() => {
-                  setSearchQuery('');
-                  setSelectedCategory('הכל');
-                  setSelectedAudience('הכל');
-                }}
-                className="text-sm text-blue-600 hover:underline whitespace-nowrap"
+             <Select value={selectedAudience} onValueChange={setSelectedAudience}>
+                <SelectTrigger className="w-[140px] bg-white"><SelectValue placeholder="כל הקהלים" /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="הכל">כל הקהלים</SelectItem>
+                  {audiences.map(a => <SelectItem key={a} value={a}>{a}</SelectItem>)}
+                </SelectContent>
+              </Select>
+              
+              <Button 
+                variant="ghost" 
+                size="sm"
+                onClick={() => { setSearchQuery(''); setSelectedCategory('הכל'); setSelectedAudience('הכל'); }}
+                className="text-blue-600"
               >
-                אפס סינונים
-              </button>
-            </div>
-
-            <div className="flex items-center gap-4">
-              <div className="flex gap-2">
-                <button
-                  onClick={() => setViewMode('grid')}
-                  className={`p-2 rounded ${viewMode === 'grid' ? 'bg-purple-600 text-white' : 'bg-gray-200'}`}
-                  title="תצוגת קוביות"
-                >
-                  <Grid size={20} />
-                </button>
-                <button
-                  onClick={() => setViewMode('table')}
-                  className={`p-2 rounded ${viewMode === 'table' ? 'bg-purple-600 text-white' : 'bg-gray-200'}`}
-                  title="תצוגת טבלה"
-                >
-                  <List size={20} />
-                </button>
-              </div>
-
-              <p className="text-sm text-muted-foreground whitespace-nowrap">
-                נמצאו {filteredPrompts.length} פרומפטים
-              </p>
-            </div>
+                אפס
+              </Button>
           </div>
         </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-          <Card className="p-4 shadow-card">
-            <div className="text-sm text-muted-foreground">סך הכל פרומפטים</div>
-            <div className="text-3xl font-bold text-foreground mt-1">{prompts.filter(p => p.visible).length}</div>
-          </Card>
-          
-          <Card className="p-4 shadow-card">
-            <div className="text-sm text-muted-foreground">פרומפטים מועדפים</div>
-            <div className="text-3xl font-bold text-destructive mt-1">{favorites.length}</div>
-          </Card>
-          
-          <Card className="p-4 shadow-card">
-            <div className="text-sm text-muted-foreground">תוצאות חיפוש</div>
-            <div className="text-3xl font-bold text-primary mt-1">{filteredPrompts.length}</div>
-          </Card>
-        </div>
-
-        {/* Prompts Grid */}
         {loading ? (
+          <div className="text-center py-12 text-purple-600">טוען...</div>
+        ) : filteredPrompts.length === 0 ? (
+          <div className="text-center py-12 text-gray-500">לא נמצאו תוצאות.</div>
+        ) : viewMode === 'grid' ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[1, 2, 3, 4, 5, 6].map(i => (
-              <Card key={i} className="p-6">
-                <Skeleton className="h-6 w-32 mb-4" />
-                <Skeleton className="h-4 w-full mb-2" />
-                <Skeleton className="h-4 w-full mb-2" />
-                <Skeleton className="h-4 w-3/4 mb-4" />
-                <Skeleton className="h-10 w-full" />
+            {filteredPrompts.map((prompt) => (
+              <Card key={prompt.id} className="p-6 shadow-sm hover:shadow-md transition-all flex flex-col bg-white">
+                <div className="flex justify-between items-start mb-3">
+                  <div className="flex flex-col gap-1">
+                    <Badge style={{ backgroundColor: CATEGORY_COLORS[prompt.category] || "#666", color: "#fff", width: "fit-content" }}>
+                      {prompt.category}
+                    </Badge>
+                    <span className="text-xs text-gray-500">{prompt.audience}</span>
+                  </div>
+                  <Button variant="ghost" size="icon" onClick={() => toggleFavorite(prompt.id)}>
+                    <Heart className={`h-4 w-4 ${favorites.includes(String(prompt.id)) ? "fill-red-500 text-red-500" : ""}`} />
+                  </Button>
+                </div>
+                <h3 className="text-lg font-bold mb-2 text-gray-800">{prompt.title}</h3>
+                <p className="text-sm text-gray-600 mb-4 flex-grow whitespace-pre-line leading-relaxed">
+                  {prompt.prompt}
+                </p>
+                <Button onClick={() => copyToClipboard(prompt)} className="w-full bg-purple-600 hover:bg-purple-700 text-white shadow-none">
+                  <Copy className="h-4 w-4 ml-2" /> העתק
+                </Button>
               </Card>
             ))}
           </div>
-        ) : filteredPrompts.length === 0 ? (
-          <Card className="p-12 text-center shadow-card">
-            <p className="text-xl text-muted-foreground">
-              לא נמצאו פרומפטים התואמים לחיפוש
-            </p>
-          </Card>
         ) : (
-          <>
-            {viewMode === 'grid' ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                {paginatedPrompts.map((prompt) => (
-                  <Card
-                    key={prompt.id}
-                    className="p-6 shadow-card hover:shadow-elevated transition-all duration-300 flex flex-col"
-                  >
-                    <div className="flex items-start justify-between mb-3 gap-2">
-                      <Badge 
-                        variant="secondary" 
-                        className="shrink-0"
-                        style={{ 
-                          backgroundColor: CATEGORY_COLORS[prompt.category] || "#95a5a6",
-                          color: "white"
-                        }}
-                      >
+          <div className="bg-white rounded-lg shadow overflow-hidden border border-gray-200">
+            <table className="w-full text-right">
+              <thead className="bg-gray-50 text-gray-600 text-sm font-medium border-b border-gray-200">
+                <tr>
+                  <th className="p-4 font-bold">כותרת</th>
+                  <th className="p-4 font-bold">קטגוריה</th>
+                  <th className="p-4 font-bold">קהל יעד</th>
+                  <th className="p-4 font-bold w-1/2">פרומפט</th>
+                  <th className="p-4 text-center font-bold">פעולות</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {filteredPrompts.map((prompt) => (
+                  <tr key={prompt.id} className="hover:bg-gray-50 transition-colors">
+                    <td className="p-4 font-medium text-gray-900">{prompt.title}</td>
+                    <td className="p-4">
+                      <Badge variant="outline" className="font-normal bg-white">
                         {prompt.category}
                       </Badge>
-                      <div className="flex gap-1">
-                        <Badge variant="outline" className="shrink-0">
-                          {prompt.audience}
-                        </Badge>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => toggleFavorite(prompt.id)}
-                          className="h-8 w-8 shrink-0"
-                        >
-                          <Heart
-                            className={`h-4 w-4 ${
-                              favorites.includes(prompt.id)
-                                ? "fill-current text-destructive"
-                                : ""
-                            }`}
-                          />
+                    </td>
+                    <td className="p-4 text-sm text-gray-500">{prompt.audience}</td>
+                    <td className="p-4 text-sm text-gray-600 leading-relaxed">{prompt.prompt}</td>
+                    <td className="p-4 text-center">
+                      <div className="flex items-center justify-center gap-2">
+                        <Button size="sm" onClick={() => copyToClipboard(prompt)} className="bg-purple-600 text-white h-8 px-3">
+                          <Copy className="h-3 w-3 ml-1" /> העתק
+                        </Button>
+                        <Button variant="ghost" size="sm" onClick={() => toggleFavorite(prompt.id)} className="h-8 w-8 p-0">
+                          <Heart className={`h-4 w-4 ${favorites.includes(String(prompt.id)) ? "fill-red-500 text-red-500" : ""}`} />
                         </Button>
                       </div>
-                    </div>
-
-                    <h3 className="text-lg font-semibold mb-3 text-foreground">
-                      {prompt.title}
-                    </h3>
-
-                    <p className="text-sm text-muted-foreground mb-4 flex-grow leading-relaxed whitespace-pre-line">
-                      {prompt.prompt}
-                    </p>
-
-                    <div className="space-y-3">
-                      <Textarea
-                        placeholder="הערות אישיות..."
-                        value={notes[prompt.id] || ""}
-                        onChange={(e) => updateNote(prompt.id, e.target.value)}
-                        className="text-right min-h-[60px] text-sm"
-                      />
-
-                      <TooltipProvider>
-                        <Tooltip open={copiedId === prompt.id}>
-                          <TooltipTrigger asChild>
-                            <Button
-                              onClick={() => copyToClipboard(prompt)}
-                              className="w-full gradient-primary text-white"
-                            >
-                              <Copy className="h-4 w-4 ml-2" />
-                              העתק
-                            </Button>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>הועתק!</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                    </div>
-                  </Card>
+                    </td>
+                  </tr>
                 ))}
-              </div>
-            ) : (
-              <div className="overflow-x-auto mb-8">
-                <table className="w-full border-collapse border border-border">
-                  <thead>
-                    <tr className="bg-purple-100">
-                      <th className="p-3 text-right border border-border">כותרת</th>
-                      <th className="p-3 text-right border border-border">קטגוריה</th>
-                      <th className="p-3 text-right border border-border">קהל יעד</th>
-                      <th className="p-3 text-right border border-border">תוכן</th>
-                      <th className="p-3 text-center border border-border">פעולות</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {paginatedPrompts.map((prompt) => (
-                      <tr key={prompt.id} className="hover:bg-gray-50 dark:hover:bg-gray-800">
-                        <td className="p-3 border border-border font-bold">{prompt.title}</td>
-                        <td className="p-3 border border-border">
-                          <span 
-                            className="px-2 py-1 rounded text-sm text-white"
-                            style={{ backgroundColor: CATEGORY_COLORS[prompt.category] || "#95a5a6" }}
-                          >
-                            {prompt.category}
-                          </span>
-                        </td>
-                        <td className="p-3 border border-border">
-                          <Badge variant="outline">{prompt.audience}</Badge>
-                        </td>
-                        <td className="p-3 border border-border text-sm max-w-md">
-                          {prompt.prompt.substring(0, 100)}...
-                        </td>
-                        <td className="p-3 border border-border text-center">
-                          <div className="flex items-center justify-center gap-2">
-                            <TooltipProvider>
-                              <Tooltip open={copiedId === prompt.id}>
-                                <TooltipTrigger asChild>
-                                  <Button
-                                    size="sm"
-                                    onClick={() => copyToClipboard(prompt)}
-                                    className="gradient-primary text-white"
-                                  >
-                                    <Copy className="h-4 w-4 ml-1" />
-                                    העתק
-                                  </Button>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                  <p>הועתק!</p>
-                                </TooltipContent>
-                              </Tooltip>
-                            </TooltipProvider>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              onClick={() => toggleFavorite(prompt.id)}
-                              className="h-8 w-8"
-                            >
-                              <Heart
-                                className={`h-4 w-4 ${
-                                  favorites.includes(prompt.id)
-                                    ? "fill-current text-destructive"
-                                    : ""
-                                }`}
-                              />
-                            </Button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-
-            {/* Pagination */}
-            {totalPages > 1 && (
-              <div className="flex items-center justify-center gap-2">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                  disabled={currentPage === 1}
-                >
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
-                
-                <div className="flex items-center gap-2">
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
-                    <Button
-                      key={page}
-                      variant={currentPage === page ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => setCurrentPage(page)}
-                      className="min-w-[40px]"
-                    >
-                      {page}
-                    </Button>
-                  ))}
-                </div>
-
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                  disabled={currentPage === totalPages}
-                >
-                  <ChevronLeft className="h-4 w-4" />
-                </Button>
-              </div>
-            )}
-          </>
+              </tbody>
+            </table>
+          </div>
         )}
       </main>
-
-      {/* Footer */}
-      <footer className="border-t border-border mt-16 py-8 bg-card">
-        <div className="container mx-auto px-4 text-center">
-          <p className="text-muted-foreground">
-            101 פרומפטים לשיווק חכם בלב פתוח | נבנה עם ❤️
-          </p>
-        </div>
-      </footer>
     </div>
   );
 };

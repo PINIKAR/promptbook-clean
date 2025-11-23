@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import Logo from "./Logo";
 import type { Session } from "@supabase/supabase-js";
 
 const AppHeader = () => {
@@ -11,46 +10,42 @@ const AppHeader = () => {
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    // Get initial session and check admin status
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
+    // בדיקה ראשונית
+    supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
-      
-      if (session) {
-        const { data: adminData } = await supabase
-          .from('admins')
-          .select('email')
-          .eq('email', session.user.email)
-          .single();
-        
-        setIsAdmin(!!adminData);
-      }
+      checkIfAdmin(session);
     });
 
-    // Listen for auth changes
+    // האזנה לשינויים (התחברות/התנתקות)
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (event, session) => {
+    } = supabase.auth.onAuthStateChange((event, session) => {
       setSession(session);
+      checkIfAdmin(session);
       
-      if (session) {
-        const { data: adminData } = await supabase
-          .from('admins')
-          .select('email')
-          .eq('email', session.user.email)
-          .single();
-        
-        setIsAdmin(!!adminData);
-      } else {
+      // אם התנתקנו - נקה את הסטייט
+      if (event === 'SIGNED_OUT') {
+        setSession(null);
         setIsAdmin(false);
+        navigate("/");
       }
     });
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [navigate]);
+
+  // פונקציה שבודקת אם את המנהלת (לפי המייל שלך)
+  const checkIfAdmin = (currentSession: Session | null) => {
+    if (currentSession?.user?.email === 'pninakar@gmail.com') {
+      setIsAdmin(true);
+    } else {
+      setIsAdmin(false);
+    }
+  };
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    navigate("/");
+    // הניווט יקרה אוטומטית בגלל ה-onAuthStateChange למעלה
   };
 
   return (
@@ -61,21 +56,31 @@ const AppHeader = () => {
           className="flex items-center gap-3 transition-transform hover:scale-105 duration-200"
           aria-label="חזרה לדף הבית"
         >
+          {/* כאן שמרתי את הלוגו שלך */}
           <img src="/logo.png" alt="PromptBook" className="h-12" />
-          <h1 className="text-xl font-bold text-blue-700">PromptBook – 101 פרומפטים</h1>
+          <h1 className="text-xl font-bold text-blue-700 hidden md:block">PromptBook – 101 פרומפטים</h1>
         </Link>
 
         {session && (
           <div className="flex items-center gap-4">
-            <span className="text-sm text-gray-600">{session.user.email}</span>
+            {/* במובייל נסתיר את המייל כדי לחסוך מקום */}
+            <span className="text-sm text-gray-600 hidden md:inline">{session.user.email}</span>
+            
+            {/* כפתור האדמין - יופיע רק לך! */}
             {isAdmin && (
-              <Button variant="outline" size="sm" onClick={() => navigate("/admin")}>
-                אדמין
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={() => navigate("/admin")}
+                className="border-blue-600 text-blue-700 hover:bg-blue-50"
+              >
+                ניהול
               </Button>
             )}
+            
             <button 
               onClick={handleLogout}
-              className="text-sm text-red-600 hover:text-red-700"
+              className="text-sm text-red-600 hover:text-red-700 font-medium"
             >
               התנתק
             </button>
