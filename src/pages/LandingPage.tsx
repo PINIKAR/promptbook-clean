@@ -17,7 +17,6 @@ const LandingPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Set deadline to Nov 30, 2025
     const deadline = new Date("2025-11-30T23:59:59").getTime();
 
     const tick = () => {
@@ -205,6 +204,7 @@ const LandingPage = () => {
           color: var(--c2);
         }
         
+        /* תיקון קופסה לבנה */
         .price-box {
           background: white; 
           color: black;
@@ -424,6 +424,7 @@ const LandingPage = () => {
               <strong>מתאים לכולם: בעלי עסקים, יוצרי תוכן, משווקים ומטפלים.</strong>
             </p>
 
+            {/* קופסה לבנה לתיקון הקריאות */}
             <div className="price-box">
               <div className="save-label">חוסכים 268 ₪!</div>
               <div className="price-display">
@@ -491,4 +492,68 @@ const LandingPage = () => {
             <div className="testimonial">
               <div className="stars">★★★★★</div>
               "התוצאות הן עברית נקייה וטבעית. סוף סוף ה-AI מדבר לקהל הישראלי."
-              <br /><strong>- מירב דהן, פרילנסרי
+              <br /><strong>- מירב דהן, פרילנסרית</strong>
+            </div>
+          </div>
+        </section>
+
+        <div className="wrap">
+          <section className="about">
+            <img src="/pnina-profile.jpg" alt="Pnina Karayoff" />
+            <div>
+              <h2>נעים להכיר, פנינה קריוף</h2>
+              <p style={{lineHeight: '1.6'}}>
+                כמוכם, הייתי מתוסכלת מהפער בין כוחו של ה-AI לצורך האמיתי שלנו: 
+                <strong>לכתוב תוכן שהוא גם חכם וגם מרגש.</strong>
+                <br/><br/>
+                את PromptBook בניתי כדי לגשר על הפער הזה. זו לא סתם רשימה, אלא כלי עבודה שמשלב אסטרטגיה שיווקית עם טכנולוגיה. המטרה שלי? שתכתבו פחות, ותמכרו יותר.
+              </p>
+            </div>
+          </section>
+        </div>
+
+        <section className="sec">
+          <h2>שאלות נפוצות</h2>
+          <div className="faq">
+            <details>
+              <summary>איך מקבלים גישה?</summary>
+              <div>מיד אחרי התשלום, תועברו לאפליקציה ותוכלו להיכנס עם חשבון הגוגל שלכם. הגישה היא מיידית.</div>
+            </details>
+            <details>
+              <summary>האם זה מנוי חודשי?</summary>
+              <div>לא! זה תשלום חד-פעמי לכל החיים. כולל כל העדכונים העתידיים.</div>
+            </details>
+            <details>
+              <summary>האם מקבלים קבלה?</summary>
+              <div>כמובן. קבלה מס נשלחת אוטומטית למייל.</div>
+            </details>
+            <details>
+              <summary>זה עובד בחינם של ChatGPT?</summary>
+              <div>כן, הפרומפטים עובדים מעולה גם בגרסה החינמית, וגם ב-Claude וב-Gemini.</div>
+            </details>
+          </div>
+        </section>
+
+        <section className="sec alt" style={{textAlign: 'center'}}>
+          <h2 style={{marginBottom: '10px'}}>מוכנים לשדרג את השיווק?</h2>
+          <p style={{marginBottom: '30px'}}>המחיר יעלה ל-397 ₪ מיד אחרי נובמבר.</p>
+          <div style={{maxWidth: '300px', margin: '0 auto'}}>
+            <div id="paypal-container-bottom"></div>
+          </div>
+        </section>
+
+        <footer>
+          © 2025 PromptBook by Pnina Karayoff
+          <br /><br />
+          <a href="mailto:pninakar@gmail.com">צור קשר</a> |
+          <a href="https://wa.me/972548383451" target="_blank" rel="noopener">ווטסאפ</a> |
+          <a href="/terms">תקנון</a> |
+          <a href="/privacy">מדיניות פרטיות</a> |
+          <a href="/accessibility">הצהרת נגישות</a>
+        </footer>
+      </div>
+    </>
+  );
+};
+
+export default LandingPage;
