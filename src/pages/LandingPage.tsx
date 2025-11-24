@@ -500,8 +500,8 @@ const LandingPage = () => {
 
         <div className="wrap">
           <section className="about">
-            <img src="https://media.licdn.com/dms/image/v2/D4D03AQGzQ_jW0jQjRg/profile-displayphoto-shrink_800_800/0/1683620887242?e=1737590400&v=beta&t=KzHq-example" alt="Pnina Karayoff" style={{ width: '120px', height: '120px', borderRadius: '50%', objectFit: 'cover', border: '4px solid #ca8a04' }} />
-              <h2>נעים להכיר, פנינה קריוף</h2>
+<img src="/pnina-profile.jpg" alt="Pnina Karayoff" /> <div>v
+  <h2>נעים להכיר, פנינה קריוף</h2>
               <p style={{lineHeight: '1.6'}}>
                 כמוכם, הייתי מתוסכלת מהפער בין כוחו של ה-AI לצורך האמיתי שלנו: 
                 <strong>לכתוב תוכן שהוא גם חכם וגם מרגש.</strong>
