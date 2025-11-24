@@ -58,15 +58,17 @@ const LandingPage = () => {
     fetchSamplePrompts();
   }, []);
 
+  // --- התיקון לכפתור הכפול ---
   useEffect(() => {
-    const loadPaypal = () => {
+    const renderButtons = () => {
       // @ts-ignore
       if (window.paypal && window.paypal.HostedButtons) {
-        const containerTop = document.getElementById("paypal-container-top");
-        const containerBottom = document.getElementById("paypal-container-bottom");
+        // מחיקה אגרסיבית של התוכן לפני ציור מחדש
+        const top = document.querySelector("#paypal-container-top");
+        const bottom = document.querySelector("#paypal-container-bottom");
         
-        if (containerTop) containerTop.innerHTML = "";
-        if (containerBottom) containerBottom.innerHTML = "";
+        if (top) top.innerHTML = "";
+        if (bottom) bottom.innerHTML = "";
 
         // @ts-ignore
         window.paypal.HostedButtons({
@@ -84,10 +86,11 @@ const LandingPage = () => {
     if (!window.paypal) {
       const script = document.createElement("script");
       script.src = "https://www.paypal.com/sdk/js?client-id=BAA9pb84hA96YyS3MdA-7E4ocZULj8P9L0FNewFBJZ8fMY-Z7Sl17R6RwOGIN2vPVLCgVNKiohWbCbg2Jw&components=hosted-buttons&disable-funding=venmo&currency=ILS";
-      script.onload = loadPaypal;
+      script.onload = renderButtons;
       document.body.appendChild(script);
     } else {
-      loadPaypal();
+      // אם הסקריפט כבר קיים, רק נצייר (אחרי ניקוי)
+      renderButtons();
     }
   }, []);
 
@@ -204,7 +207,6 @@ const LandingPage = () => {
           color: var(--c2);
         }
         
-        /* תיקון קופסה לבנה */
         .price-box {
           background: white; 
           color: black;
@@ -424,7 +426,6 @@ const LandingPage = () => {
               <strong>מתאים לכולם: בעלי עסקים, יוצרי תוכן, משווקים ומטפלים.</strong>
             </p>
 
-            {/* קופסה לבנה לתיקון הקריאות */}
             <div className="price-box">
               <div className="save-label">חוסכים 268 ₪!</div>
               <div className="price-display">
