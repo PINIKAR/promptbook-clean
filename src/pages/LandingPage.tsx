@@ -58,17 +58,15 @@ const LandingPage = () => {
     fetchSamplePrompts();
   }, []);
 
-  // --- התיקון לכפתור הכפול ---
   useEffect(() => {
-    const renderButtons = () => {
+    const loadPaypal = () => {
       // @ts-ignore
       if (window.paypal && window.paypal.HostedButtons) {
-        // מחיקה אגרסיבית של התוכן לפני ציור מחדש
-        const top = document.querySelector("#paypal-container-top");
-        const bottom = document.querySelector("#paypal-container-bottom");
+        const containerTop = document.querySelector("#paypal-container-top");
+        const containerBottom = document.querySelector("#paypal-container-bottom");
         
-        if (top) top.innerHTML = "";
-        if (bottom) bottom.innerHTML = "";
+        if (containerTop) containerTop.innerHTML = "";
+        if (containerBottom) containerBottom.innerHTML = "";
 
         // @ts-ignore
         window.paypal.HostedButtons({
@@ -86,11 +84,10 @@ const LandingPage = () => {
     if (!window.paypal) {
       const script = document.createElement("script");
       script.src = "https://www.paypal.com/sdk/js?client-id=BAA9pb84hA96YyS3MdA-7E4ocZULj8P9L0FNewFBJZ8fMY-Z7Sl17R6RwOGIN2vPVLCgVNKiohWbCbg2Jw&components=hosted-buttons&disable-funding=venmo&currency=ILS";
-      script.onload = renderButtons;
+      script.onload = loadPaypal;
       document.body.appendChild(script);
     } else {
-      // אם הסקריפט כבר קיים, רק נצייר (אחרי ניקוי)
-      renderButtons();
+      loadPaypal();
     }
   }, []);
 
@@ -335,6 +332,7 @@ const LandingPage = () => {
           border-radius: 20px;
         }
         
+        /* שימוש בתמונה מקומית */
         .about img {
           width: 120px;
           height: 120px;
@@ -500,8 +498,10 @@ const LandingPage = () => {
 
         <div className="wrap">
           <section className="about">
-<img src="/pnina-profile.jpg" alt="Pnina Karayoff" /> <div>v
-  <h2>נעים להכיר, פנינה קריוף</h2>
+            {/* שימוש בתמונה המקומית */}
+            <img src="/pnina-profile.jpg" alt="Pnina Karayoff" />
+            <div>
+              <h2>נעים להכיר, פנינה קריוף</h2>
               <p style={{lineHeight: '1.6'}}>
                 כמוכם, הייתי מתוסכלת מהפער בין כוחו של ה-AI לצורך האמיתי שלנו: 
                 <strong>לכתוב תוכן שהוא גם חכם וגם מרגש.</strong>
