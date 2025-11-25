@@ -513,19 +513,23 @@ const LandingPage = () => {
         </section>
 
         <div className="wrap">
-          <section className="about">
-            {/* שימוש בתמונה המקומית */}
-            <img src="/pnina-profile.jpg" alt="Pnina Karayoff" />
-            <div>
-              <h2>נעים להכיר, פנינה קריוף</h2>
-              <p style={{lineHeight: '1.6'}}>
-                כמוכם, הייתי מתוסכלת מהפער בין כוחו של ה-AI לצורך האמיתי שלנו: 
-                <strong>לכתוב תוכן שהוא גם חכם וגם מרגש.</strong>
-                <br/><br/>
-                את PromptBook בניתי כדי לגשר על הפער הזה. זו לא סתם רשימה, אלא כלי עבודה שמשלב אסטרטגיה שיווקית עם טכנולוגיה. המטרה שלי? שתכתבו פחות, ותמכרו יותר.
-              </p>
-            </div>
-          </section>
+         <section className="about">
+          {/* וודאי שיש פה רק תגית img אחת, וששם הקובץ תואם בדיוק את מה שיש בתיקיית public */}
+          <img 
+            src="/pnina-profil.png" 
+            alt="Pnina Karayoff" 
+            onError={(e) => e.currentTarget.style.display = 'none'} // שורה זו תעלים את העיגול אם התמונה לא נמצאת
+          />
+          <div>
+            <h2>נעים להכיר, פנינה קריוף</h2>
+            <p style={{lineHeight: '1.6'}}>
+              כמוכם, הייתי מתוסכלת מהפער בין כוחו של ה-AI לצורך האמיתי שלנו: 
+              <strong>לכתוב תוכן שהוא גם חכם וגם מרגש.</strong>
+              <br/><br/>
+              את PromptBook בניתי כדי לגשר על הפער הזה. זו לא סתם רשימה, אלא כלי עבודה שמשלב אסטרטגיה שיווקית עם טכנולוגיה. המטרה שלי? שתכתבו פחות, ותמכרו יותר.
+            </p>
+          </div>
+        </section>
         </div>
 
         <section className="sec">
