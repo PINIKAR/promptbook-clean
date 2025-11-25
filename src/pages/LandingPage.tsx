@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -14,6 +14,10 @@ const LandingPage = () => {
   const [timeLeft, setTimeLeft] = useState("");
   const [samplePrompts, setSamplePrompts] = useState<Prompt[]>([]);
   const [isPromoActive, setIsPromoActive] = useState(true);
+  
+  // תיקון לכפתורי פייפאל כפולים
+  const paypalRan = useRef(false);
+  
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -58,7 +62,11 @@ const LandingPage = () => {
     fetchSamplePrompts();
   }, []);
 
+  // מנגנון פייפאל המתוקן (מונע כפילויות)
   useEffect(() => {
+    if (paypalRan.current) return;
+    paypalRan.current = true;
+
     const loadPaypal = () => {
       // @ts-ignore
       if (window.paypal && window.paypal.HostedButtons) {
@@ -82,6 +90,10 @@ const LandingPage = () => {
 
     // @ts-ignore
     if (!window.paypal) {
+      if (document.querySelector('script[src*="paypal.com/sdk/js"]')) {
+         loadPaypal();
+         return;
+      }
       const script = document.createElement("script");
       script.src = "https://www.paypal.com/sdk/js?client-id=BAA9pb84hA96YyS3MdA-7E4ocZULj8P9L0FNewFBJZ8fMY-Z7Sl17R6RwOGIN2vPVLCgVNKiohWbCbg2Jw&components=hosted-buttons&disable-funding=venmo&currency=ILS";
       script.onload = loadPaypal;
@@ -385,7 +397,6 @@ const LandingPage = () => {
             width: auto !important;
         }
         
-        /* סגנון להודעת האשראי */
         .credit-card-note {
             font-size: 13px;
             color: #666;
@@ -444,7 +455,6 @@ const LandingPage = () => {
               
               <div id="paypal-container-top"></div>
               
-              {/* --- הוספת הבהרת אשראי --- */}
               <p className="credit-card-note">
                 💳 ניתן לשלם באשראי רגיל (גם ללא חשבון PayPal)
               </p>
@@ -513,23 +523,23 @@ const LandingPage = () => {
         </section>
 
         <div className="wrap">
-         <section className="about">
-          {/* וודאי שיש פה רק תגית img אחת, וששם הקובץ תואם בדיוק את מה שיש בתיקיית public */}
-          <img 
-            src="/pnina-profil.png" 
-            alt="Pnina Karayoff" 
-            onError={(e) => e.currentTarget.style.display = 'none'} // שורה זו תעלים את העיגול אם התמונה לא נמצאת
-          />
-          <div>
-            <h2>נעים להכיר, פנינה קריוף</h2>
-            <p style={{lineHeight: '1.6'}}>
-              כמוכם, הייתי מתוסכלת מהפער בין כוחו של ה-AI לצורך האמיתי שלנו: 
-              <strong>לכתוב תוכן שהוא גם חכם וגם מרגש.</strong>
-              <br/><br/>
-              את PromptBook בניתי כדי לגשר על הפער הזה. זו לא סתם רשימה, אלא כלי עבודה שמשלב אסטרטגיה שיווקית עם טכנולוגיה. המטרה שלי? שתכתבו פחות, ותמכרו יותר.
-            </p>
-          </div>
-        </section>
+          <section className="about">
+            {/* כאן בוצע התיקון - יש רק תמונה אחת */}
+            <img 
+                src="/pnina-profil.png" 
+                alt="Pnina Karayoff" 
+                onError={(e) => e.currentTarget.style.display = 'none'}
+            />
+            <div>
+              <h2>נעים להכיר, פנינה קריוף</h2>
+              <p style={{lineHeight: '1.6'}}>
+                כמוכם, הייתי מתוסכלת מהפער בין כוחו של ה-AI לצורך האמיתי שלנו: 
+                <strong>לכתוב תוכן שהוא גם חכם וגם מרגש.</strong>
+                <br/><br/>
+                את PromptBook בניתי כדי לגשר על הפער הזה. זו לא סתם רשימה, אלא כלי עבודה שמשלב אסטרטגיה שיווקית עם טכנולוגיה. המטרה שלי? שתכתבו פחות, ותמכרו יותר.
+              </p>
+            </div>
+          </section>
         </div>
 
         <section className="sec">
@@ -559,7 +569,6 @@ const LandingPage = () => {
           <p style={{marginBottom: '30px'}}>המחיר יעלה ל-397 ₪ מיד אחרי נובמבר.</p>
           <div style={{maxWidth: '300px', margin: '0 auto'}}>
             <div id="paypal-container-bottom"></div>
-            {/* גם למטה */}
             <p className="credit-card-note">💳 ניתן לשלם באשראי רגיל</p>
           </div>
         </section>
