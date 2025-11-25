@@ -15,7 +15,7 @@ const LandingPage = () => {
   const [samplePrompts, setSamplePrompts] = useState<Prompt[]>([]);
   const [isPromoActive, setIsPromoActive] = useState(true);
   
-  // תיקון לכפתורי פייפאל כפולים
+  // משתנה למניעת טעינה כפולה של פייפאל
   const paypalRan = useRef(false);
   
   const navigate = useNavigate();
@@ -62,7 +62,7 @@ const LandingPage = () => {
     fetchSamplePrompts();
   }, []);
 
-  // מנגנון פייפאל המתוקן (מונע כפילויות)
+  // מנגנון פייפאל המתוקן
   useEffect(() => {
     if (paypalRan.current) return;
     paypalRan.current = true;
@@ -524,7 +524,7 @@ const LandingPage = () => {
 
         <div className="wrap">
           <section className="about">
-            {/* כאן בוצע התיקון - יש רק תמונה אחת */}
+            {/* כאן התמונה תוקנה לשם הנכון */}
             <img 
                 src="/pnina-profile.jpg" 
                 alt="Pnina Karayoff" 
