@@ -546,7 +546,7 @@ const LandingPage = () => {
               <div>כמובן. קבלה מס נשלחת אוטומטית למייל.</div>
             </details>
             <details>
-              <summary>זה עובד בחינם של ChatGPT?</summary>
+              <summary>זה עובד בחינם ב ChatGPT?</summary>
               <div>כן, הפרומפטים עובדים מעולה גם בגרסה החינמית, וגם ב-Claude וב-Gemini.</div>
             </details>
           </div>
