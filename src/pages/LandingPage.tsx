@@ -516,8 +516,6 @@ const LandingPage = () => {
           <section className="about">
             {/* שימוש בתמונה המקומית */}
             <img src="/pnina-profile.jpg" alt="Pnina Karayoff" />
-            <img 
-            />
             <div>
               <h2>נעים להכיר, פנינה קריוף</h2>
               <p style={{lineHeight: '1.6'}}>
