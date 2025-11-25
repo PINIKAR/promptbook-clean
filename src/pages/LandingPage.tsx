@@ -332,7 +332,6 @@ const LandingPage = () => {
           border-radius: 20px;
         }
         
-        /* שימוש בתמונה מקומית */
         .about img {
           width: 120px;
           height: 120px;
@@ -385,6 +384,18 @@ const LandingPage = () => {
             height: 40px !important;
             width: auto !important;
         }
+        
+        /* סגנון להודעת האשראי */
+        .credit-card-note {
+            font-size: 13px;
+            color: #666;
+            margin-top: 8px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
 
         @media (max-width: 768px) {
           .hero h1 { font-size: 32px; }
@@ -433,7 +444,12 @@ const LandingPage = () => {
               
               <div id="paypal-container-top"></div>
               
-              <p style={{marginTop: '15px', fontSize: '12px', color: '#666'}}>
+              {/* --- הוספת הבהרת אשראי --- */}
+              <p className="credit-card-note">
+                💳 ניתן לשלם באשראי רגיל (גם ללא חשבון PayPal)
+              </p>
+              
+              <p style={{marginTop: '10px', fontSize: '12px', color: '#999'}}>
                 🔒 תשלום מאובטח | גישה מיידית | ללא מנוי חודשי
               </p>
             </div>
@@ -498,8 +514,10 @@ const LandingPage = () => {
 
         <div className="wrap">
           <section className="about">
-            {/* שימוש בתמונה המקומית */}
-            <img src="/pnina-profile.jpg" alt="Pnina Karayoff" />
+            <img 
+              src="https://media.licdn.com/dms/image/v2/D4D03AQGzQ_jW0jQjRg/profile-displayphoto-shrink_800_800/0/1683620887242?e=1737590400&v=beta&t=KzHq-example" 
+              alt="Pnina Karayoff" 
+            />
             <div>
               <h2>נעים להכיר, פנינה קריוף</h2>
               <p style={{lineHeight: '1.6'}}>
@@ -539,6 +557,8 @@ const LandingPage = () => {
           <p style={{marginBottom: '30px'}}>המחיר יעלה ל-397 ₪ מיד אחרי נובמבר.</p>
           <div style={{maxWidth: '300px', margin: '0 auto'}}>
             <div id="paypal-container-bottom"></div>
+            {/* גם למטה */}
+            <p className="credit-card-note">💳 ניתן לשלם באשראי רגיל</p>
           </div>
         </section>
 
