@@ -514,6 +514,8 @@ const LandingPage = () => {
 
         <div className="wrap">
           <section className="about">
+            {/* שימוש בתמונה המקומית */}
+            <img src="/pnina-profile.jpg" alt="Pnina Karayoff" />
             <img 
               src="https://media.licdn.com/dms/image/v2/D4D03AQGzQ_jW0jQjRg/profile-displayphoto-shrink_800_800/0/1683620887242?e=1737590400&v=beta&t=KzHq-example" 
               alt="Pnina Karayoff" 
