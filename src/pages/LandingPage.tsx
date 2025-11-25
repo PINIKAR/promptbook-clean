@@ -526,7 +526,7 @@ const LandingPage = () => {
           <section className="about">
             {/* כאן בוצע התיקון - יש רק תמונה אחת */}
             <img 
-                src="/pnina-profil.png" 
+                src="/pnina-profil.jpg" 
                 alt="Pnina Karayoff" 
                 onError={(e) => e.currentTarget.style.display = 'none'}
             />
