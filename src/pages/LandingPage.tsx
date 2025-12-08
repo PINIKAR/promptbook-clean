@@ -15,13 +15,12 @@ const LandingPage = () => {
   const [samplePrompts, setSamplePrompts] = useState<Prompt[]>([]);
   const [isPromoActive, setIsPromoActive] = useState(true);
   
-  // משתנה למניעת טעינה כפולה של פייפאל
   const paypalRan = useRef(false);
-  
   const navigate = useNavigate();
 
   useEffect(() => {
-    const deadline = new Date("2025-11-30T23:59:59").getTime();
+    // עדכון תאריך לסוף השנה האזרחית
+    const deadline = new Date("2025-12-31T23:59:59").getTime();
 
     const tick = () => {
       const now = Date.now();
@@ -62,7 +61,6 @@ const LandingPage = () => {
     fetchSamplePrompts();
   }, []);
 
-  // מנגנון פייפאל המתוקן
   useEffect(() => {
     if (paypalRan.current) return;
     paypalRan.current = true;
@@ -78,12 +76,14 @@ const LandingPage = () => {
 
         // @ts-ignore
         window.paypal.HostedButtons({
-          hostedButtonId: "TWSW6SFMDNR72",
+          // *** חשוב: כאן את צריכה לשים את ה-ID החדש של ה-99 ש"ח מפייפאל ***
+          hostedButtonId: "TWSW6SFMDNR72", 
         }).render("#paypal-container-top");
         
         // @ts-ignore
         window.paypal.HostedButtons({
-          hostedButtonId: "TWSW6SFMDNR72",
+          // *** וגם כאן ***
+          hostedButtonId: "TWSW6SFMDNR72", 
         }).render("#paypal-container-bottom");
       }
     };
@@ -163,7 +163,7 @@ const LandingPage = () => {
         }
 
         .bar {
-          background: black;
+          background: var(--c1); /* שינוי צבע לכחול כהה */
           color: white;
           text-align: center;
           padding: 10px;
@@ -181,21 +181,14 @@ const LandingPage = () => {
         }
 
         .promo-badge {
-          background-color: var(--danger);
-          color: white;
+          background-color: var(--c2); /* זהב במקום אדום */
+          color: black;
           display: inline-block;
           padding: 6px 16px;
           border-radius: 50px;
           font-weight: 700;
           font-size: 14px;
           margin-bottom: 20px;
-          animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-          0% { transform: scale(1); }
-          50% { transform: scale(1.05); }
-          100% { transform: scale(1); }
         }
 
         .hero {
@@ -224,18 +217,19 @@ const LandingPage = () => {
           border-radius: 16px;
           padding: 30px;
           box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-          border: 4px solid black;
+          border: 4px solid var(--c2); /* מסגרת זהב */
           position: relative;
           overflow: hidden;
         }
 
+        /* תווית סוף שנה */
         .price-box::before {
-          content: "BLACK FRIDAY";
+          content: "סוף שנה";
           position: absolute;
           top: 20px;
           right: -35px;
-          background: var(--c2);
-          color: black;
+          background: black;
+          color: white;
           font-weight: bold;
           padding: 5px 40px;
           transform: rotate(45deg);
@@ -418,7 +412,7 @@ const LandingPage = () => {
       <div className="landing-page" dir="rtl">
         {isPromoActive && (
           <div className="bar">
-            <span>⚡ BLACK FRIDAY SALE מסתיים בעוד: </span>
+            <span>🥂 מבצע סוף שנה מסתיים בעוד: </span>
             <span className="time">{timeLeft}</span>
           </div>
         )}
@@ -435,7 +429,7 @@ const LandingPage = () => {
 
         <section className="hero">
           <div className="wrap">
-            <span className="promo-badge">🔥 המחיר הנמוך של השנה</span>
+            <span className="promo-badge">✨ מתכוננים ל-2026</span>
             <h1>
               הפכו את ה-AI לקופירייטר <br />
               <span>עם נשמה ישראלית</span>
@@ -447,10 +441,10 @@ const LandingPage = () => {
             </p>
 
             <div className="price-box">
-              <div className="save-label">חוסכים 268 ₪!</div>
+              <div className="save-label">חוסכים 298 ₪!</div>
               <div className="price-display">
                 <span className="old-price">397 ₪</span>
-                <span className="new-price">129 ₪</span>
+                <span className="new-price">99 ₪</span>
               </div>
               
               <div id="paypal-container-top"></div>
@@ -524,7 +518,6 @@ const LandingPage = () => {
 
         <div className="wrap">
           <section className="about">
-            {/* כאן התמונה תוקנה לשם הנכון */}
             <img 
                 src="/pnina-profile.jpg" 
                 alt="Pnina Karayoff" 
@@ -565,8 +558,8 @@ const LandingPage = () => {
         </section>
 
         <section className="sec alt" style={{textAlign: 'center'}}>
-          <h2 style={{marginBottom: '10px'}}>מוכנים לשדרג את השיווק?</h2>
-          <p style={{marginBottom: '30px'}}>המחיר יעלה ל-397 ₪ מיד אחרי נובמבר.</p>
+          <h2 style={{marginBottom: '10px'}}>מוכנים לשדרג את השיווק ב-2026?</h2>
+          <p style={{marginBottom: '30px'}}>המחיר יעלה ל-397 ₪ ב-1 בינואר.</p>
           <div style={{maxWidth: '300px', margin: '0 auto'}}>
             <div id="paypal-container-bottom"></div>
             <p className="credit-card-note">💳 ניתן לשלם באשראי רגיל</p>
