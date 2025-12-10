@@ -42,7 +42,6 @@ const LandingPage = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // פונקציית גלילה למטה
   const scrollToPrice = () => {
     const element = document.getElementById("price-section");
     if (element) {
@@ -50,7 +49,6 @@ const LandingPage = () => {
     }
   };
 
-  // טעינת פייפאל - רק למטה!
   useEffect(() => {
     if (paypalRan.current) return;
     paypalRan.current = true;
@@ -59,8 +57,6 @@ const LandingPage = () => {
       // @ts-ignore
       if (window.paypal && window.paypal.HostedButtons) {
         const containerBottom = document.querySelector("#paypal-container-bottom");
-        
-        // ניקוי המיכל לפני רינדור כדי למנוע כפילויות
         if (containerBottom) containerBottom.innerHTML = "";
 
         // @ts-ignore
@@ -90,11 +86,11 @@ const LandingPage = () => {
       <style>{`
         :root {
           --font: 'Noto Sans Hebrew', 'Assistant', 'Arial', sans-serif;
-          --c1: #933ec7; /* סגול ראשי */ 
-          --c2: #1e95df; /* כחול טורקיז */ 
-          --c3: #337cdc; /* כחול כהה */ 
+          --c1: #933ec7; 
+          --c2: #1e95df; 
+          --c3: #337cdc; 
           --c4: #5f5ad7; 
-          --danger: #f86173; /* ורוד-אדום */
+          --danger: #f86173;
           --text: #111;
           --bg: #fcfcff;
           --card-bg: #ffffff;
@@ -185,7 +181,7 @@ const LandingPage = () => {
         
         .hero p {
             margin: 0 auto 40px;
-            max-width: 700px;
+            max-width: 750px;
             color: #444;
             font-size: 20px;
             font-weight: 500;
@@ -303,7 +299,6 @@ const LandingPage = () => {
         
         .card:hover { transform: translateY(-5px); }
         
-        /* צבעים לכרטיסיות כמו במקור */
         .card:nth-child(6n+1) { background-color: #E6E0F1; border-top: 5px solid var(--c1); } 
         .card:nth-child(6n+2) { background-color: #E0F5FF; border-top: 5px solid var(--c2); } 
         .card:nth-child(6n+3) { background-color: #FFE0E5; border-top: 5px solid var(--danger); } 
@@ -329,11 +324,12 @@ const LandingPage = () => {
           font-weight: 700;
           margin-bottom: 12px;
           display: flex;
-          align-items: center;
+          align-items: flex-start;
           gap: 15px;
           font-size: 18px;
+          line-height: 1.5;
         }
-        .bullets li:before { content: "✨"; font-size: 20px;}
+        .bullets li:before { content: "🧡"; font-size: 20px; flex-shrink: 0; }
 
         .about {
           display: flex;
@@ -377,7 +373,6 @@ const LandingPage = () => {
             display: inline-block;
         }
 
-        /* תיקון ה-FAQ */
         .faq details {
             margin-bottom: 15px;
             background: white;
@@ -429,7 +424,7 @@ const LandingPage = () => {
       <div className="landing-page" dir="rtl">
         {isPromoActive && (
           <div className="bar">
-            <span>🥂 מבצע סוף שנה מסתיים בעוד: </span>
+            <span>✨ מבצע סוף שנה (חיסול 2025) מסתיים בעוד: </span>
             <span className="time">{timeLeft}</span>
           </div>
         )}
@@ -444,19 +439,21 @@ const LandingPage = () => {
           </button>
         </header>
 
-        {/* HERO - ללא תשלום, רק טיזר */}
+        {/* HERO - משופר רגשית */}
         <section className="hero">
           <div className="wrap">
             <span className="promo-badge">✨ מתכוננים ל-2026</span>
             
             <h1>
-              הפכו את ה-AI לקופירייטר <br/>
-              <span>עם נשמה ישראלית</span>
+              נמאס לך שה-AI נשמע כמו רובוט? <br/>
+              <span>קבלו את הנשמה הישראלית</span>
             </h1>
             <p>
-              אם ה-AI כותב לכם טקסטים קרים שפשוט לא ממירים, אתם לא לבד.
+              אם כל פעם שאתם כותבים ל-ChatGPT יוצא לכם "צללו לעולם המופלא", אתם לא לבד.
               <br/>
-              הפתרון הוא לא להחליף כלי, אלא את ההוראה.
+              כדי שהטקסט ימכור בעברית, הוא צריך לדעת לדבר בגובה העיניים, עם רגש ועם סלנג ישראלי.
+              <br/>
+              <strong>וזה בדיוק מה שהספרייה הזו עושה בשבילכם.</strong>
             </p>
 
             <button onClick={scrollToPrice} className="cta-btn">
@@ -466,44 +463,44 @@ const LandingPage = () => {
         </section>
 
         <section className="sec alt">
-          <h2>מה מחכה לכם בפנים?</h2>
+          <h2>למה זה שונה מכל מה שהכרתם?</h2>
           <ul className="bullets">
-            <li><strong>אפליקציה אינטראקטיבית:</strong> 101 פרומפטים מסודרים ב־10 קטגוריות נוחות</li>
-            <li><strong>מנוע חיפוש חכם:</strong> סינון מהיר לפי קהל יעד וקטגוריה</li>
-            <li><strong>חיסכון בזמן:</strong> כפתור "העתק" מהיר ושמירת מועדפים</li>
-            <li><strong>ייצוא מלא:</strong> אפשרות להוריד את כל החוברת כ-PDF</li>
-            <li><strong>עדכונים שוטפים:</strong> ללא תוספת תשלום</li>
+            <li><strong>לא עוד קורס ארוך:</strong> זו ספרייה פרקטית. בוחרים מה רוצים לכתוב (פוסט, מייל, מודעה) ומקבלים "מתכון" מוכן.</li>
+            <li><strong>הסוד הוא ב"דוגרי":</strong> הפרומפטים אומנו להוציא מה-AI עברית טבעית, כזאת שלא צריך לשכתב שעות.</li>
+            <li><strong>שקט נפשי לשנה החדשה:</strong> במקום לבהות במסך ריק, יש לכם 101 רעיונות מוכנים לשליפה בכל רגע.</li>
+            <li><strong>חוסכים אלפי שקלים:</strong> זה כמו להחזיק קופירייטר צמוד בכיס, בלי לשלם ריטיינר חודשי.</li>
+            <li><strong>מתאים לכולם:</strong> גם אם אתם לא טכנולוגיים. שיטת "העתק-הדבק" פשוטה שעובדת בכל כלי (ChatGPT, Claude ועוד).</li>
           </ul>
         </section>
 
         <section className="sec">
-          <h2>טעימה מהכלי (דוגמאות)</h2>
+          <h2>איזה בעיות זה פותר לכם? (דוגמאות)</h2>
           <div className="teaser">
-                <div className="card"><b>כותרת ממירה לדף נחיתה</b><br/>יצירת 10 וריאציות עם הבטחת תוצאה וטון רגשי.</div>
-                <div className="card"><b>פתיח אמפתי קצר</b><br/>נוסחה של 70 מילים לזיהוי כאב, תקווה ופתרון לקהל שלך.</div>
-                <div className="card"><b>קמפיין 7 ימים להשקה רכה</b><br/>בניית רצף 7 ימי טיזר, עדות ודחיפות להשקות מוצרים.</div>
-                <div className="card"><b>Retargeting השארת עגלה</b><br/>3 מודעות רימרקטינג אפקטיביות למבקרים שלא המירו.</div>
-                <div className="card"><b>פירוק התנגדות עיקרית</b><br/>מענה בשלושה חלקים להתנגדות הגדולה ביותר למוצר שלך.</div>
-                <div className="card"><b>FAQ ממיר</b><br/>6 שאלות ותשובות שמסירות התנגדויות ומכניסות CTA עדין.</div>
+                <div className="card"><b>"אני צריכה דף נחיתה דחוף"</b><br/>קבלו נוסחה לכותרת וטקסט שגורמים לאנשים להשאיר פרטים, בלי להישמע שיווקיים מידי.</div>
+                <div className="card"><b>"איך מתחילים פוסט?"</b><br/>פרומפט ל"פתיח אמפתי" שמזהה את הכאב של הלקוח וגורם לו לקרוא עד הסוף.</div>
+                <div className="card"><b>"יש לי השקה בפתח"</b><br/>גאנט תוכן מלא לשבוע שלם: מהטיזר הראשון ועד למכירה, הכל מוכן.</div>
+                <div className="card"><b>"לקוחות נוטשים עגלה"</b><br/>מודעות רימרקטינג חכמות שמחזירות את הלקוחות בעדינות ובחיוך.</div>
+                <div className="card"><b>"יקר להם..."</b><br/>נוסחה לפירוק התנגדויות בצורה אלגנטית ומכילה, שהופכת "לא" ל"אולי" ואז ל"כן".</div>
+                <div className="card"><b>"אין לי כוח לכתוב שאלות ותשובות"</b><br/>פרומפט שמייצר FAQ חכם שגם עונה וגם מוכר את המוצר.</div>
           </div>
         </section>
 
         <section className="sec alt">
-          <h2>מה אומרים מי שכבר משתמשים?</h2>
+          <h2>מה אומרים מי שכבר ניסו?</h2>
           <div className="teaser">
             <div className="testimonial">
               <div style={{color:'gold', fontSize:'20px'}}>★★★★★</div>
-              "הכלי הזה חסך לי לפחות 5 שעות כתיבה שבועיות. במקום לשבור את הראש, אני פשוט מעתיקה ומדביקה."
+              "הייתי סקפטית שזה יעבוד בעברית, אבל זה פשוט עובד. הטקסטים יוצאים 'עגולים' ונעימים, בלי התרגום המעצבן של גוגל."
               <br /><strong>- יעל כץ, מנהלת סושיאל</strong>
             </div>
             <div className="testimonial">
               <div style={{color:'gold', fontSize:'20px'}}>★★★★★</div>
-              "פנינה, תודה! זה מרגיש כמו ששכרתי קופירייטר צמוד לעסק, אבל שילמתי פחות משיחת ייעוץ אחת."
+              "זה לא רק חוסך זמן, זה חוסך תסכול. במקום לריב עם הבוט, אני פשוט מעתיקה את הפרומפט של פנינה וזהו."
               <br /><strong>- רן לוי, מאמן אישי</strong>
             </div>
             <div className="testimonial">
               <div style={{color:'gold', fontSize:'20px'}}>★★★★★</div>
-              "התוצאות הן עברית נקייה וטבעית. סוף סוף ה-AI מדבר בשפה שמתאימה לקהל הישראלי."
+              "ההשקעה הכי טובה שעשיתי השנה לעסק. במחיר של ארוחת צהריים קיבלתי שקט תעשייתי בכתיבת התוכן."
               <br /><strong>- מירב דהן, פרילנסרית</strong>
             </div>
           </div>
@@ -517,28 +514,29 @@ const LandingPage = () => {
                 onError={(e) => e.currentTarget.style.display = 'none'}
             />
             <div>
-              <h2>נעים להכיר, פנינה קריוף</h2>
+              <h2>למה פיתחתי את זה?</h2>
               <p style={{lineHeight: '1.6', fontSize: '18px'}}>
-                כמוכם, הייתי מתוסכלת מהפער בין כוחו של ה-AI לצורך האמיתי שלנו: 
-                <strong>לכתוב תוכן שהוא גם חכם וגם מרגש.</strong>
+                היי, אני פנינה. כמנטורית AI ומטפלת, ראיתי איך בעלי עסקים מדהימים נופלים דווקא בשלב הכתיבה.
+                יש לכם את הידע, יש לכם את הרגש, אבל ה-AI לא מצליח להוציא את זה החוצה.
                 <br/><br/>
-                את PromptBook בניתי כדי לגשר על הפער הזה – זו שיטה שמשלבת אסטרטגיה, עיצוב וטכנולוגיה. המטרה שלי? שתכתבו פחות, ותמכרו יותר.
+                את PromptBook בניתי לא כ"מתכנתת", אלא כמי שמבינה אנשים.
+                כל פרומפט כאן עבר שיוף ודיוק כדי להבטיח שהתוצאה תהיה כזאת שתרצו לחתום עליה בגאווה.
               </p>
             </div>
           </section>
         </div>
 
         <section className="sec faq">
-          <h2>שאלות נפוצות</h2>
-          <details><summary>איך מקבלים גישה?</summary><div>מיד אחרי התשלום, תועברו למערכת ותוכלו להתחבר עם גוגל. הגישה היא מיידית.</div></details>
-          <details><summary>אפשר לקבל קבלה?</summary><div>כן, קבלה מס נשלחת אוטומטית למייל אחרי התשלום.</div></details>
-          <details><summary>זה עובד גם בנייד?</summary><div>כן! האפליקציה מותאמת לכל המכשירים - מחשב, טאבלט וסמארטפון.</div></details>
-          <details><summary>האם זה מנוי חודשי?</summary><div>לא! התשלום הוא חד-פעמי לכל החיים.</div></details>
+          <h2>שאלות ששואלים אותי</h2>
+          <details><summary>האם צריך ידע קודם ב-AI?</summary><div>ממש לא. זה כל היופי. האפליקציה בנויה כספרייה ויזואלית. אתם רק צריכים לדעת לעשות "העתק-הדבק".</div></details>
+          <details><summary>זה עובד גם בגרסה החינמית של ChatGPT?</summary><div>בהחלט! הפרומפטים נבדקו ועובדים מצוין גם בגרסה החינמית, וגם ב-Claude וב-Gemini.</div></details>
+          <details><summary>האם זה מנוי שמתחדש?</summary><div>לא! אני לא אוהבת הפתעות באשראי. התשלום הוא חד-פעמי והגישה נשארת שלכם לתמיד, כולל עדכונים עתידיים.</div></details>
+          <details><summary>איך מקבלים גישה?</summary><div>מיד אחרי התשלום המאובטח, המערכת תזהה אתכם ותוכלו להיכנס ולהתחיל לעבוד.</div></details>
         </section>
 
         {/* SECTION תשלום - מופיע רק כאן */}
         <section id="price-section" className="sec price-box">
-          <h2 style={{color:'var(--c1)', marginBottom:'10px'}}>אז למה לחכות ל-2026?</h2>
+          <h2 style={{color:'var(--c1)', marginBottom:'10px'}}>מוכנים לשדרג את העסק ל-2026?</h2>
           <p style={{fontSize:'18px'}}>המחיר עולה ל-397 ₪ ב-1 בינואר.</p>
           
           <div className="price-display">
