@@ -12,7 +12,6 @@ interface Prompt {
 
 const LandingPage = () => {
   const [timeLeft, setTimeLeft] = useState("");
-  // const [samplePrompts, setSamplePrompts] = useState<Prompt[]>([]); // הוסתר לפי בקשה
   const [isPromoActive, setIsPromoActive] = useState(true);
   
   const paypalRan = useRef(false);
@@ -43,7 +42,15 @@ const LandingPage = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // הטעינה של פייפאל
+  // פונקציית גלילה למטה
+  const scrollToPrice = () => {
+    const element = document.getElementById("price-section");
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  // טעינת פייפאל - רק למטה!
   useEffect(() => {
     if (paypalRan.current) return;
     paypalRan.current = true;
@@ -51,20 +58,14 @@ const LandingPage = () => {
     const loadPaypal = () => {
       // @ts-ignore
       if (window.paypal && window.paypal.HostedButtons) {
-        const containerTop = document.querySelector("#paypal-container-top");
         const containerBottom = document.querySelector("#paypal-container-bottom");
         
-        if (containerTop) containerTop.innerHTML = "";
+        // ניקוי המיכל לפני רינדור כדי למנוע כפילויות
         if (containerBottom) containerBottom.innerHTML = "";
 
         // @ts-ignore
         window.paypal.HostedButtons({
-          hostedButtonId: "TWSW6SFMDNR72", // המזהה הקיים שלך
-        }).render("#paypal-container-top");
-        
-        // @ts-ignore
-        window.paypal.HostedButtons({
-          hostedButtonId: "TWSW6SFMDNR72", // המזהה הקיים שלך
+          hostedButtonId: "TWSW6SFMDNR72", 
         }).render("#paypal-container-bottom");
       }
     };
@@ -87,7 +88,6 @@ const LandingPage = () => {
   return (
     <>
       <style>{`
-        /* העתקה של העיצוב המקורי והיפה שלך */
         :root {
           --font: 'Noto Sans Hebrew', 'Assistant', 'Arial', sans-serif;
           --c1: #933ec7; /* סגול ראשי */ 
@@ -106,11 +106,6 @@ const LandingPage = () => {
             33% { background-color: var(--c2); }
             66% { background-color: var(--c3); }
             100% { background-color: var(--c1); }
-        }
-        @keyframes pulseDanger {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(248, 97, 115, 0.7); }
-            70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(248, 97, 115, 0); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(248, 97, 115, 0); }
         }
         
         .landing-page {
@@ -134,6 +129,8 @@ const LandingPage = () => {
           display: flex;
           justify-content: space-between;
           align-items: center;
+          position: relative;
+          z-index: 40;
         }
 
         .bar {
@@ -159,41 +156,60 @@ const LandingPage = () => {
           font-family: monospace;
         }
         
-        .promo-bar-static {
+        .promo-badge {
             background-color: var(--danger);
             color: white;
-            text-align: center;
-            font-size: 18px; 
-            font-weight: 800;
-            padding: 12px 20px;
-            border-radius: 30px; 
-            margin: 20px auto 30px;
-            width: fit-content;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-            animation: pulseDanger 2s infinite;
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
         .hero {
             text-align: center; 
             background: var(--card-bg);
-            padding: 40px 20px;
+            padding: 60px 20px;
         }
         
         .hero h1 {
-            margin: 0 auto 15px;
+            margin: 0 auto 20px;
             font-size: 48px;
-            line-height: 1.1;
+            line-height: 1.2;
             color: var(--c1);
             font-weight: 900;
-            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); 
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.05); 
         }
         
         .hero p {
-            margin: 0 auto 30px;
+            margin: 0 auto 40px;
             max-width: 700px;
             color: #444;
             font-size: 20px;
-            font-weight: 600;
+            font-weight: 500;
+            line-height: 1.6;
+        }
+
+        .cta-btn {
+            background: var(--c3);
+            color: white;
+            font-size: 22px;
+            font-weight: 800;
+            padding: 18px 45px;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 25px rgba(51, 124, 220, 0.4);
+            text-decoration: none;
+            display: inline-block;
+        }
+        .cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(51, 124, 220, 0.6);
+            background: var(--c1);
         }
 
         .price-box {
@@ -201,11 +217,28 @@ const LandingPage = () => {
           border-radius: 20px;
           padding: 40px;
           text-align: center;
-          border: 2px solid var(--c1);
+          border: 3px solid var(--c1);
           margin-top: 30px;
           max-width: 500px;
           margin-left: auto;
           margin-right: auto;
+          box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+          position: relative;
+          overflow: hidden;
+        }
+
+        .price-box::before {
+          content: "סוף שנה";
+          position: absolute;
+          top: 30px;
+          right: -40px;
+          background: var(--danger);
+          color: white;
+          font-weight: bold;
+          padding: 8px 50px;
+          transform: rotate(45deg);
+          font-size: 14px;
+          box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
 
         .price-display {
@@ -231,8 +264,8 @@ const LandingPage = () => {
 
         .sec {
           border-radius: 20px;
-          padding: 30px;
-          margin: 25px auto;
+          padding: 40px;
+          margin: 40px auto;
           box-shadow: 0 6px 15px rgba(0,0,0,0.05);
           max-width: 1000px;
           background: var(--card-bg);
@@ -240,47 +273,51 @@ const LandingPage = () => {
         
         .sec.alt {
           background: var(--alt-bg);
-          border: 1px solid rgba(30,149,223,0.2);
+          border: 1px solid rgba(30,149,223,0.1);
         }
         
         .sec h2 {
-            margin: 0 0 20px;
-            font-size: 28px;
+            margin: 0 0 25px;
+            font-size: 30px;
             color: var(--c3);
-            border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
-            font-weight: 700;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 15px;
+            font-weight: 800;
         }
 
         .teaser {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-          gap: 15px;
+          gap: 20px;
         }
         
         .card {
             border-radius: 16px;
-            padding: 18px; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            padding: 25px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             color: var(--text);
             transition: transform 0.3s;
             border: 1px solid rgba(0,0,0,0.05);
+            background: white;
         }
         
+        .card:hover { transform: translateY(-5px); }
+        
         /* צבעים לכרטיסיות כמו במקור */
-        .card:nth-child(6n+1) { background-color: #E6E0F1; border-top: 4px solid var(--c1); } 
-        .card:nth-child(6n+2) { background-color: #E0F5FF; border-top: 4px solid var(--c2); } 
-        .card:nth-child(6n+3) { background-color: #FFE0E5; border-top: 4px solid var(--danger); } 
-        .card:nth-child(6n+4) { background-color: #F0F4E8; border-top: 4px solid #88aa33; } 
-        .card:nth-child(6n+5) { background-color: #F8F9FF; border-top: 4px solid var(--c4); }
-        .card:nth-child(6n+6) { background-color: #FFF9E0; border-top: 4px solid orange; }
+        .card:nth-child(6n+1) { background-color: #E6E0F1; border-top: 5px solid var(--c1); } 
+        .card:nth-child(6n+2) { background-color: #E0F5FF; border-top: 5px solid var(--c2); } 
+        .card:nth-child(6n+3) { background-color: #FFE0E5; border-top: 5px solid var(--danger); } 
+        .card:nth-child(6n+4) { background-color: #F0F4E8; border-top: 5px solid #88aa33; } 
+        .card:nth-child(6n+5) { background-color: #F8F9FF; border-top: 5px solid var(--c4); }
+        .card:nth-child(6n+6) { background-color: #FFF9E0; border-top: 5px solid orange; }
 
         .testimonial {
             background: white;
-            border-left: 5px solid var(--c1);
-            padding: 20px;
-            box-shadow: 2px 4px 10px rgba(0,0,0,0.1);
-            margin-bottom: 15px;
+            border-right: 5px solid var(--c2);
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            border-radius: 12px;
         }
 
         .bullets li {
@@ -288,67 +325,118 @@ const LandingPage = () => {
           background: #fff;
           padding: 15px;
           border-radius: 12px;
-          border: 2px solid #e0e0e0;
+          border: 2px solid #f0f0f0;
           font-weight: 700;
-          margin-bottom: 10px;
+          margin-bottom: 12px;
           display: flex;
           align-items: center;
-          gap: 10px;
+          gap: 15px;
+          font-size: 18px;
         }
-        .bullets li:before { content: "✨"; }
+        .bullets li:before { content: "✨"; font-size: 20px;}
 
         .about {
           display: flex;
           gap: 30px;
           align-items: center;
-          background: var(--card-bg);
-          padding: 40px;
-          border-radius: 20px;
-          border: 1px solid #eee;
+          background: #1a1a1a;
+          color: white;
+          padding: 50px;
+          border-radius: 30px;
         }
+        .about h2 { color: var(--c2); border: none; }
         .about img {
-          width: 120px;
-          height: 120px;
+          width: 140px;
+          height: 140px;
           border-radius: 50%;
-          border: 4px solid var(--c1);
+          border: 5px solid var(--c1);
           object-fit: cover;
         }
 
         .login-btn {
             background-color: var(--c3);
             color: white;
-            padding: 8px 20px;
-            border-radius: 20px;
+            padding: 10px 25px;
+            border-radius: 25px;
             text-decoration: none;
             font-weight: bold;
             cursor: pointer;
             border: none;
+            transition: all 0.3s;
         }
+        .login-btn:hover { background-color: var(--c1); }
 
         .credit-card-note {
-            font-size: 14px;
-            color: #666;
-            margin-top: 10px;
-            font-weight: 600;
+            font-size: 15px;
+            color: #555;
+            margin-top: 15px;
+            font-weight: 700;
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            display: inline-block;
         }
 
+        /* תיקון ה-FAQ */
+        .faq details {
+            margin-bottom: 15px;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .faq summary {
+            padding: 20px;
+            cursor: pointer;
+            font-weight: 700;
+            background: #fff;
+            list-style: none;
+            position: relative;
+            color: var(--c1);
+        }
+        .faq summary::-webkit-details-marker { display: none; }
+        .faq summary:after {
+            content: "+";
+            position: absolute;
+            left: 20px;
+            font-size: 24px;
+            color: var(--c2);
+        }
+        .faq details[open] summary:after { content: "-"; }
+        .faq details[open] { background: var(--alt-bg); }
+        .faq div {
+            padding: 0 20px 20px 20px;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px;
+            background: #f0f0f0;
+            color: #666;
+        }
+        footer a { color: var(--c3); text-decoration: none; margin: 0 10px;}
+
         @media (max-width: 768px) {
-          .hero h1 { font-size: 36px; }
-          .about { flex-direction: column; text-align: center; }
+          .hero h1 { font-size: 34px; }
+          .about { flex-direction: column; text-align: center; padding: 30px; }
+          .price-box { padding: 20px; }
+          .new-price { font-size: 60px; }
         }
       `}</style>
 
       <div className="landing-page" dir="rtl">
         {isPromoActive && (
           <div className="bar">
-            <span>✨ מבצע סוף שנה (חיסול 2025) מסתיים בעוד: </span>
+            <span>🥂 מבצע סוף שנה מסתיים בעוד: </span>
             <span className="time">{timeLeft}</span>
           </div>
         )}
 
         <header className="landing-header">
           <a href="/" className="logo" style={{display:'flex', alignItems:'center', textDecoration:'none', gap:'10px'}}>
-            <img src="/logo.png" alt="PromptBook" className="logo-img" style={{height: '40px'}} />
+            <img src="/logo.png" alt="PromptBook" className="logo-img" style={{height: '45px'}} />
             <div className="title" style={{color: 'var(--c3)', fontWeight:'800', fontSize:'22px'}}>PromptBook</div>
           </a>
           <button onClick={() => navigate('/auth')} className="login-btn">
@@ -356,15 +444,14 @@ const LandingPage = () => {
           </button>
         </header>
 
+        {/* HERO - ללא תשלום, רק טיזר */}
         <section className="hero">
           <div className="wrap">
-            <div className="promo-bar-static">
-                🔥 המחיר הנמוך של השנה - 99 ₪ בלבד
-            </div>
+            <span className="promo-badge">✨ מתכוננים ל-2026</span>
             
             <h1>
-              הקץ לטקסטים רובוטיים: <br/>
-              101 הפרומפטים שמוסיפים נשמה ל-AI שלך
+              הפכו את ה-AI לקופירייטר <br/>
+              <span>עם נשמה ישראלית</span>
             </h1>
             <p>
               אם ה-AI כותב לכם טקסטים קרים שפשוט לא ממירים, אתם לא לבד.
@@ -372,20 +459,9 @@ const LandingPage = () => {
               הפתרון הוא לא להחליף כלי, אלא את ההוראה.
             </p>
 
-            <div className="price-box">
-              <h2>מבצע חיסול 2025 💰</h2>
-              <div className="price-display">
-                <span className="old-price">397 ₪</span>
-                <span className="new-price">99 ₪</span>
-              </div>
-              
-              <div id="paypal-container-top"></div>
-              
-              <p className="credit-card-note">
-                💳 ניתן לשלם באשראי רגיל (גם ללא חשבון PayPal)
-              </p>
-              <p style={{marginTop: '10px', fontSize: '13px'}}>🔒 גישה מיידית לכל החיים</p>
-            </div>
+            <button onClick={scrollToPrice} className="cta-btn">
+              רוצה לראות איך זה עובד ↓
+            </button>
           </div>
         </section>
 
@@ -442,7 +518,7 @@ const LandingPage = () => {
             />
             <div>
               <h2>נעים להכיר, פנינה קריוף</h2>
-              <p style={{lineHeight: '1.6', fontSize: '16px'}}>
+              <p style={{lineHeight: '1.6', fontSize: '18px'}}>
                 כמוכם, הייתי מתוסכלת מהפער בין כוחו של ה-AI לצורך האמיתי שלנו: 
                 <strong>לכתוב תוכן שהוא גם חכם וגם מרגש.</strong>
                 <br/><br/>
@@ -454,12 +530,14 @@ const LandingPage = () => {
 
         <section className="sec faq">
           <h2>שאלות נפוצות</h2>
-          <details style={{padding:'10px', borderBottom:'1px solid #eee'}}><summary>איך מקבלים גישה?</summary><div style={{marginTop:'5px', color:'#555'}}>מיד אחרי התשלום, תועברו למערכת ותוכלו להתחבר. הגישה היא מיידית.</div></details>
-          <details style={{padding:'10px', borderBottom:'1px solid #eee'}}><summary>אפשר לקבל קבלה?</summary><div style={{marginTop:'5px', color:'#555'}}>כן, קבלה מס נשלחת אוטומטית למייל אחרי התשלום.</div></details>
-          <details style={{padding:'10px', borderBottom:'1px solid #eee'}}><summary>זה עובד גם בנייד?</summary><div style={{marginTop:'5px', color:'#555'}}>כן! האפליקציה מותאמת לכל המכשירים - מחשב, טאבלט וסמארטפון.</div></details>
+          <details><summary>איך מקבלים גישה?</summary><div>מיד אחרי התשלום, תועברו למערכת ותוכלו להתחבר עם גוגל. הגישה היא מיידית.</div></details>
+          <details><summary>אפשר לקבל קבלה?</summary><div>כן, קבלה מס נשלחת אוטומטית למייל אחרי התשלום.</div></details>
+          <details><summary>זה עובד גם בנייד?</summary><div>כן! האפליקציה מותאמת לכל המכשירים - מחשב, טאבלט וסמארטפון.</div></details>
+          <details><summary>האם זה מנוי חודשי?</summary><div>לא! התשלום הוא חד-פעמי לכל החיים.</div></details>
         </section>
 
-        <section className="sec price-box" style={{marginTop:'40px'}}>
+        {/* SECTION תשלום - מופיע רק כאן */}
+        <section id="price-section" className="sec price-box">
           <h2 style={{color:'var(--c1)', marginBottom:'10px'}}>אז למה לחכות ל-2026?</h2>
           <p style={{fontSize:'18px'}}>המחיר עולה ל-397 ₪ ב-1 בינואר.</p>
           
@@ -468,10 +546,12 @@ const LandingPage = () => {
              <span className="new-price">99 ₪</span>
           </div>
 
-          <div style={{maxWidth: '300px', margin: '0 auto'}}>
+          <div style={{maxWidth: '350px', margin: '0 auto'}}>
             <div id="paypal-container-bottom"></div>
-            <p className="credit-card-note">💳 ניתן לשלם באשראי רגיל</p>
+            <p className="credit-card-note">💳 ניתן לשלם באשראי רגיל (גם ללא חשבון PayPal)</p>
           </div>
+          
+          <p style={{marginTop:'20px', fontSize:'14px', color:'#777'}}>🔒 רכישה מאובטחת וגישה מיידית</p>
         </section>
 
         <footer>
