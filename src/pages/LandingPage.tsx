@@ -12,7 +12,7 @@ interface Prompt {
 
 const LandingPage = () => {
   const [timeLeft, setTimeLeft] = useState("");
-  const [samplePrompts, setSamplePrompts] = useState<Prompt[]>([]);
+  // const [samplePrompts, setSamplePrompts] = useState<Prompt[]>([]); // הסתרנו את הדוגמאות לפי הפידבק
   const [isPromoActive, setIsPromoActive] = useState(true);
   
   const paypalRan = useRef(false);
@@ -43,23 +43,7 @@ const LandingPage = () => {
     return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    const fetchSamplePrompts = async () => {
-      const { data } = await supabase
-        .from("prompts")
-        .select("*")
-        .eq("is_published", true)
-        .eq("visible", true)
-        .eq("is_sample", true)
-        .order("order")
-        .limit(6);
-
-      if (data && data.length > 0) {
-        setSamplePrompts(data);
-      }
-    };
-    fetchSamplePrompts();
-  }, []);
+  // הסרנו את שליפת הדוגמאות כדי לשמור על סקרנות
 
   useEffect(() => {
     if (paypalRan.current) return;
@@ -68,21 +52,12 @@ const LandingPage = () => {
     const loadPaypal = () => {
       // @ts-ignore
       if (window.paypal && window.paypal.HostedButtons) {
-        const containerTop = document.querySelector("#paypal-container-top");
         const containerBottom = document.querySelector("#paypal-container-bottom");
         
-        if (containerTop) containerTop.innerHTML = "";
         if (containerBottom) containerBottom.innerHTML = "";
 
         // @ts-ignore
         window.paypal.HostedButtons({
-          // *** חשוב: כאן את צריכה לשים את ה-ID החדש של ה-99 ש"ח מפייפאל ***
-          hostedButtonId: "TWSW6SFMDNR72", 
-        }).render("#paypal-container-top");
-        
-        // @ts-ignore
-        window.paypal.HostedButtons({
-          // *** וגם כאן ***
           hostedButtonId: "TWSW6SFMDNR72", 
         }).render("#paypal-container-bottom");
       }
@@ -103,8 +78,8 @@ const LandingPage = () => {
     }
   }, []);
 
-  const getFirstThreeLines = (text: string) => {
-    return text.split("\n").filter(Boolean).slice(0, 3).join("\n");
+  const scrollToPrice = () => {
+    document.getElementById("price-section")?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
@@ -124,10 +99,11 @@ const LandingPage = () => {
           background: var(--bg);
           color: #1e293b;
           min-height: 100vh;
+          overflow-x: hidden;
         }
         
         .wrap {
-          max-width: 1050px;
+          max-width: 900px;
           margin: 0 auto;
           padding: 20px;
         }
@@ -143,63 +119,25 @@ const LandingPage = () => {
           top: 0;
           z-index: 40;
         }
-        
-        .login-btn {
-            background-color: black;
-            color: white;
-            padding: 8px 20px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 14px;
-            cursor: pointer;
-            border: 1px solid black;
-            transition: all 0.3s;
-        }
-
-        .login-btn:hover {
-            background-color: white;
-            color: black;
-        }
 
         .bar {
-          background: var(--c1); /* שינוי צבע לכחול כהה */
+          background: var(--c1);
           color: white;
           text-align: center;
           padding: 10px;
           font-weight: bold;
-          font-size: 16px;
-          position: relative;
-          z-index: 50;
+          font-size: 14px;
         }
         
-        .bar .time {
-          color: var(--c2);
-          font-family: monospace;
-          font-size: 18px;
-          margin-right: 10px;
-        }
-
-        .promo-badge {
-          background-color: var(--c2); /* זהב במקום אדום */
-          color: black;
-          display: inline-block;
-          padding: 6px 16px;
-          border-radius: 50px;
-          font-weight: 700;
-          font-size: 14px;
-          margin-bottom: 20px;
-        }
-
         .hero {
           text-align: center;
-          padding: 60px 20px;
+          padding: 80px 20px 40px;
           background: white;
         }
         
         .hero h1 {
-          font-size: 42px;
-          line-height: 1.2;
+          font-size: 48px;
+          line-height: 1.1;
           color: black;
           font-weight: 900;
           margin-bottom: 20px;
@@ -207,33 +145,77 @@ const LandingPage = () => {
         
         .hero h1 span {
           color: var(--c2);
+          display: block;
         }
-        
+
+        .hero p {
+            font-size: 20px;
+            color: #475569;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            line-height: 1.5;
+        }
+
+        .cta-btn {
+            background: black;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 15px 40px;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        .cta-btn:hover {
+            transform: scale(1.05);
+            background: #333;
+        }
+
+        /* סקשן הכאב - הוספה חדשה */
+        .pain-section {
+            background: #f1f5f9;
+            padding: 60px 20px;
+            text-align: center;
+        }
+        .pain-box {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .pain-box h2 { font-size: 32px; margin-bottom: 20px; }
+        .pain-box p { font-size: 18px; line-height: 1.6; margin-bottom: 15px; }
+
+        .solution-section {
+            padding: 60px 20px;
+            text-align: center;
+            background: white;
+        }
+
         .price-box {
-          background: white; 
+          background: #fff; 
           color: black;
-          max-width: 450px;
-          margin: 0 auto;
-          border-radius: 16px;
-          padding: 30px;
-          box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-          border: 4px solid var(--c2); /* מסגרת זהב */
+          max-width: 500px;
+          margin: 40px auto;
+          border-radius: 20px;
+          padding: 40px;
+          box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+          border: 4px solid var(--c2);
           position: relative;
           overflow: hidden;
         }
 
-        /* תווית סוף שנה */
         .price-box::before {
           content: "סוף שנה";
           position: absolute;
-          top: 20px;
-          right: -35px;
+          top: 30px;
+          right: -40px;
           background: black;
           color: white;
           font-weight: bold;
-          padding: 5px 40px;
+          padding: 8px 50px;
           transform: rotate(45deg);
-          font-size: 12px;
+          font-size: 14px;
         }
         
         .price-display {
@@ -241,92 +223,42 @@ const LandingPage = () => {
           align-items: center;
           justify-content: center;
           gap: 15px;
-          margin-bottom: 20px;
+          margin: 20px 0;
         }
 
         .old-price {
           text-decoration: line-through;
           color: #94a3b8;
-          font-size: 24px;
+          font-size: 28px;
         }
 
         .new-price {
-          font-size: 56px;
+          font-size: 72px;
           font-weight: 900;
           color: black;
           line-height: 1;
         }
 
-        .save-label {
-          color: var(--danger);
-          font-weight: bold;
-          font-size: 18px;
-          display: block;
-          margin-bottom: 20px;
-        }
-
-        .sec {
-          border-radius: 16px;
-          padding: 40px;
-          margin: 40px auto;
-          max-width: 1000px;
-          background: white;
-          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-        }
-        
-        .sec.alt {
-          background: #f8fafc;
-          box-shadow: none;
-        }
-        
         .bullets li {
           list-style: none;
-          background: #fff;
-          padding: 20px;
+          background: #f8fafc;
+          padding: 15px 20px;
           border-radius: 12px;
-          border: 1px solid #e2e8f0;
+          margin-bottom: 15px;
           font-weight: 600;
           display: flex;
-          align-items: flex-start;
-          gap: 10px;
+          align-items: center;
+          gap: 15px;
+          text-align: right;
+          font-size: 18px;
         }
         
         .bullets li:before {
           content: "✓";
           color: var(--c2);
           font-weight: 900;
-          font-size: 20px;
+          font-size: 24px;
         }
-
-        .teaser {
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-          gap: 20px;
-        }
-        
-        .card {
-          background: white;
-          border: 1px solid #e2e8f0;
-          border-radius: 12px;
-          padding: 20px;
-          box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        
-        .card b {
-          color: var(--c1);
-          font-size: 18px;
-          display: block;
-          margin-bottom: 8px;
-        }
-
-        .testimonial {
-          text-align: center;
-          padding: 20px;
-          background: #f8fafc;
-          border-radius: 12px;
-          border: 1px solid #e2e8f0;
-        }
-        .stars { color: var(--c2); font-size: 20px; margin-bottom: 10px; }
 
         .about {
           display: flex;
@@ -336,6 +268,7 @@ const LandingPage = () => {
           color: white;
           padding: 40px;
           border-radius: 20px;
+          margin: 40px 0;
         }
         
         .about img {
@@ -346,173 +279,89 @@ const LandingPage = () => {
           object-fit: cover;
           flex-shrink: 0;
         }
-        
-        .about h2 { color: var(--c2); text-align: right; margin-bottom: 10px; }
-        
-        .faq details {
-          background: #fff;
-          margin-bottom: 10px;
-          border: 1px solid #e2e8f0;
-          border-radius: 8px;
-          padding: 15px;
-        }
-        
-        .faq summary {
-          padding: 15px;
-          cursor: pointer;
-          font-weight: bold;
-          background: #f1f5f9;
-        }
-        
-        .faq div {
-          padding: 15px;
-          color: #475569;
-          line-height: 1.6;
-        }
-
-        footer {
-          text-align: center;
-          padding: 40px 20px;
-          background: black;
-          color: #94a3b8;
-          font-size: 14px;
-        }
-        
-        footer a {
-          color: white;
-          text-decoration: none;
-          margin: 0 8px;
-        }
-        
-        footer a:hover { color: var(--c2); }
-
-        .logo-img {
-            height: 40px !important;
-            width: auto !important;
-        }
-        
-        .credit-card-note {
-            font-size: 13px;
-            color: #666;
-            margin-top: 8px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
-        }
 
         @media (max-width: 768px) {
-          .hero h1 { font-size: 32px; }
+          .hero h1 { font-size: 36px; }
           .about { flex-direction: column; text-align: center; }
-          .about h2 { text-align: center; }
+          .cta-btn { width: 100%; }
         }
       `}</style>
 
       <div className="landing-page" dir="rtl">
         {isPromoActive && (
           <div className="bar">
-            <span>🥂 מבצע סוף שנה מסתיים בעוד: </span>
+            <span>✨ מבצע סוף שנה מסתיים בעוד: </span>
             <span className="time">{timeLeft}</span>
           </div>
         )}
 
         <header className="landing-header">
-          <a href="/" className="logo" style={{display:'flex', alignItems:'center', textDecoration:'none', gap:'10px'}}>
-            <img src="/logo.png" alt="PromptBook" className="logo-img" />
-            <div className="title" style={{color: 'black', fontWeight:'800', fontSize:'20px'}}>PromptBook</div>
-          </a>
-          <button onClick={() => navigate('/auth')} className="login-btn">
-            כניסה למנויים
-          </button>
+          <div style={{display:'flex', alignItems:'center', gap:'10px'}}>
+            <img src="/logo.png" alt="PromptBook" style={{height:'35px'}} />
+            <div style={{fontWeight:'800', fontSize:'18px'}}>PromptBook</div>
+          </div>
         </header>
 
+        {/* Hero Section: בלי מחיר, רק ההבטחה */}
         <section className="hero">
           <div className="wrap">
-            <span className="promo-badge">✨ מתכוננים ל-2026</span>
             <h1>
-              הפכו את ה-AI לקופירייטר <br />
+              הפכו את ה-AI לקופירייטר
               <span>עם נשמה ישראלית</span>
             </h1>
             <p>
-              101 פרומפטים מדוייקים שהופכים תוכן רובוטי לטקסטים שמוכרים, מרגשים ועובדים בעברית.
-              <br />
-              <strong>מתאים לכולם: בעלי עסקים, יוצרי תוכן, משווקים ומטפלים.</strong>
+              הספרייה הדיגיטלית הראשונה מסוגה:
+              101 נוסחאות ("פרומפטים") מדויקות לכתיבה שיווקית, שעובדות בשיטת "העתק-הדבק".
             </p>
-
-            <div className="price-box">
-              <div className="save-label">חוסכים 298 ₪!</div>
-              <div className="price-display">
-                <span className="old-price">397 ₪</span>
-                <span className="new-price">99 ₪</span>
-              </div>
-              
-              <div id="paypal-container-top"></div>
-              
-              <p className="credit-card-note">
-                💳 ניתן לשלם באשראי רגיל (גם ללא חשבון PayPal)
-              </p>
-              
-              <p style={{marginTop: '10px', fontSize: '12px', color: '#999'}}>
-                🔒 תשלום מאובטח | גישה מיידית | ללא מנוי חודשי
-              </p>
-            </div>
+            <button onClick={scrollToPrice} className="cta-btn">
+              רוצה לראות איך זה עובד ↓
+            </button>
           </div>
         </section>
 
-        <section className="sec alt">
-          <h2>מה מחכה לכם בפנים?</h2>
-          <ul className="bullets">
-            <li><strong>אפליקציה אינטראקטיבית:</strong> 101 פרומפטים מסודרים ב־10 קטגוריות נוחות</li>
-            <li><strong>מנוע חיפוש חכם:</strong> סינון מהיר לפי קהל יעד וקטגוריה</li>
-            <li><strong>חיסכון בזמן:</strong> כפתור "העתק" מהיר ושמירת מועדפים</li>
-            <li><strong>ייצוא מלא:</strong> אפשרות להוריד את כל החוברת כ-PDF</li>
-            <li><strong>מתאים לכולם:</strong> עובד עם ChatGPT, Claude, Gemini</li>
-            <li><strong>תשלום חד פעמי:</strong> עדכונים שוטפים ללא דמי מנוי</li>
-          </ul>
-        </section>
-
-        <section className="sec">
-          <h2>טעימה מהפרומפטים</h2>
-          <div className="teaser">
-            {samplePrompts.length > 0 ? (
-              samplePrompts.map((prompt) => (
-                <div key={prompt.id} className="card">
-                  <b>{prompt.title}</b>
-                  <div style={{fontSize: '14px', color: '#666'}}>
-                    {getFirstThreeLines(prompt.prompt)}
-                  </div>
-                </div>
-              ))
-            ) : (
-              <>
-                <div className="card"><b>כותרת ממירה לדף נחיתה</b>יצירת 10 וריאציות עם הבטחת תוצאה וטון רגשי.</div>
-                <div className="card"><b>פתיח אמפתי קצר</b>נוסחה לזיהוי כאב, תקווה ופתרון לקהל שלכם.</div>
-                <div className="card"><b>קמפיין 7 ימים</b>בניית רצף תוכן להשקה רכה.</div>
-                <div className="card"><b>טיפול בהתנגדויות</b>מענה חכם להתנגדות "יקר לי".</div>
-              </>
-            )}
+        {/* Pain Section: הבעיה והכאב */}
+        <section className="pain-section">
+          <div className="pain-box">
+            <h2>למה כל כך קשה לכתוב עם ChatGPT?</h2>
+            <p>
+              אתם יושבים מול המסך, כותבים לו "תכתוב לי פוסט לפייסבוק", ומקבלים... רובוט.
+              <br/>
+              טקסט מתורגם, משפטים כמו "צללו לעולם המופלא", ושפה שלא מוכרת לאף אחד.
+            </p>
+            <p>
+              <strong>הבעיה היא לא בכלי. הבעיה היא בהוראה.</strong>
+            </p>
+            <p>
+              כדי שה-AI יכתוב כמו בן אדם, צריך לתת לו "מתכון" (Prompt) מדויק מאוד.
+              אבל למי יש זמן ללמוד הנדסת פרומפטים?
+            </p>
           </div>
         </section>
 
-        <section className="sec alt">
-          <h2>מה אומרים אלה שכבר משתמשים?</h2>
-          <div className="teaser">
-            <div className="testimonial">
-              <div className="stars">★★★★★</div>
-              "זה שינה לי את העסק. הפרומפטים מדויקים, עמוקים, ובעברית טובה באמת."
-              <br /><strong>- דניאל כהן, יועץ עסקי</strong>
-            </div>
-            <div className="testimonial">
-              <div className="stars">★★★★★</div>
-              "פנינה, תודה! זה מרגיש כמו ששכרתי קופירייטר צמוד, אבל במחיר בדיחה."
-              <br /><strong>- רן לוי, מאמן</strong>
-            </div>
-            <div className="testimonial">
-              <div className="stars">★★★★★</div>
-              "התוצאות הן עברית נקייה וטבעית. סוף סוף ה-AI מדבר לקהל הישראלי."
-              <br /><strong>- מירב דהן, פרילנסרית</strong>
-            </div>
+        {/* Solution Section: הפתרון וההבהרה */}
+        <section className="solution-section">
+          <div className="wrap">
+            <h2>הכירו את PromptBook: הספרייה הסודית שלכם</h2>
+            <p style={{fontSize:'18px', maxWidth:'700px', margin:'0 auto 40px'}}>
+              זו לא עוד "בוט" או אפליקציה מסובכת שצריך ללמוד.
+              <br/>
+              זו ספרייה אינטראקטיבית ופשוטה שמכילה 101 תבניות מוכנות מראש.
+            </p>
+            
+            <ul className="bullets">
+              <li>
+                  <strong>בוחרים קטגוריה:</strong> פוסטים, מיילים, דפי נחיתה או מודעות.
+              </li>
+              <li>
+                  <strong>מעתיקים את ה"מתכון":</strong> פרומפט מקצועי שכבר נוסה ונבדק.
+              </li>
+              <li>
+                  <strong>מדביקים ב-ChatGPT:</strong> (או בכל כלי אחר) ומשלימים את הפרטים שלכם בסוגריים.
+              </li>
+              <li>
+                  <strong>התוצאה:</strong> טקסט שיווקי מושלם בעברית, בתוך 30 שניות.
+              </li>
+            </ul>
           </div>
         </section>
 
@@ -524,56 +373,46 @@ const LandingPage = () => {
                 onError={(e) => e.currentTarget.style.display = 'none'}
             />
             <div>
-              <h2>נעים להכיר, פנינה קריוף</h2>
-              <p style={{lineHeight: '1.6'}}>
-                כמוכם, הייתי מתוסכלת מהפער בין כוחו של ה-AI לצורך האמיתי שלנו: 
-                <strong>לכתוב תוכן שהוא גם חכם וגם מרגש.</strong>
-                <br/><br/>
-                את PromptBook בניתי כדי לגשר על הפער הזה. זו לא סתם רשימה, אלא כלי עבודה שמשלב אסטרטגיה שיווקית עם טכנולוגיה. המטרה שלי? שתכתבו פחות, ותמכרו יותר.
+              <h2>מי עומדת מאחורי הפרומפטים?</h2>
+              <p>נעים להכיר, אני פנינה קריוף. מנטורית AI ומחברת בין טכנולוגיה לאנשים.</p>
+              <p>
+                אחרי שבניתי עשרות דפי נחיתה וליוויתי מאות בעלות עסקים, פיצחתי את השיטה לגרום ל-AI לכתוב בעברית טבעית ומרגשת.
+                את כל הידע הזה, ששווה עשרות אלפי שקלים, זיקקתי לתוך 101 תבניות מוכנות לשימוש.
               </p>
             </div>
           </section>
         </div>
 
-        <section className="sec">
-          <h2>שאלות נפוצות</h2>
-          <div className="faq">
-            <details>
-              <summary>איך מקבלים גישה?</summary>
-              <div>מיד אחרי התשלום, תועברו לאפליקציה ותוכלו להיכנס עם חשבון הגוגל שלכם. הגישה היא מיידית.</div>
-            </details>
-            <details>
-              <summary>האם זה מנוי חודשי?</summary>
-              <div>לא! זה תשלום חד-פעמי לכל החיים. כולל כל העדכונים העתידיים.</div>
-            </details>
-            <details>
-              <summary>האם מקבלים קבלה?</summary>
-              <div>כמובן. קבלה מס נשלחת אוטומטית למייל.</div>
-            </details>
-            <details>
-              <summary>זה עובד בחינם ב ChatGPT?</summary>
-              <div>כן, הפרומפטים עובדים מעולה גם בגרסה החינמית, וגם ב-Claude וב-Gemini.</div>
-            </details>
-          </div>
-        </section>
-
-        <section className="sec alt" style={{textAlign: 'center'}}>
-          <h2 style={{marginBottom: '10px'}}>מוכנים לשדרג את השיווק ב-2026?</h2>
-          <p style={{marginBottom: '30px'}}>המחיר יעלה ל-397 ₪ ב-1 בינואר.</p>
-          <div style={{maxWidth: '300px', margin: '0 auto'}}>
+        {/* Price Section: המכירה בסוף */}
+        <section id="price-section" className="sec alt" style={{textAlign: 'center', background:'#f8fafc'}}>
+          <h2>מוכנים לשדרג את הכתיבה ב-2026?</h2>
+          <p style={{fontSize:'18px'}}>בלי מנוי חודשי. בלי אותיות קטנות.</p>
+          
+          <div className="price-box">
+            <div className="save-label">מחיר חיסול 2025 🔥</div>
+            <div className="price-display">
+              <span className="old-price">397 ₪</span>
+              <span className="new-price">99 ₪</span>
+            </div>
+            <p style={{fontSize:'18px', marginBottom:'20px'}}>תשלום חד פעמי לגישה לכל החיים</p>
+            
             <div id="paypal-container-bottom"></div>
-            <p className="credit-card-note">💳 ניתן לשלם באשראי רגיל</p>
+            
+            <p className="credit-card-note">💳 ניתן לשלם באשראי רגיל (גם ללא חשבון PayPal)</p>
           </div>
+          
+          <p style={{marginTop:'30px', color:'#666'}}>
+            הגישה מיידית מיד לאחר התשלום.
+            <br/>
+            קבלה נשלחת אוטומטית למייל.
+          </p>
         </section>
 
         <footer>
           © 2025 PromptBook by Pnina Karayoff
           <br /><br />
-          <a href="mailto:pninakar@gmail.com">צור קשר</a> |
-          <a href="https://wa.me/972548383451" target="_blank" rel="noopener">ווטסאפ</a> |
-          <a href="/terms">תקנון</a> |
-          <a href="/privacy">מדיניות פרטיות</a> |
-          <a href="/accessibility">הצהרת נגישות</a>
+          <a href="mailto:pninakar@gmail.com">צור קשר</a> | 
+          <a href="/terms">תקנון</a>
         </footer>
       </div>
     </>
