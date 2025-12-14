@@ -491,17 +491,17 @@ const LandingPage = () => {
             <div className="testimonial">
               <div style={{color:'gold', fontSize:'20px'}}>★★★★★</div>
               "הייתי סקפטית שזה יעבוד בעברית, אבל זה פשוט עובד. הטקסטים יוצאים 'עגולים' ונעימים, בלי התרגום המעצבן של גוגל."
-              <br /><strong>- יעל כץ, מנהלת סושיאל</strong>
+              <br /><strong>- שירן ארד, מנהלת סושיאל</strong>
             </div>
             <div className="testimonial">
               <div style={{color:'gold', fontSize:'20px'}}>★★★★★</div>
-              "זה לא רק חוסך זמן, זה חוסך תסכול. במקום לריב עם הבוט, אני פשוט מעתיקה את הפרומפט של פנינה וזהו."
-              <br /><strong>- רן לוי, מאמן אישי</strong>
+              "זה לא רק חוסך זמן, זה חוסך תסכול. במקום לריב עם הבוט, אני פשוט מעתיק את הפרומפט של פנינה וזהו."
+              <br /><strong>- ירין לוי, מאמן אישי</strong>
             </div>
             <div className="testimonial">
               <div style={{color:'gold', fontSize:'20px'}}>★★★★★</div>
               "ההשקעה הכי טובה שעשיתי השנה לעסק. במחיר של ארוחת צהריים קיבלתי שקט תעשייתי בכתיבת התוכן."
-              <br /><strong>- מירב דהן, פרילנסרית</strong>
+              <br /><strong>- טלי שמש, פרילנסרית</strong>
             </div>
           </div>
         </section>
