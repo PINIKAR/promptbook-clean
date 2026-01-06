@@ -1,46 +1,9 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
-
-interface Prompt {
-  id: string;
-  title: string;
-  prompt: string;
-  category: string;
-  audience: string;
-}
 
 const LandingPage = () => {
-  const [timeLeft, setTimeLeft] = useState("");
-  const [isPromoActive, setIsPromoActive] = useState(true);
-  
   const paypalRan = useRef(false);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    // תאריך יעד: סוף שנת 2025
-    const deadline = new Date("2025-12-31T23:59:59").getTime();
-
-    const tick = () => {
-      const now = Date.now();
-      const diff = Math.max(0, deadline - now);
-      const s = Math.floor(diff / 1000) % 60;
-      const m = Math.floor(diff / 1000 / 60) % 60;
-      const h = Math.floor(diff / 1000 / 60 / 60) % 24;
-      const d = Math.floor(diff / 1000 / 60 / 60 / 24);
-      const pad = (n: number) => n.toString().padStart(2, "0");
-      const out = (d > 0 ? d + " ימים " : "") + [pad(h), pad(m), pad(s)].join(":");
-      setTimeLeft(out);
-
-      if (diff === 0) {
-        setIsPromoActive(false);
-      }
-    };
-
-    tick();
-    const interval = setInterval(tick, 1000);
-    return () => clearInterval(interval);
-  }, []);
 
   // פונקציית גלילה למטה
   const scrollToPrice = () => {
@@ -50,7 +13,7 @@ const LandingPage = () => {
     }
   };
 
-  // טעינת פייפאל - רק למטה!
+  // טעינת פייפאל
   useEffect(() => {
     if (paypalRan.current) return;
     paypalRan.current = true;
@@ -59,8 +22,6 @@ const LandingPage = () => {
       // @ts-ignore
       if (window.paypal && window.paypal.HostedButtons) {
         const containerBottom = document.querySelector("#paypal-container-bottom");
-        
-        // ניקוי המיכל לפני רינדור כדי למנוע כפילויות
         if (containerBottom) containerBottom.innerHTML = "";
 
         // @ts-ignore
@@ -72,10 +33,6 @@ const LandingPage = () => {
 
     // @ts-ignore
     if (!window.paypal) {
-      if (document.querySelector('script[src*="paypal.com/sdk/js"]')) {
-         loadPaypal();
-         return;
-      }
       const script = document.createElement("script");
       script.src = "https://www.paypal.com/sdk/js?client-id=BAA9pb84hA96YyS3MdA-7E4ocZULj8P9L0FNewFBJZ8fMY-Z7Sl17R6RwOGIN2vPVLCgVNKiohWbCbg2Jw&components=hosted-buttons&disable-funding=venmo&currency=ILS";
       script.onload = loadPaypal;
@@ -94,23 +51,11 @@ const LandingPage = () => {
           --c2: #1e95df; /* כחול טורקיז */ 
           --c3: #337cdc; /* כחול כהה */ 
           --c4: #5f5ad7; 
-          --danger: #f86173; /* ורוד-אדום */
+          --danger: #f86173;
           --text: #111;
           --bg: #fcfcff;
           --card-bg: #ffffff;
           --alt-bg: #f8f9ff;
-        }
-        
-        @keyframes colorChange {
-            0% { background-color: var(--c1); }
-            33% { background-color: var(--c2); }
-            66% { background-color: var(--c3); }
-            100% { background-color: var(--c1); }
-        }
-        @keyframes pulseDanger {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(248, 97, 115, 0.7); }
-            70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(248, 97, 115, 0); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(248, 97, 115, 0); }
         }
         
         .landing-page {
@@ -138,47 +83,10 @@ const LandingPage = () => {
           z-index: 40;
         }
 
-        .bar {
-          position: sticky;
-          top: 0;
-          z-index: 50;
-          background: var(--c1); 
-          animation: colorChange 15s infinite alternate; 
-          color: white;
-          display: flex;
-          gap: 10px;
-          align-items: center;
-          justify-content: center;
-          padding: 14px 12px; 
-          font-size: 18px;
-          font-weight: 700;
-          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); 
-        }
-        
-        .bar .time {
-          font-weight: 900;
-          color: yellow;
-          font-family: monospace;
-        }
-        
-        .promo-bar-static {
-            background-color: var(--danger);
-            color: white;
-            text-align: center;
-            font-size: 18px; 
-            font-weight: 800;
-            padding: 12px 20px;
-            border-radius: 30px; 
-            margin: 20px auto 30px;
-            width: fit-content;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-            animation: pulseDanger 2s infinite;
-        }
-
         .hero {
             text-align: center; 
             background: var(--card-bg);
-            padding: 40px 20px;
+            padding: 60px 20px;
         }
         
         .hero h1 {
@@ -187,7 +95,7 @@ const LandingPage = () => {
             line-height: 1.1;
             color: var(--c1);
             font-weight: 900;
-            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); 
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.05); 
         }
         
         .hero p {
@@ -223,28 +131,13 @@ const LandingPage = () => {
           border-radius: 20px;
           padding: 40px;
           text-align: center;
-          border: 3px solid var(--c1);
+          border: 2px solid #e2e8f0;
           margin-top: 30px;
           max-width: 500px;
           margin-left: auto;
           margin-right: auto;
-          box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+          box-shadow: 0 20px 60px rgba(0,0,0,0.05);
           position: relative;
-          overflow: hidden;
-        }
-
-        .price-box::before {
-          content: "סוף שנה";
-          position: absolute;
-          top: 30px;
-          right: -40px;
-          background: var(--danger);
-          color: white;
-          font-weight: bold;
-          padding: 8px 50px;
-          transform: rotate(45deg);
-          font-size: 14px;
-          box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
 
         .price-display {
@@ -253,12 +146,6 @@ const LandingPage = () => {
           justify-content: center;
           gap: 15px;
           margin-bottom: 20px;
-        }
-
-        .old-price {
-          text-decoration: line-through;
-          color: #94a3b8;
-          font-size: 30px;
         }
 
         .new-price {
@@ -279,7 +166,6 @@ const LandingPage = () => {
         
         .sec.alt {
           background: var(--alt-bg);
-          border: 1px solid rgba(30,149,223,0.2);
         }
         
         .sec h2 {
@@ -303,17 +189,17 @@ const LandingPage = () => {
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
             color: var(--text);
             transition: transform 0.3s;
+            background: white;
             border: 1px solid rgba(0,0,0,0.05);
         }
         .card:hover { transform: translateY(-5px); }
         
-        /* צבעים לכרטיסיות כמו במקור */
-        .card:nth-child(6n+1) { background-color: #E6E0F1; border-top: 4px solid var(--c1); } 
-        .card:nth-child(6n+2) { background-color: #E0F5FF; border-top: 4px solid var(--c2); } 
-        .card:nth-child(6n+3) { background-color: #FFE0E5; border-top: 4px solid var(--danger); } 
-        .card:nth-child(6n+4) { background-color: #F0F4E8; border-top: 4px solid #88aa33; } 
-        .card:nth-child(6n+5) { background-color: #F8F9FF; border-top: 4px solid var(--c4); }
-        .card:nth-child(6n+6) { background-color: #FFF9E0; border-top: 4px solid orange; }
+        .card:nth-child(6n+1) { border-top: 4px solid var(--c1); } 
+        .card:nth-child(6n+2) { border-top: 4px solid var(--c2); } 
+        .card:nth-child(6n+3) { border-top: 4px solid var(--danger); } 
+        .card:nth-child(6n+4) { border-top: 4px solid #88aa33; } 
+        .card:nth-child(6n+5) { border-top: 4px solid var(--c4); }
+        .card:nth-child(6n+6) { border-top: 4px solid orange; }
 
         .testimonial {
             background: white;
@@ -328,7 +214,7 @@ const LandingPage = () => {
           background: #fff;
           padding: 15px;
           border-radius: 12px;
-          border: 2px solid #e0e0e0;
+          border: 1px solid #e0e0e0;
           font-weight: 700;
           margin-bottom: 10px;
           display: flex;
@@ -345,7 +231,6 @@ const LandingPage = () => {
           color: white;
           padding: 40px;
           border-radius: 20px;
-          border: 1px solid #eee;
         }
         .about h2 { color: var(--c2); }
         .about img {
@@ -363,45 +248,35 @@ const LandingPage = () => {
             border-radius: 20px;
             text-decoration: none;
             font-weight: bold;
-            cursor: pointer;
             border: none;
         }
 
         .credit-card-note {
             font-size: 14px;
             color: #666;
-            margin-top: 10px;
+            margin-top: 15px;
             font-weight: 600;
         }
 
-        /* תיקון ה-FAQ */
         .faq details {
             margin-bottom: 10px;
             background: white;
             border-radius: 12px;
             border: 1px solid #eee;
-            overflow: hidden;
         }
         .faq summary {
             padding: 15px;
             cursor: pointer;
             font-weight: 700;
-            background: #fff;
             color: var(--c1);
             list-style: none;
             position: relative;
         }
-        .faq summary::-webkit-details-marker { display: none; }
         .faq summary:after {
             content: "+";
             position: absolute;
             left: 20px;
-            font-weight: bold;
-            color: var(--c2);
         }
-        .faq details[open] summary:after { content: "-"; }
-        .faq details[open] { background: var(--alt-bg); }
-        .faq div { padding: 15px; color: #555; line-height: 1.6; }
 
         footer {
             text-align: center;
@@ -418,42 +293,29 @@ const LandingPage = () => {
       `}</style>
 
       <div className="landing-page" dir="rtl">
-        {isPromoActive && (
-          <div className="bar">
-            <span>✨ מבצע סוף שנה (חיסול 2025) מסתיים בעוד: </span>
-            <span className="time">{timeLeft}</span>
-          </div>
-        )}
-
         <header className="landing-header">
-          <a href="/" className="logo" style={{display:'flex', alignItems:'center', textDecoration:'none', gap:'10px'}}>
-            <img src="/logo.png" alt="PromptBook" className="logo-img" style={{height: '40px'}} />
-            <div className="title" style={{color: 'var(--c3)', fontWeight:'800', fontSize:'22px'}}>PromptBook</div>
+          <a href="/" style={{display:'flex', alignItems:'center', textDecoration:'none', gap:'10px'}}>
+            <img src="/logo.png" alt="PromptBook" style={{height: '40px'}} />
+            <div style={{color: 'var(--c3)', fontWeight:'800', fontSize:'22px'}}>PromptBook</div>
           </a>
           <button onClick={() => navigate('/auth')} className="login-btn">
             כניסה למנויים
           </button>
         </header>
 
-        {/* HERO - ללא תשלום, רק טיזר */}
         <section className="hero">
           <div className="wrap">
-            <div className="promo-bar-static">
-                🔥 המחיר הנמוך של השנה - 99 ₪ בלבד
-            </div>
-            
             <h1>
               הקץ לטקסטים רובוטיים: <br/>
               101 הפרומפטים שמוסיפים נשמה ל-AI שלך
             </h1>
             <p>
               אם ה-AI כותב לכם טקסטים קרים שפשוט לא ממירים, אתם לא לבד.
-              <br/>
               הפתרון הוא לא להחליף כלי, אלא את ההוראה.
             </p>
 
             <button onClick={scrollToPrice} className="cta-btn">
-              רוצה לראות איך זה עובד ↓
+              התחילו לכתוב תוכן שממיר ב-2026
             </button>
           </div>
         </section>
@@ -461,23 +323,23 @@ const LandingPage = () => {
         <section className="sec alt">
           <h2>מה מחכה לכם בפנים?</h2>
           <ul className="bullets">
-            <li><strong>אפליקציה אינטראקטיבית:</strong> 101 פרומפטים מסודרים ב־10 קטגוריות נוחות</li>
+            <li><strong>אפליקציה אינטראקטיבית:</strong> 101 פרומפטים מסודרים ב־10 קטגוריות</li>
             <li><strong>מנוע חיפוש חכם:</strong> סינון מהיר לפי קהל יעד וקטגוריה</li>
             <li><strong>חיסכון בזמן:</strong> כפתור "העתק" מהיר ושמירת מועדפים</li>
             <li><strong>ייצוא מלא:</strong> אפשרות להוריד את כל החוברת כ-PDF</li>
-            <li><strong>עדכונים שוטפים:</strong> ללא תוספת תשלום</li>
+            <li><strong>עדכונים שוטפים:</strong> לכל אורך שנת 2026</li>
           </ul>
         </section>
 
         <section className="sec">
           <h2>טעימה מהכלי (דוגמאות)</h2>
           <div className="teaser">
-                <div className="card"><b>כותרת ממירה לדף נחיתה</b><br/>יצירת 10 וריאציות עם הבטחת תוצאה וטון רגשי.</div>
-                <div className="card"><b>פתיח אמפתי קצר</b><br/>נוסחה של 70 מילים לזיהוי כאב, תקווה ופתרון לקהל שלך.</div>
-                <div className="card"><b>קמפיין 7 ימים להשקה רכה</b><br/>בניית רצף 7 ימי טיזר, עדות ודחיפות להשקות מוצרים.</div>
-                <div className="card"><b>Retargeting השארת עגלה</b><br/>3 מודעות רימרקטינג אפקטיביות למבקרים שלא המירו.</div>
-                <div className="card"><b>פירוק התנגדות עיקרית</b><br/>מענה בשלושה חלקים להתנגדות הגדולה ביותר למוצר שלך.</div>
-                <div className="card"><b>FAQ ממיר</b><br/>6 שאלות ותשובות שמסירות התנגדויות ומכניסות CTA עדין.</div>
+              <div className="card"><b>כותרת ממירה לדף נחיתה</b><br/>יצירת 10 וריאציות עם הבטחת תוצאה וטון רגשי.</div>
+              <div className="card"><b>פתיח אמפתי קצר</b><br/>נוסחה של 70 מילים לזיהוי כאב ופתרון.</div>
+              <div className="card"><b>קמפיין 7 ימים להשקה</b><br/>בניית רצף טיזרים ודחיפות להשקות.</div>
+              <div className="card"><b>Retargeting חכם</b><br/>3 מודעות רימרקטינג אפקטיביות למבקרים שלא המירו.</div>
+              <div className="card"><b>פירוק התנגדות עיקרית</b><br/>מענה להתנגדות הגדולה ביותר למוצר שלך.</div>
+              <div className="card"><b>FAQ ממיר</b><br/>שאלות ותשובות שמסירות התנגדויות וכוללות CTA.</div>
           </div>
         </section>
 
@@ -494,58 +356,38 @@ const LandingPage = () => {
               "פנינה, תודה! זה מרגיש כמו ששכרתי קופירייטר צמוד לעסק, אבל שילמתי פחות משיחת ייעוץ אחת."
               <br /><strong>- רן לוי, מאמן אישי</strong>
             </div>
-            <div className="testimonial">
-              <div style={{color:'gold', fontSize:'20px'}}>★★★★★</div>
-              "התוצאות הן עברית נקייה וטבעית. סוף סוף ה-AI מדבר בשפה שמתאימה לקהל הישראלי."
-              <br /><strong>- מירב דהן, פרילנסרית</strong>
-            </div>
           </div>
         </section>
 
         <div className="wrap">
           <section className="about">
-            <img 
-                src="/pnina-profile.jpg" 
-                alt="Pnina Karayoff" 
-                onError={(e) => e.currentTarget.style.display = 'none'}
-            />
+            <img src="/pnina-profile.jpg" alt="Pnina Karayoff" onError={(e) => e.currentTarget.style.display = 'none'} />
             <div>
               <h2>נעים להכיר, פנינה קריוף</h2>
               <p style={{lineHeight: '1.6', fontSize: '16px'}}>
-                כמוכם, הייתי מתוסכלת מהפער בין כוחו של ה-AI לצורך האמיתי שלנו: 
-                <strong>לכתוב תוכן שהוא גם חכם וגם מרגש.</strong>
-                <br/><br/>
-                את PromptBook בניתי כדי לגשר על הפער הזה – זו שיטה שמשלבת אסטרטגיה, עיצוב וטכנולוגיה. המטרה שלי? שתכתבו פחות, ותמכרו יותר.
+                את PromptBook בניתי כדי לגשר על הפער בין ה-AI לבין כתיבה מרגשת.
+                זו שיטה שמשלבת אסטרטגיה וטכנולוגיה כדי שתוכלו לכתוב פחות, ולמכור יותר.
               </p>
             </div>
           </section>
         </div>
 
-        <section className="sec faq">
-          <h2>שאלות נפוצות</h2>
-          <details><summary>איך מקבלים גישה?</summary><div>מיד אחרי התשלום, תועברו למערכת ותוכלו להתחבר. הגישה היא מיידית.</div></details>
-          <details><summary>אפשר לקבל קבלה?</summary><div>כן, קבלה מס נשלחת אוטומטית למייל אחרי התשלום.</div></details>
-          <details><summary>זה עובד גם בנייד?</summary><div>כן! האפליקציה מותאמת לכל המכשירים - מחשב, טאבלט וסמארטפון.</div></details>
-        </section>
-
-        {/* SECTION תשלום - מופיע רק כאן */}
         <section id="price-section" className="sec price-box">
-          <h2 style={{color:'var(--c1)', marginBottom:'10px'}}>אז למה לחכות ל-2026?</h2>
-          <p style={{fontSize:'18px'}}>המחיר עולה ל-397 ₪ ב-1 בינואר.</p>
+          <h2 style={{color:'var(--c1)', marginBottom:'10px'}}>מוכנים לשדרג את התוכן שלכם?</h2>
+          <p style={{fontSize:'18px'}}>השקעה חד פעמית לגישה מלאה לכל החיים</p>
           
           <div className="price-display">
-             <span className="old-price">397 ₪</span>
-             <span className="new-price">99 ₪</span>
+             <span className="new-price">129 ₪</span>
           </div>
 
           <div style={{maxWidth: '300px', margin: '0 auto'}}>
             <div id="paypal-container-bottom"></div>
-            <p className="credit-card-note">💳 ניתן לשלם באשראי רגיל</p>
+            <p className="credit-card-note">💳 ניתן לשלם באשראי או ב-PayPal</p>
           </div>
         </section>
 
         <footer>
-          © 2025 PromptBook by Pnina Karayoff
+          © 2026 PromptBook by Pnina Karayoff
           <br /><br />
           <a href="mailto:pninakar@gmail.com">צור קשר</a> |
           <a href="/terms">תקנון</a> |
