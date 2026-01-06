@@ -367,7 +367,7 @@ const LandingPage = () => {
             <div className="testimonial">
               <div style={{color:'gold', fontSize:'22px', marginBottom: '10px'}}>★★★★★</div>
               "הכלי הזה חסך לי לפחות 5 שעות כתיבה שבועיות. במקום לשבור את הראש, אני פשוט מעתיקה ומדביקה."
-              <br /><br /><strong>- יעל כץ, מנהלת סושיאל</strong>
+              <br /><br /><strong>- שירן אליהו, מנהלת סושיאל</strong>
             </div>
             <div className="testimonial">
               <div style={{color:'gold', fontSize:'22px', marginBottom: '10px'}}>★★★★★</div>
@@ -383,17 +383,26 @@ const LandingPage = () => {
         </section>
 
         <div className="wrap">
-          <section className="about">
-            <img src="/pnina-profile.jpg" alt="Pnina Karayoff" onError={(e) => e.currentTarget.style.display = 'none'} />
-            <div>
-              <h2>נעים להכיר, פנינה קריוף</h2>
-              <p style={{lineHeight: '1.8', fontSize: '18px'}}>
-                את PromptBook בניתי כדי לגשר על הפער בין ה-AI לבין כתיבה שבאמת מוכרת.
-                זו שיטה שמשלבת אסטרטגיה וטכנולוגיה כדי שתוכלו לכתוב פחות, ולמכור הרבה יותר.
-              </p>
-            </div>
-          </section>
-        </div>
+  <section className="about">
+    <img 
+        src="/pnina-profile.jpg" 
+        alt="פנינה קריוף" 
+        onError={(e) => e.currentTarget.style.display = 'none'}
+    />
+    <div>
+      <h2>נעים להכיר, פנינה קריוף</h2>
+      <p style={{lineHeight: '1.8', fontSize: '18px'}}>
+        שלום, אני פנינה. כמוכם, הייתי מתוסכלת מהפער בין כוחו העצום של ה-AI לבין הצורך האמיתי שלנו כבעלי עסקים: 
+        <strong> לכתוב תוכן שהוא גם חכם וגם מרגש, כזה שבאמת נוגע באנשים.</strong>
+        <br/><br/>
+        את PromptBook בניתי כדי לגשר על הפער הזה – זו לא סתם רשימת הוראות, זו שיטה שמשלבת אסטרטגיה שיווקית, הבנה בעיצוב חווית משתמש וטכנולוגיה מתקדמת. 
+        <br/><br/>
+        המטרה שלי היא להפוך אתכם לקופירייטרים עם רגש בעזרת הבינה המלאכותית. המטרה הסופית? 
+        <strong> שתצטרכו לכתוב הרבה פחות, אבל תצליחו למכור הרבה יותר.</strong>
+      </p>
+    </div>
+  </section>
+</div>
 
         <section id="price-section" className="sec price-box">
           <h2 style={{color:'var(--c1)', marginBottom:'10px', fontSize: '32px'}}>מוכנים לשדרג את התוכן שלכם?</h2>
