@@ -42,7 +42,6 @@ const LandingPage = () => {
   return (
     <>
       <style>{`
-        /* איפוס יסודי למניעת פס לבן */
         html, body {
           margin: 0 !important;
           padding: 0 !important;
@@ -67,7 +66,6 @@ const LandingPage = () => {
           line-height: 1.6;
         }
 
-        /* Hero Section - מורחב עד הקצה */
         .hero {
             text-align: center; 
             padding: 0 0 100px 0;
@@ -76,7 +74,6 @@ const LandingPage = () => {
             position: relative;
             overflow: hidden;
             min-height: 600px;
-            margin: 0;
         }
         
         .hero::after {
@@ -91,10 +88,9 @@ const LandingPage = () => {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          padding: 40px 60px; /* מרווח פנימי גדול יותר */
+          padding: 30px 60px;
           position: relative;
           z-index: 10;
-          background: transparent;
         }
 
         .header-logo-container {
@@ -105,40 +101,35 @@ const LandingPage = () => {
         }
 
         .header-logo-img {
-          height: 90px; /* הגדלה נוספת */
+          height: 110px; /* לוגו גדול יותר */
           width: auto;
-          filter: brightness(0) invert(1); /* הופך לוגו כהה ללבן בוהק */
+          filter: brightness(0) invert(1);
+          margin-left: 10px;
         }
 
         .header-title {
           color: #ffffff;
           font-weight: 900;
-          font-size: 42px; /* הגדלה משמעותית של הטקסט */
+          font-size: 36px;
           letter-spacing: -1px;
         }
 
         .login-btn {
           background: #ffffff;
           color: var(--dark);
-          padding: 16px 36px;
+          padding: 14px 32px;
           border-radius: 100px;
           border: none;
           font-weight: 800;
           font-size: 18px;
           cursor: pointer;
           transition: all 0.3s ease;
-          box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-        }
-
-        .login-btn:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 8px 25px rgba(0,0,0,0.4);
         }
 
         .hero-content {
           position: relative;
           z-index: 10;
-          padding: 40px 20px;
+          padding: 60px 20px;
         }
 
         .hero h1 {
@@ -164,8 +155,16 @@ const LandingPage = () => {
             border-radius: 100px;
             border: none;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.3s ease;
             box-shadow: 0 15px 35px rgba(147, 62, 199, 0.5);
+        }
+
+        /* סקשן לפני ואחרי */
+        .comparison-card {
+            background: white;
+            padding: 40px;
+            border-radius: 32px;
+            transition: transform 0.3s;
         }
 
         .sec-features { background: var(--soft-purple); padding: 100px 20px; }
@@ -179,7 +178,6 @@ const LandingPage = () => {
         .card { background: white; border-radius: 28px; padding: 40px; border-right: 10px solid var(--c1); box-shadow: 0 20px 40px rgba(0,0,0,0.06); }
 
         .sec-testimonials { background: var(--dark); color: white; padding: 100px 20px; }
-        .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 35px; }
         .testimonial-card { background: rgba(255,255,255,0.05); padding: 40px; border-radius: 28px; border: 1px solid rgba(255,255,255,0.1); font-style: italic; }
 
         .price-box { background: white; border-radius: 45px; padding: 80px; text-align: center; border: 2px solid var(--c1); margin: 60px auto; max-width: 600px; }
@@ -189,10 +187,12 @@ const LandingPage = () => {
         .about-box img { width: 250px; height: 250px; border-radius: 40px; object-fit: cover; border: 5px solid var(--c1); }
 
         @media (max-width: 768px) {
-            .landing-header { padding: 20px; flex-direction: column; gap: 20px; }
-            .header-logo-img { height: 60px; }
+            .landing-header { padding: 25px; flex-direction: column; gap: 20px; }
+            .header-logo-img { height: 70px; margin-left: 0; }
             .header-title { font-size: 28px; }
-            .hero h1 { font-size: 44px; }
+            .hero h1 { font-size: 40px; }
+            .hero p { font-size: 18px; }
+            .comparison-grid { grid-template-columns: 1fr !important; }
         }
       `}</style>
 
@@ -217,30 +217,42 @@ const LandingPage = () => {
           </div>
         </section>
 
+        {/* סקשן לפני ואחרי - ההוכחה לסקפטיים */}
+        <section style={{background: '#fff', padding: '100px 20px'}}>
+          <div className="wrap">
+            <h2 style={{textAlign:'center', fontSize:'42px', fontWeight:'900', marginBottom:'50px'}}>הנה מה שקורה כשמפסיקים "לנחש" פרומפטים:</h2>
+            <div className="comparison-grid" style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px'}}>
+              
+              <div style={{background: '#f1f5f9', padding: '40px', borderRadius: '32px', border: '2px solid #e2e8f0'}}>
+                <div style={{background: '#94a3b8', color: 'white', padding: '5px 15px', borderRadius: '100px', fontSize: '14px', fontWeight: '800', display: 'inline-block', marginBottom: '20px'}}>ChatGPT רגיל</div>
+                <h4 style={{fontSize: '20px', marginBottom: '15px'}}>פרומפט גנרי: "תכתוב לי פוסט על נעליים"</h4>
+                <div style={{color: '#64748b', fontStyle: 'italic', lineHeight: '1.6'}}>
+                  "האם אתם מחפשים נעליים חדשות? בואו לחנות שלנו. יש לנו הרבה דגמים יפים ונוחים לכל המשפחה. האיכות שלנו טובה מאוד והמחירים הוגנים. אנחנו מחכים לכם."
+                </div>
+                <p style={{marginTop: '20px', color: '#f86173', fontWeight: '700'}}>❌ תוצאה: משעמם, לא אישי, מרגיש כמו תרגום מכונה.</p>
+              </div>
+
+              <div style={{background: 'var(--soft-purple)', padding: '40px', borderRadius: '32px', border: '2px solid var(--c1)', boxShadow: '0 20px 40px rgba(147, 62, 199, 0.1)'}}>
+                <div style={{background: 'var(--grad)', color: 'white', padding: '5px 15px', borderRadius: '100px', fontSize: '14px', fontWeight: '800', display: 'inline-block', marginBottom: '20px'}}>עם PromptBook</div>
+                <h4 style={{fontSize: '20px', marginBottom: '15px'}}>פרומפט מתוך המערכת: "נוסחת הכאב והתקווה"</h4>
+                <div style={{color: 'var(--dark)', fontWeight: '600', lineHeight: '1.6'}}>
+                  "תודו שגם לכם נמאס לחזור הביתה עם כאבי רגליים אחרי יום עבודה ארוך... אתם מרגישים שכל צעד הוא מאבק. אבל מה אם הייתם יכולים להרגיש שאתם הולכים על ענן? הדגם החדש שלנו..."
+                </div>
+                <p style={{marginTop: '20px', color: '#88aa33', fontWeight: '700'}}>✅ תוצאה: עברית עם "נשמה", פנייה לכאב, כתיבה שמוכרת!</p>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
         <section className="sec-features">
           <div className="wrap">
             <h2 style={{textAlign:'center', fontSize:'42px', fontWeight:'900', marginBottom:'50px'}}>מה מחכה לכם בפנים?</h2>
             <div className="feature-grid">
-              <div className="feature-card">
-                <span className="icon">📱</span>
-                <h3>אפליקציה אינטראקטיבית</h3>
-                <p>10 קטגוריות תוכן בממשק נוח ומעוצב</p>
-              </div>
-              <div className="feature-card">
-                <span className="icon">🔍</span>
-                <h3>מנוע חיפוש חכם</h3>
-                <p>סינון מהיר לפי קהל יעד בלחיצת כפתור</p>
-              </div>
-              <div className="feature-card">
-                <span className="icon">⚡</span>
-                <h3>חיסכון בזמן</h3>
-                <p>כפתור העתקה מהיר לכל פרומפט ישירות ל-AI</p>
-              </div>
-              <div className="feature-card">
-                <span className="icon">📄</span>
-                <h3>ייצוא PDF מלא</h3>
-                <p>אפשרות להוריד את כל החוברת למחשב</p>
-              </div>
+              <div className="feature-card"><span className="icon">📱</span><h3>אפליקציה אינטראקטיבית</h3><p>10 קטגוריות תוכן בממשק נוח</p></div>
+              <div className="feature-card"><span className="icon">🔍</span><h3>מנוע חיפוש חכם</h3><p>סינון מהיר לפי קהל יעד</p></div>
+              <div className="feature-card"><span className="icon">⚡</span><h3>חיסכון בזמן</h3><p>כפתור העתקה מהיר לכל פרומפט</p></div>
+              <div className="feature-card"><span className="icon">📄</span><h3>ייצוא PDF מלא</h3><p>אפשרות להוריד את כל החוברת</p></div>
             </div>
           </div>
         </section>
@@ -253,7 +265,7 @@ const LandingPage = () => {
               <div className="card"><b>פתיח אמפתי קצר</b><br/><br/>נוסחה מדויקת לזיהוי כאב, תקווה ופתרון מהיר.</div>
               <div className="card"><b>קמפיין השקה של 7 ימים</b><br/><br/>בניית רצף טיזרים, עדויות ודחיפות למכירה.</div>
               <div className="card"><b>פירוק התנגדויות עומק</b><br/><br/>מענה מנצח להתנגדות הגדולה ביותר של הלקוח שלך.</div>
-              <div className="card"><b>Retargeting חכם</b><br/><br/>3 מודעות רימרקטינג אפקטיביות למבקרים שביקרו ולא רכשו.</div>
+              <div className="card"><b>Retargeting חכם</b><br/><br/>3 מודעות רימרקטינג אפקטיביות למבקרים שלא רכשו.</div>
               <div className="card"><b>FAQ ממיר ומניע</b><br/><br/>שאלות ותשובות שמסירות חסמי קנייה וכוללות CTA עדין.</div>
             </div>
           </div>
@@ -262,19 +274,10 @@ const LandingPage = () => {
         <section className="sec-testimonials">
           <div className="wrap">
             <h2 style={{textAlign:'center', fontSize:'42px', fontWeight:'900', marginBottom:'50px'}}>מה אומרים המשתמשים?</h2>
-            <div className="testimonials-grid">
-                <div className="testimonial-card">
-                  <div style={{color:'gold', marginBottom:'15px', fontSize: '20px'}}>★★★★★</div>
-                  "הכלי הזה חסך לי לפחות 5 שעות כתיבה שבועיות. במקום לשבור את הראש, אני פשוט מעתיקה ומדביקה."<br/><br/><b>- שירן אליהו, מנהלת סושיאל</b>
-                </div>
-                <div className="testimonial-card">
-                  <div style={{color:'gold', marginBottom:'15px', fontSize: '20px'}}>★★★★★</div>
-                  "פנינה, תודה! זה מרגיש כאילו שכרתי קופירייטר צמוד לעסק בשבריר מהמחיר."<br/><br/><b>- רן לוי, מאמן אישי</b>
-                </div>
-                <div className="testimonial-card">
-                  <div style={{color:'gold', marginBottom:'15px', fontSize: '20px'}}>★★★★★</div>
-                  "התוצאות הן עברית נקייה וטבעית. סוף סוף ה-AI מדבר בשפה שמתאימה לקהל הישראלי."<br/><br/><b>- מירב דהן, פרילנסרית</b>
-                </div>
+            <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(300px, 1fr))', gap:'30px'}}>
+                <div className="testimonial-card"><div style={{color:'gold', marginBottom:'15px'}}>★★★★★</div>"הכלי הזה חסך לי לפחות 5 שעות כתיבה שבועיות. במקום לשבור את הראש, אני פשוט מעתיקה ומדביקה."<br/><br/><b>- שירן אליהו, מנהלת סושיאל</b></div>
+                <div className="testimonial-card"><div style={{color:'gold', marginBottom:'15px'}}>★★★★★</div>"פנינה, תודה! זה מרגיש כאילו שכרתי קופירייטר צמוד לעסק בשבריר מהמחיר."<br/><br/><b>- רן לוי, מאמן אישי</b></div>
+                <div className="testimonial-card"><div style={{color:'gold', marginBottom:'15px'}}>★★★★★</div>"התוצאות הן עברית נקייה וטבעית. סוף סוף ה-AI מדבר בשפה שמתאימה לקהל הישראלי."<br/><br/><b>- מירב דהן, פרילנסרית</b></div>
             </div>
           </div>
         </section>
