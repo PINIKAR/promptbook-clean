@@ -42,6 +42,13 @@ const LandingPage = () => {
   return (
     <>
       <style>{`
+        /* איפוס יסודי למניעת פס לבן */
+        html, body {
+          margin: 0 !important;
+          padding: 0 !important;
+          background: #0f172a;
+        }
+
         :root {
           --font: 'Noto Sans Hebrew', sans-serif;
           --c1: #933ec7; 
@@ -60,7 +67,7 @@ const LandingPage = () => {
           line-height: 1.6;
         }
 
-        /* --- Hero עם הדר מובנה --- */
+        /* Hero Section - מורחב עד הקצה */
         .hero {
             text-align: center; 
             padding: 0 0 100px 0;
@@ -69,6 +76,7 @@ const LandingPage = () => {
             position: relative;
             overflow: hidden;
             min-height: 600px;
+            margin: 0;
         }
         
         .hero::after {
@@ -83,7 +91,7 @@ const LandingPage = () => {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          padding: 30px 60px;
+          padding: 40px 60px; /* מרווח פנימי גדול יותר */
           position: relative;
           z-index: 10;
           background: transparent;
@@ -97,21 +105,22 @@ const LandingPage = () => {
         }
 
         .header-logo-img {
-          height: 80px; /* לוגו גדול ומרשים */
+          height: 90px; /* הגדלה נוספת */
           width: auto;
+          filter: brightness(0) invert(1); /* הופך לוגו כהה ללבן בוהק */
         }
 
         .header-title {
           color: #ffffff;
           font-weight: 900;
-          font-size: 36px;
+          font-size: 42px; /* הגדלה משמעותית של הטקסט */
           letter-spacing: -1px;
         }
 
         .login-btn {
           background: #ffffff;
           color: var(--dark);
-          padding: 14px 32px;
+          padding: 16px 36px;
           border-radius: 100px;
           border: none;
           font-weight: 800;
@@ -129,7 +138,7 @@ const LandingPage = () => {
         .hero-content {
           position: relative;
           z-index: 10;
-          padding: 60px 20px;
+          padding: 40px 20px;
         }
 
         .hero h1 {
@@ -137,7 +146,6 @@ const LandingPage = () => {
             font-size: 68px;
             line-height: 1.1;
             font-weight: 900;
-            letter-spacing: -1px;
         }
         
         .hero p {
@@ -159,16 +167,10 @@ const LandingPage = () => {
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             box-shadow: 0 15px 35px rgba(147, 62, 199, 0.5);
         }
-        .cta-btn:hover {
-            transform: scale(1.05) translateY(-5px);
-            box-shadow: 0 20px 50px rgba(147, 62, 199, 0.7);
-        }
 
-        /* --- שאר הסקשנים --- */
         .sec-features { background: var(--soft-purple); padding: 100px 20px; }
         .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 30px; margin-top: 50px; }
-        .feature-card { background: white; padding: 45px 35px; border-radius: 28px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; transition: all 0.3s ease; }
-        .feature-card:hover { transform: translateY(-10px); }
+        .feature-card { background: white; padding: 45px 35px; border-radius: 28px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
         .feature-card .icon { font-size: 42px; margin-bottom: 25px; display: block; }
         .feature-card h3 { margin: 0 0 12px; font-size: 22px; font-weight: 900; color: var(--c1); }
 
@@ -178,21 +180,19 @@ const LandingPage = () => {
 
         .sec-testimonials { background: var(--dark); color: white; padding: 100px 20px; }
         .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 35px; }
-        .testimonial-card { background: rgba(255,255,255,0.05); padding: 40px; border-radius: 28px; border: 1px solid rgba(255,255,255,0.1); font-style: italic; font-size: 18px; }
+        .testimonial-card { background: rgba(255,255,255,0.05); padding: 40px; border-radius: 28px; border: 1px solid rgba(255,255,255,0.1); font-style: italic; }
 
-        .price-box { background: white; border-radius: 45px; padding: 80px; text-align: center; border: 2px solid var(--c1); margin: 60px auto; max-width: 600px; box-shadow: 0 40px 100px rgba(0,0,0,0.15); }
+        .price-box { background: white; border-radius: 45px; padding: 80px; text-align: center; border: 2px solid var(--c1); margin: 60px auto; max-width: 600px; }
         .new-price { font-size: 110px; font-weight: 900; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1; }
 
         .about-box { display: flex; align-items: center; gap: 60px; background: white; padding: 70px; border-radius: 45px; box-shadow: 0 20px 60px rgba(0,0,0,0.08); }
         .about-box img { width: 250px; height: 250px; border-radius: 40px; object-fit: cover; border: 5px solid var(--c1); }
 
         @media (max-width: 768px) {
+            .landing-header { padding: 20px; flex-direction: column; gap: 20px; }
+            .header-logo-img { height: 60px; }
+            .header-title { font-size: 28px; }
             .hero h1 { font-size: 44px; }
-            .hero p { font-size: 20px; }
-            .landing-header { padding: 25px; flex-direction: column; gap: 20px; }
-            .header-logo-img { height: 50px; }
-            .header-title { font-size: 26px; }
-            .about-box { flex-direction: column; text-align: center; padding: 45px; }
         }
       `}</style>
 
