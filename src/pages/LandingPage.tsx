@@ -59,244 +59,161 @@ const LandingPage = () => {
           color: var(--dark);
           line-height: 1.6;
         }
-        
-        .wrap {
-          max-width: 1100px;
-          margin: 0 auto;
-          padding: 20px;
-        }
-        
-        /* --- הדר שקוף ומשולב --- */
-        .landing-header {
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          padding: 30px 50px;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          z-index: 100;
-          background: transparent;
-        }
 
-        .header-logo-container {
-          display: flex;
-          align-items: center;
-          gap: 15px;
-          text-decoration: none;
-        }
-
-        .header-logo-img {
-          height: 60px; /* לוגו גדול יותר */
-          width: auto;
-        }
-
-        .header-title {
-          color: #ffffff; /* טקסט לבן על הרקע הכהה */
-          font-weight: 900;
-          font-size: 32px;
-          letter-spacing: -1px;
-        }
-
-        .login-btn {
-          background: #ffffff;
-          color: var(--dark);
-          padding: 12px 28px;
-          border-radius: 100px;
-          border: none;
-          font-weight: 800;
-          font-size: 16px;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-
-        .login-btn:hover {
-          transform: translateY(-2px);
-          background: #f8fafc;
-          box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-        }
-
-        /* --- Hero Section --- */
+        /* --- Hero עם הדר מובנה --- */
         .hero {
             text-align: center; 
-            padding: 180px 20px 100px; /* רווח עליון בגלל ההדר הצף */
+            padding: 0 0 100px 0;
             background: var(--dark);
             color: white;
             position: relative;
             overflow: hidden;
-            min-height: 500px;
+            min-height: 600px;
         }
         
         .hero::after {
             content: '';
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: radial-gradient(circle at 50% 50%, rgba(147, 62, 199, 0.3) 0%, transparent 70%);
+            background: radial-gradient(circle at 50% 50%, rgba(147, 62, 199, 0.35) 0%, transparent 80%);
+            z-index: 1;
+        }
+
+        .landing-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 30px 60px;
+          position: relative;
+          z-index: 10;
+          background: transparent;
+        }
+
+        .header-logo-container {
+          display: flex;
+          align-items: center;
+          gap: 20px;
+          text-decoration: none;
+        }
+
+        .header-logo-img {
+          height: 80px; /* לוגו גדול ומרשים */
+          width: auto;
+        }
+
+        .header-title {
+          color: #ffffff;
+          font-weight: 900;
+          font-size: 36px;
+          letter-spacing: -1px;
+        }
+
+        .login-btn {
+          background: #ffffff;
+          color: var(--dark);
+          padding: 14px 32px;
+          border-radius: 100px;
+          border: none;
+          font-weight: 800;
+          font-size: 18px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .login-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+        }
+
+        .hero-content {
+          position: relative;
+          z-index: 10;
+          padding: 60px 20px;
         }
 
         .hero h1 {
-            position: relative;
-            z-index: 1;
             margin: 0 auto 25px;
-            font-size: 64px;
+            font-size: 68px;
             line-height: 1.1;
             font-weight: 900;
             letter-spacing: -1px;
         }
         
         .hero p {
-            position: relative;
-            z-index: 1;
             margin: 0 auto 45px;
-            max-width: 800px;
+            max-width: 850px;
             color: #cbd5e1;
-            font-size: 24px;
+            font-size: 26px;
         }
 
         .cta-btn {
-            position: relative;
-            z-index: 1;
             background: var(--grad);
             color: white;
-            font-size: 26px;
+            font-size: 28px;
             font-weight: 800;
-            padding: 24px 70px;
+            padding: 24px 80px;
             border-radius: 100px;
             border: none;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 15px 35px rgba(147, 62, 199, 0.4);
+            box-shadow: 0 15px 35px rgba(147, 62, 199, 0.5);
         }
         .cta-btn:hover {
             transform: scale(1.05) translateY(-5px);
-            box-shadow: 0 20px 50px rgba(147, 62, 199, 0.6);
+            box-shadow: 0 20px 50px rgba(147, 62, 199, 0.7);
         }
 
-        /* --- פיצ'רים (מה מחכה לכם) --- */
-        .sec-features {
-            background: var(--soft-purple);
-            padding: 100px 20px;
-        }
-
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 25px;
-            margin-top: 50px;
-        }
-
-        .feature-card {
-            background: white;
-            padding: 40px 30px;
-            border-radius: 24px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            border: 1px solid #e2e8f0;
-            transition: all 0.3s ease;
-        }
+        /* --- שאר הסקשנים --- */
+        .sec-features { background: var(--soft-purple); padding: 100px 20px; }
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 30px; margin-top: 50px; }
+        .feature-card { background: white; padding: 45px 35px; border-radius: 28px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; transition: all 0.3s ease; }
         .feature-card:hover { transform: translateY(-10px); }
-        .feature-card .icon { font-size: 36px; margin-bottom: 20px; display: block; }
-        .feature-card h3 { margin: 0 0 10px; font-size: 20px; font-weight: 900; color: var(--c1); }
+        .feature-card .icon { font-size: 42px; margin-bottom: 25px; display: block; }
+        .feature-card h3 { margin: 0 0 12px; font-size: 22px; font-weight: 900; color: var(--c1); }
 
-        /* --- טעימה מהנוסחאות --- */
         .sec-teaser { padding: 100px 20px; }
-        .teaser-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 30px;
-        }
-        .card {
-            background: white;
-            border-radius: 24px;
-            padding: 35px;
-            border-right: 8px solid var(--c1);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.06);
-            transition: all 0.3s ease;
-        }
+        .teaser-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; }
+        .card { background: white; border-radius: 28px; padding: 40px; border-right: 10px solid var(--c1); box-shadow: 0 20px 40px rgba(0,0,0,0.06); }
 
-        /* --- המלצות --- */
-        .sec-testimonials {
-            background: var(--dark);
-            color: white;
-            padding: 100px 20px;
-        }
-        .testimonials-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-        .testimonial-card {
-            background: rgba(255,255,255,0.05);
-            padding: 35px;
-            border-radius: 24px;
-            border: 1px solid rgba(255,255,255,0.1);
-            font-style: italic;
-        }
+        .sec-testimonials { background: var(--dark); color: white; padding: 100px 20px; }
+        .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 35px; }
+        .testimonial-card { background: rgba(255,255,255,0.05); padding: 40px; border-radius: 28px; border: 1px solid rgba(255,255,255,0.1); font-style: italic; font-size: 18px; }
 
-        /* --- תיבת מחיר --- */
-        .price-box {
-          background: white;
-          border-radius: 40px;
-          padding: 70px;
-          text-align: center;
-          border: 2px solid var(--c1);
-          margin: 60px auto;
-          max-width: 580px;
-          box-shadow: 0 40px 100px rgba(0,0,0,0.12);
-        }
-        .new-price {
-          font-size: 100px;
-          font-weight: 900;
-          background: var(--grad);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          line-height: 1;
-        }
+        .price-box { background: white; border-radius: 45px; padding: 80px; text-align: center; border: 2px solid var(--c1); margin: 60px auto; max-width: 600px; box-shadow: 0 40px 100px rgba(0,0,0,0.15); }
+        .new-price { font-size: 110px; font-weight: 900; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1; }
 
-        /* --- אודות --- */
-        .about-sec {
-            background: var(--bg-light);
-            padding: 100px 20px;
-        }
-        .about-box {
-            display: flex;
-            align-items: center;
-            gap: 50px;
-            background: white;
-            padding: 60px;
-            border-radius: 40px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.06);
-        }
-        .about-box img { width: 220px; height: 220px; border-radius: 35px; object-fit: cover; border: 4px solid var(--c1); }
+        .about-box { display: flex; align-items: center; gap: 60px; background: white; padding: 70px; border-radius: 45px; box-shadow: 0 20px 60px rgba(0,0,0,0.08); }
+        .about-box img { width: 250px; height: 250px; border-radius: 40px; object-fit: cover; border: 5px solid var(--c1); }
 
         @media (max-width: 768px) {
-            .hero h1 { font-size: 42px; }
-            .hero { padding: 140px 20px 80px; }
-            .about-box { flex-direction: column; text-align: center; padding: 40px; }
-            .landing-header { padding: 20px; }
-            .header-logo-img { height: 45px; }
-            .header-title { font-size: 24px; }
+            .hero h1 { font-size: 44px; }
+            .hero p { font-size: 20px; }
+            .landing-header { padding: 25px; flex-direction: column; gap: 20px; }
+            .header-logo-img { height: 50px; }
+            .header-title { font-size: 26px; }
+            .about-box { flex-direction: column; text-align: center; padding: 45px; }
         }
       `}</style>
 
       <div className="landing-page" dir="rtl">
-        <header className="landing-header">
-          <a href="/" className="header-logo-container">
-            <img src="/logo.png" alt="PromptBook" className="header-logo-img" />
-            <div className="header-title">PromptBook</div>
-          </a>
-          <button onClick={() => navigate('/auth')} className="login-btn">
-            כניסה למנויים
-          </button>
-        </header>
-
         <section className="hero">
-          <div className="wrap">
-            <h1>מספיק לעבוד בשביל ה-AI:<br/>תנו למנוע של PromptBook לכתוב עבורכם</h1>
-            <p>במקום להסתבך עם הגדרות ולהילחם בניסוחים רובוטיים - קבלו גישה לממשק אינטראקטיבי עם 101 נוסחאות קופירייטינג מוכנות מראש.</p>
-            <button onClick={scrollToPrice} className="cta-btn">אני רוצה לכתוב פחות ולמכור יותר ↓</button>
+          <header className="landing-header">
+            <a href="/" className="header-logo-container">
+              <img src="/logo.png" alt="PromptBook" className="header-logo-img" />
+              <div className="header-title">PromptBook</div>
+            </a>
+            <button onClick={() => navigate('/auth')} className="login-btn">
+              כניסה למנויים
+            </button>
+          </header>
+
+          <div className="hero-content">
+            <div className="wrap">
+              <h1>מספיק לעבוד בשביל ה-AI:<br/>תנו למנוע של PromptBook לכתוב עבורכם</h1>
+              <p>במקום להסתבך עם הגדרות ולהילחם בניסוחים רובוטיים - קבלו גישה לממשק אינטראקטיבי עם 101 נוסחאות קופירייטינג מוכנות מראש.</p>
+              <button onClick={scrollToPrice} className="cta-btn">אני רוצה לכתוב פחות ולמכור יותר ↓</button>
+            </div>
           </div>
         </section>
 
@@ -362,34 +279,32 @@ const LandingPage = () => {
           </div>
         </section>
 
-        <section className="about-sec">
-          <div className="wrap">
+        <section className="wrap" style={{padding: '100px 0'}}>
             <div className="about-box">
               <img src="/pnina-profile.jpg" alt="פנינה" />
               <div>
-                <h2 style={{color:'var(--c1)', fontWeight:'900', fontSize: '32px'}}>נעים להכיר, פנינה קריוף</h2>
-                <p style={{fontSize:'20px', lineHeight: '1.8'}}>בניתי את PromptBook כי נמאס לי לראות בעלי עסקים נלחמים ב-AI ומקבלים תוצאות בינוניות. המטרה שלי היא שתכתבו הרבה פחות, אבל תמכרו הרבה יותר בעזרת נוסחאות מוכחות ועברית עם נשמה.</p>
+                <h2 style={{color:'var(--c1)', fontWeight:'900', fontSize: '36px', marginBottom: '20px'}}>נעים להכיר, פנינה קריוף</h2>
+                <p style={{fontSize:'22px', lineHeight: '1.8'}}>בניתי את PromptBook כי נמאס לי לראות בעלי עסקים נלחמים ב-AI ומקבלים תוצאות בינוניות. המטרה שלי היא שתכתבו הרבה פחות, אבל תמכרו הרבה יותר בעזרת נוסחאות מוכחות ועברית עם נשמה.</p>
               </div>
             </div>
-          </div>
         </section>
 
         <section id="price-section" className="wrap" style={{textAlign:'center', padding:'100px 20px'}}>
           <div className="price-box">
-            <h2 style={{fontWeight:'900', fontSize:'36px', color:'var(--c1)', marginBottom: '10px'}}>מוכנים לשדרג את התוכן?</h2>
-            <p style={{fontSize: '20px', color: '#64748b', marginBottom: '30px'}}>השקעה חד פעמית לגישה מלאה לכל החיים</p>
-            <div style={{marginBottom:'30px'}}>
-              <span style={{textDecoration:'line-through', fontSize:'35px', color:'#94a3b8', marginLeft: '15px'}}>397 ₪</span>
+            <h2 style={{fontWeight:'900', fontSize:'42px', color:'var(--c1)', marginBottom: '15px'}}>מוכנים לשדרג את התוכן?</h2>
+            <p style={{fontSize: '24px', color: '#64748b', marginBottom: '40px'}}>השקעה חד פעמית לגישה מלאה לכל החיים</p>
+            <div style={{marginBottom:'40px'}}>
+              <span style={{textDecoration:'line-through', fontSize:'40px', color:'#94a3b8', marginLeft: '20px'}}>397 ₪</span>
               <div className="new-price">99 ₪</div>
             </div>
             <div style={{maxWidth:'350px', margin:'0 auto'}}>
               <div id="paypal-container-bottom"></div>
-              <p style={{fontSize:'16px', marginTop:'20px', fontWeight:'700', color: '#1e293b'}}>💳 ניתן לשלם באשראי או ב-PayPal</p>
+              <p style={{fontSize:'18px', marginTop:'25px', fontWeight:'700', color: '#1e293b'}}>💳 ניתן לשלם באשראי או ב-PayPal</p>
             </div>
           </div>
         </section>
 
-        <footer style={{textAlign:'center', padding:'60px 20px', background:'#f8fafc', color:'#64748b', borderTop: '1px solid #e2e8f0'}}>
+        <footer style={{textAlign:'center', padding:'80px 20px', background:'#f8fafc', color:'#64748b', borderTop: '1px solid #e2e8f0'}}>
           © 2026 PromptBook by Pnina Karayoff | <a href="/terms" style={{color:'var(--c1)', fontWeight: '700', textDecoration: 'none'}}>תקנון</a> | <a href="/privacy" style={{color:'var(--c1)', fontWeight: '700', textDecoration: 'none'}}>פרטיות</a>
         </footer>
       </div>
