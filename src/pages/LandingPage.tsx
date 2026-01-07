@@ -105,6 +105,7 @@ const LandingPage = () => {
           height: 110px;
           width: auto;
           filter: brightness(0) invert(1);
+          margin-left: 10px;
         }
 
         .header-title {
@@ -185,18 +186,19 @@ const LandingPage = () => {
         .price-box { background: white; border-radius: 45px; padding: 80px; text-align: center; border: 2px solid var(--c1); margin: 60px auto; max-width: 600px; box-shadow: 0 40px 100px rgba(0,0,0,0.15); }
         .new-price { font-size: 110px; font-weight: 900; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1; }
 
-        /* About Section Update */
+        /* About Section Box */
         .about-box { display: flex; align-items: center; gap: 60px; background: white; padding: 70px; border-radius: 45px; box-shadow: 0 20px 60px rgba(0,0,0,0.08); }
         .about-box img { width: 250px; height: 250px; border-radius: 40px; object-fit: cover; border: 5px solid var(--c1); }
 
         @media (max-width: 768px) {
             .landing-header { padding: 25px; flex-direction: column; gap: 20px; }
-            .header-logo-img { height: 70px; }
+            .header-logo-img { height: 70px; margin-left: 0; }
             .header-title { font-size: 28px; }
             .hero h1 { font-size: 40px; }
             .hero p { font-size: 18px; }
             .comparison-grid { grid-template-columns: 1fr; }
             .about-box { flex-direction: column; text-align: center; padding: 45px; }
+            .about-box img { width: 180px; height: 180px; }
         }
       `}</style>
 
@@ -252,19 +254,20 @@ const LandingPage = () => {
               <div className="feature-card"><span className="icon">📱</span><h3>אפליקציה אינטראקטיבית</h3><p>10 קטגוריות תוכן בממשק נוח</p></div>
               <div className="feature-card"><span className="icon">🔍</span><h3>מנוע חיפוש חכם</h3><p>סינון מהיר לפי קהל יעד</p></div>
               <div className="feature-card"><span className="icon">⚡</span><h3>חיסכון בזמן</h3><p>כפתור העתקה מהיר לכל פרומפט</p></div>
-              <div className="feature-card"><span className="icon">📄</span><h3>ייצוא PDF מלא</h3><p>אפשרות להוריד את כל החוברת</p></div>
+              <div className="feature-card"><span className="icon">📄</span><h3>ייצוא PDF מלא</h3><p>אפשרות להוריד את כל החוברת למחשב</p></div>
             </div>
           </div>
         </section>
 
-        {/* למה לא פשוט להשתמש בחינם? */}
-        <section className="sec" style={{padding: '100px 20px'}}>
-          <div className="wrap" style={{textAlign: 'center'}}>
-            <h2 style={{fontSize:'42px', fontWeight:'900', marginBottom:'30px'}}>למה לא פשוט להעתיק תבניות חינמיות מהרשת?</h2>
-            <p style={{fontSize: '22px', maxWidth: '900px', margin: '0 auto 40px'}}>
-              ברשת יש אלפי פרומפטים בחינם, אבל הבעיה היא שהם **גנריים**. הם נכתבו באנגלית, תורגמו לעברית רובוטית, והם לא לוקחים בחשבון את הקהל הישראלי, את הפסיכולוגיה של המכירה או את הקול האישי שלכם.
+        {/* מקטע: למה לא פשוט להעתיק תבניות? - מעוצב ומשודרג */}
+        <section style={{background: 'var(--dark)', color: 'white', padding: '100px 20px', position: 'relative', overflow: 'hidden'}}>
+          <div style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0.1, background: 'radial-gradient(circle at 50% 50%, var(--c1), transparent 70%)'}}></div>
+          <div className="wrap" style={{textAlign: 'center', position: 'relative', zIndex: 2}}>
+            <h2 style={{fontSize:'42px', fontWeight:'900', marginBottom:'30px', color: 'white'}}>למה לא פשוט להעתיק תבניות חינמיות מהרשת?</h2>
+            <p style={{fontSize: '22px', maxWidth: '900px', margin: '0 auto 40px', lineHeight: '1.8'}}>
+              ברשת יש אלפי פרומפטים בחינם, אבל הבעיה פשוטה: הם גנריים. [cite: 5] הם נכתבו במקור באנגלית, עברו תרגום רובוטי ולא לוקחים בחשבון את הניואנסים של הקהל הישראלי, את פסיכולוגיית המכירה או את הקול הייחודי שלכם. [cite: 5, 6]
               <br/><br/>
-              ב-PromptBook אתם מקבלים נוסחאות שנוסו, זוקקו והותאמו במיוחד כדי ש-ChatGPT יוציא תוצאה שנשמעת כמו קופירייטר אנושי – כבר מהניסיון הראשון.
+              ב-PromptBook אתם מקבלים נוסחאות שנוסו, זוקקו והותאמו במיוחד כדי ש-ChatGPT יוציא תוצאה שנשמעת כמו קופירייטר אנושי ומקצועי – כבר מהניסיון הראשון. 
             </p>
           </div>
         </section>
@@ -294,19 +297,21 @@ const LandingPage = () => {
           </div>
         </section>
 
-        {/* אודות פנינה - לפי הקובץ המעודכן */}
+        {/* אודות פנינה - משוחזר ומשודרג לפי הקובץ האישי */}
         <section className="about-sec">
           <div className="wrap">
             <div className="about-box">
               <img src="/pnina-profile.jpg" alt="פנינה קריוף" />
               <div>
-                <h2 style={{color:'var(--c1)', fontWeight:'900', fontSize: '36px', marginBottom: '20px'}}>מחברת בין עולמות: טיפול. טכנולוגיה. טרנספורמציה.</h2>
-                <p style={{fontSize:'20px', lineHeight: '1.8'}}>
-                  שלום, אני פנינה. בעשור האחרון ליוויתי עשרות אנשים במסעות של ריפוי וצמיחה דרך NLP, טארוט, נומרולוגיה והעיצוב האנושי.
+                <h2 style={{color:'var(--c1)', fontWeight:'900', fontSize: '32px', marginBottom: '20px'}}>מחברת בין עולמות: טיפול. טכנולוגיה. טרנספורמציה. </h2>
+                <p style={{fontSize:'19px', lineHeight: '1.8'}}>
+                  נעים להכיר, אני פנינה. בעשור האחרון ליוויתי עשרות אנשים במסעות של ריפוי, צמיחה והתמרה דרך NLP, טארוט, נומרולוגיה והעיצוב האנושי. [cite: 4]
                   <br/><br/>
-                  בניתי את **PromptBook** כי אני לא מלמדת טכנולוגיה – אני מלמדת אנשים איך לא לפחד ממנה. כמטפלת ויוצרת, אני מכירה מקרוב את הנטייה לדחות את ה"טכני" לטובת ה"אנושי", ואני כאן כדי להראות לכם שהם יכולים לעבוד יחד. 
+                  אני פונה אליכם – המטפלים, היוצרים, וכל מי שפועל מהלב ומרגיש שהעולם הדיגיטלי רץ קדימה ומשאיר אתכם קצת מאחור. [cite: 4] בינה מלאכותית עשויה להישמע מורכבת או מרוחקת, אבל אני כאן כדי להראות לכם אחרת. [cite: 5]
                   <br/><br/>
-                  כ-AI Master, חקרתי איך כלי הבינה המלאכותית יכולים לשרת אותנו בלי לוותר על הלב והאינטואיציה. המטרה שלי היא לפתוח לכם שער לעולם חדש, להחזיק לכם את היד, ולעזור לכם לכתוב פחות – ולמכור הרבה יותר.
+                  כ-AI Master שלמדתי מהטובים ביותר (עם עדן ביבס), חקרתי איך הכלים האלו יכולים לשרת אותנו בלי לוותר על מי שאנחנו באמת. [cite: 7, 8] אני מגיעה מהעולם שלכם ומכירה את הדילמות והרגישות. 
+                  <br/><br/>
+                  <strong>"אני לא מלמדת טכנולוגיה – אני מלמדת אנשים איך לא לפחד ממנה." [cite: 2, 3, 9]</strong> אני כאן כדי להחזיק לכם את היד עד שתעברו את השער לעולם החדש הזה. [cite: 10]
                 </p>
               </div>
             </div>
