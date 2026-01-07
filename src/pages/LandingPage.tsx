@@ -66,50 +66,74 @@ const LandingPage = () => {
           padding: 20px;
         }
         
-        /* Header Integrated into Hero */
+        /* --- הדר שקוף ומשולב --- */
         .landing-header {
-          padding: 25px 40px;
-          background: transparent;
           position: absolute;
           top: 0;
           left: 0;
           right: 0;
-          z-index: 100;
+          padding: 30px 50px;
           display: flex;
           justify-content: space-between;
           align-items: center;
+          z-index: 100;
+          background: transparent;
+        }
+
+        .header-logo-container {
+          display: flex;
+          align-items: center;
+          gap: 15px;
+          text-decoration: none;
+        }
+
+        .header-logo-img {
+          height: 60px; /* לוגו גדול יותר */
+          width: auto;
+        }
+
+        .header-title {
+          color: #ffffff; /* טקסט לבן על הרקע הכהה */
+          font-weight: 900;
+          font-size: 32px;
+          letter-spacing: -1px;
         }
 
         .login-btn {
-          background: transparent;
-          color: white;
-          padding: 8px 22px;
+          background: #ffffff;
+          color: var(--dark);
+          padding: 12px 28px;
           border-radius: 100px;
-          border: 1px solid rgba(255, 255, 255, 0.4);
-          fontWeight: 700;
+          border: none;
+          font-weight: 800;
+          font-size: 16px;
           cursor: pointer;
           transition: all 0.3s ease;
-        }
-        .login-btn:hover {
-          background: rgba(255, 255, 255, 0.1);
-          border-color: white;
+          box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
-        /* Hero Section - Deep & Vibrant */
+        .login-btn:hover {
+          transform: translateY(-2px);
+          background: #f8fafc;
+          box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        /* --- Hero Section --- */
         .hero {
             text-align: center; 
-            padding: 160px 20px 100px;
+            padding: 180px 20px 100px; /* רווח עליון בגלל ההדר הצף */
             background: var(--dark);
             color: white;
             position: relative;
             overflow: hidden;
+            min-height: 500px;
         }
         
         .hero::after {
             content: '';
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: radial-gradient(circle at 50% 50%, rgba(147, 62, 199, 0.25) 0%, transparent 70%);
+            background: radial-gradient(circle at 50% 50%, rgba(147, 62, 199, 0.3) 0%, transparent 70%);
         }
 
         .hero h1 {
@@ -150,7 +174,7 @@ const LandingPage = () => {
             box-shadow: 0 20px 50px rgba(147, 62, 199, 0.6);
         }
 
-        /* Features Section */
+        /* --- פיצ'רים (מה מחכה לכם) --- */
         .sec-features {
             background: var(--soft-purple);
             padding: 100px 20px;
@@ -176,7 +200,7 @@ const LandingPage = () => {
         .feature-card .icon { font-size: 36px; margin-bottom: 20px; display: block; }
         .feature-card h3 { margin: 0 0 10px; font-size: 20px; font-weight: 900; color: var(--c1); }
 
-        /* Teaser Cards */
+        /* --- טעימה מהנוסחאות --- */
         .sec-teaser { padding: 100px 20px; }
         .teaser-grid {
             display: grid;
@@ -191,9 +215,8 @@ const LandingPage = () => {
             box-shadow: 0 20px 40px rgba(0,0,0,0.06);
             transition: all 0.3s ease;
         }
-        .card:hover { transform: scale(1.02); }
 
-        /* Testimonials */
+        /* --- המלצות --- */
         .sec-testimonials {
             background: var(--dark);
             color: white;
@@ -212,7 +235,7 @@ const LandingPage = () => {
             font-style: italic;
         }
 
-        /* Pricing Box */
+        /* --- תיבת מחיר --- */
         .price-box {
           background: white;
           border-radius: 40px;
@@ -232,6 +255,7 @@ const LandingPage = () => {
           line-height: 1;
         }
 
+        /* --- אודות --- */
         .about-sec {
             background: var(--bg-light);
             padding: 100px 20px;
@@ -252,16 +276,20 @@ const LandingPage = () => {
             .hero { padding: 140px 20px 80px; }
             .about-box { flex-direction: column; text-align: center; padding: 40px; }
             .landing-header { padding: 20px; }
+            .header-logo-img { height: 45px; }
+            .header-title { font-size: 24px; }
         }
       `}</style>
 
       <div className="landing-page" dir="rtl">
         <header className="landing-header">
-          <div style={{display:'flex', alignItems:'center', gap:'12px'}}>
-            <img src="/logo.png" alt="PromptBook" style={{height: '45px'}} />
-            <div style={{fontWeight:'900', fontSize:'26px', color:'white'}}>PromptBook</div>
-          </div>
-          <button onClick={() => navigate('/auth')} className="login-btn">כניסה למנויים</button>
+          <a href="/" className="header-logo-container">
+            <img src="/logo.png" alt="PromptBook" className="header-logo-img" />
+            <div className="header-title">PromptBook</div>
+          </a>
+          <button onClick={() => navigate('/auth')} className="login-btn">
+            כניסה למנויים
+          </button>
         </header>
 
         <section className="hero">
