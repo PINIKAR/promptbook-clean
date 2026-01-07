@@ -66,7 +66,7 @@ const LandingPage = () => {
           line-height: 1.6;
         }
 
-        /* Hero Section */
+        /* Hero & Header */
         .hero {
             text-align: center; 
             padding: 0 0 100px 0;
@@ -125,7 +125,6 @@ const LandingPage = () => {
           font-size: 18px;
           cursor: pointer;
           transition: all 0.3s ease;
-          box-shadow: 0 4px 20px rgba(0,0,0,0.3);
         }
 
         .hero-content {
@@ -157,11 +156,18 @@ const LandingPage = () => {
             border-radius: 100px;
             border: none;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.3s ease;
             box-shadow: 0 15px 35px rgba(147, 62, 199, 0.5);
         }
 
-        /* Sections Styling */
+        /* Comparison Section */
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 50px;
+        }
+
         .sec-features { background: var(--soft-purple); padding: 100px 20px; }
         .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 30px; margin-top: 50px; }
         .feature-card { background: white; padding: 45px 35px; border-radius: 28px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
@@ -181,12 +187,19 @@ const LandingPage = () => {
         .about-box { display: flex; align-items: center; gap: 60px; background: white; padding: 70px; border-radius: 45px; box-shadow: 0 20px 60px rgba(0,0,0,0.08); }
         .about-box img { width: 250px; height: 250px; border-radius: 40px; object-fit: cover; border: 5px solid var(--c1); }
 
+        /* FAQ Styling */
+        .faq-item { margin-bottom: 15px; background: white; border-radius: 20px; border: 1px solid #e2e8f0; overflow: hidden; }
+        .faq-item summary { padding: 25px; cursor: pointer; font-weight: 800; color: var(--c1); list-style: none; position: relative; font-size: 20px; }
+        .faq-item summary:after { content: "▼"; position: absolute; left: 25px; font-size: 14px; color: var(--c2); }
+        .faq-item[open] summary:after { content: "▲"; }
+        .faq-content { padding: 0 25px 25px; color: #475569; font-size: 18px; }
+
         @media (max-width: 768px) {
             .landing-header { padding: 25px; flex-direction: column; gap: 20px; }
             .header-logo-img { height: 70px; margin-left: 0; }
             .header-title { font-size: 28px; }
             .hero h1 { font-size: 40px; }
-            .hero p { font-size: 18px; }
+            .comparison-grid { grid-template-columns: 1fr; }
             .about-box { flex-direction: column; text-align: center; padding: 45px; }
             .about-box img { width: 180px; height: 180px; }
         }
@@ -211,11 +224,11 @@ const LandingPage = () => {
           </div>
         </section>
 
-        {/* השוואת כתיבה */}
+        {/* ההבדל המוחשי */}
         <section style={{background: '#fff', padding: '100px 20px'}}>
           <div className="wrap">
             <h2 style={{textAlign:'center', fontSize:'42px', fontWeight:'900', marginBottom:'50px'}}>הנה מה שקורה כשמפסיקים "לנחש" פרומפטים:</h2>
-            <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px'}} className="comparison-grid">
+            <div className="comparison-grid">
               <div style={{background: '#f1f5f9', padding: '40px', borderRadius: '32px', border: '2px solid #e2e8f0'}}>
                 <div style={{background: '#94a3b8', color: 'white', padding: '5px 15px', borderRadius: '100px', fontSize: '14px', fontWeight: '800', display: 'inline-block', marginBottom: '20px'}}>ChatGPT רגיל</div>
                 <h4 style={{fontSize: '20px', marginBottom: '15px'}}>פרומפט גנרי: "תכתוב לי הזמנה לשיחת ייעוץ"</h4>
@@ -244,20 +257,18 @@ const LandingPage = () => {
               <div className="feature-card"><span className="icon">📱</span><h3>אפליקציה אינטראקטיבית</h3><p>10 קטגוריות תוכן בממשק נוח</p></div>
               <div className="feature-card"><span className="icon">🔍</span><h3>מנוע חיפוש חכם</h3><p>סינון מהיר לפי קהל יעד</p></div>
               <div className="feature-card"><span className="icon">⚡</span><h3>חיסכון בזמן</h3><p>כפתור העתקה מהיר לכל פרומפט</p></div>
-              <div className="feature-card"><span className="icon">📄</span><h3>ייצוא PDF מלא</h3><p>אפשרות להוריד את כל החוברת למחשב</p></div>
+              <div className="feature-card"><span className="icon">📄</span><h3>ייצוא PDF מלא</h3><p>אפשרות להוריד את כל החוברת</p></div>
             </div>
           </div>
         </section>
 
-        {/* מקטע התנגדויות - מעוצב ומשודרג */}
+        {/* התנגדויות - עיצוב יוקרתי */}
         <section style={{background: 'var(--dark)', color: 'white', padding: '100px 20px', position: 'relative', overflow: 'hidden'}}>
           <div style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0.1, background: 'radial-gradient(circle at 50% 50%, var(--c1), transparent 70%)'}}></div>
           <div className="wrap" style={{textAlign: 'center', position: 'relative', zIndex: 2}}>
             <h2 style={{fontSize:'42px', fontWeight:'900', marginBottom:'30px', color: 'white'}}>למה לא פשוט להעתיק תבניות חינמיות מהרשת?</h2>
             <p style={{fontSize: '22px', maxWidth: '900px', margin: '0 auto 40px', lineHeight: '1.8'}}>
-              ברשת יש אלפי פרומפטים בחינם, אבל הבעיה פשוטה: הם גנריים. הם נכתבו במקור באנגלית, עברו תרגום רובוטי ולא לוקחים בחשבון את הניואנסים של הקהל הישראלי, את פסיכולוגיית המכירה או את הקול הייחודי שלכם.
-              <br/><br/>
-              ב-PromptBook אתם מקבלים נוסחאות שנוסו, זוקקו והותאמו במיוחד כדי ש-ChatGPT יוציא תוצאה שנשמעת כמו קופירייטר אנושי ומקצועי, כבר מהניסיון הראשון.
+              ברשת יש אלפי פרומפטים בחינם, אבל הבעיה פשוטה: הם גנריים. הם נכתבו במקור באנגלית, עברו תרגום רובוטי ולא לוקחים בחשבון את הניואנסים של הקהל הישראלי, את פסיכולוגיית המכירה או את הקול הייחודי שלכם. ב-PromptBook אתם מקבלים נוסחאות שנוסו, זוקקו והותאמו במיוחד כדי ש-ChatGPT יוציא תוצאה שנשמעת כמו קופירייטר אנושי ומקצועי כבר מהניסיון הראשון.
             </p>
           </div>
         </section>
@@ -281,13 +292,13 @@ const LandingPage = () => {
             <h2 style={{textAlign:'center', fontSize:'42px', fontWeight:'900', marginBottom:'50px'}}>מה אומרים המשתמשים?</h2>
             <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(300px, 1fr))', gap:'30px'}}>
                 <div className="testimonial-card"><div style={{color:'gold', marginBottom:'15px'}}>★★★★★</div>"הכלי הזה חסך לי לפחות 5 שעות כתיבה שבועיות. במקום לשבור את הראש, אני פשוט מעתיקה ומדביקה."<br/><br/><b>- שירן אליהו, מנהלת סושיאל</b></div>
-                <div className="testimonial-card"><div style={{color:'gold', marginBottom:'15px'}}>★★★★★</div>"פנינה, תודה! זה מרגיש כאילו שכרתי קופירייטר צמוד לעסק בעשירית מהמחיר."<br/><br/><b>- רן לוי, מאמן אישי</b></div>
+                <div className="testimonial-card"><div style={{color:'gold', marginBottom:'15px'}}>★★★★★</div>"פנינה, תודה! זה מרגיש כאילו שכרתי קופירייטר צמוד לעסק בשבריר מהמחיר."<br/><br/><b>- רן לוי, מאמן אישי</b></div>
                 <div className="testimonial-card"><div style={{color:'gold', marginBottom:'15px'}}>★★★★★</div>"התוצאות הן עברית נקייה וטבעית. סוף סוף ה-AI מדבר בשפה שמתאימה לקהל הישראלי."<br/><br/><b>- מירב דהן, פרילנסרית</b></div>
             </div>
           </div>
         </section>
 
-        {/* אודות פנינה - מעודכן מהקובץ האישי */}
+        {/* אודות פנינה - הטקסט המלא מהקובץ */}
         <section className="about-sec">
           <div className="wrap">
             <div className="about-box">
@@ -295,15 +306,38 @@ const LandingPage = () => {
               <div>
                 <h2 style={{color:'var(--c1)', fontWeight:'900', fontSize: '32px', marginBottom: '20px'}}>מחברת בין עולמות: טיפול. טכנולוגיה. טרנספורמציה.</h2>
                 <p style={{fontSize:'19px', lineHeight: '1.8'}}>
-                  נעים להכיר, אני פנינה. בעשור האחרון ליוויתי עשרות אנשים במסעות של ריפוי, צמיחה והתמרה דרך NLP, טארוט, נומרולוגיה והעיצוב האנושי.
-                  <br/><br/>
-                  אני פונה אליכם: המטפלים, היוצרים וכל מי שפועל מהלב ומרגיש שהעולם הדיגיטלי רץ קדימה ומשאיר אתכם קצת מאחור. בינה מלאכותית עשויה להישמע מורכבת או מרוחקת, אבל אני כאן כדי להראות לכם אחרת.
+                  נעים להכיר, אני פנינה. בעשור האחרון ליוויתי עשרות אנשים במסעות של ריפוי, צמיחה והתמרה דרך NLP, טארוט, נומרולוגיה והעיצוב האנושי. אני פונה אליכם – המטפלים, היוצרים וכל מי שפועל מהלב ומרגיש שהעולם הדיגיטלי רץ קדימה ומשאיר אתכם קצת מאחור. 
                   <br/><br/>
                   כ-AI Master שלמדה מהטובים ביותר, חקרתי איך הכלים האלו יכולים לשרת אותנו בלי לוותר על מי שאנחנו באמת. אני מגיעה מהעולם שלכם ומכירה את הדילמות והרגישות.
                   <br/><br/>
-                  <strong>"אני לא מלמדת טכנולוגיה – אני מלמדת אנשים איך לא לפחד ממנה ."</strong> אני כאן כדי להחזיק לכם את היד עד שתעברו את השער לעולם החדש הזה.
+                  <strong>"אני לא מלמדת טכנולוגיה – אני מלמדת אנשים איך לא לפחד ממנה."</strong> אני כאן כדי להחזיק לכם את היד עד שתעברו את השער לעולם החדש הזה.
                 </p>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* מקטע שאלות ותשובות */}
+        <section className="sec" style={{padding: '100px 20px', background: '#f8fafc'}}>
+          <div className="wrap">
+            <h2 style={{textAlign:'center', fontSize:'42px', fontWeight:'900', marginBottom:'50px'}}>שאלות נפוצות</h2>
+            <div style={{maxWidth: '800px', margin: '0 auto'}}>
+              <details className="faq-item">
+                <summary>איך מקבלים גישה למערכת?</summary>
+                <div className="faq-content">מיד לאחר סיום התשלום ב-PayPal או באשראי, תועברו באופן אוטומטי לדף הכניסה של האפליקציה ותקבלו את פרטי הגישה שלכם למייל.</div>
+              </details>
+              <details className="faq-item">
+                <summary>האם זה מתאים גם למי שלא מבין כלום במחשבים?</summary>
+                <div className="faq-content">בהחלט! בניתי את המערכת כך שתהיה פשוטה ואינטואיטיבית. אתם פשוט בוחרים קטגוריה, לוחצים על "העתק" ומדביקים ב-ChatGPT. אין צורך בידע טכני מוקדם.</div>
+              </details>
+              <details className="faq-item">
+                <summary>האם הכלי עובד מהנייד?</summary>
+                <div className="faq-content">כן, האפליקציה מותאמת באופן מלא לסמארטפונים וטאבלטים, כך שתוכלו לכתוב תוכן מכל מקום ובכל זמן.</div>
+              </details>
+              <details className="faq-item">
+                <summary>האם אקבל חשבונית?</summary>
+                <div className="faq-content">בוודאי. חשבונית מס/קבלה נשלחת באופן אוטומטי לכתובת המייל איתה ביצעתם את הרכישה מיד עם סיום התשלום.</div>
+              </details>
             </div>
           </div>
         </section>
