@@ -66,7 +66,7 @@ const LandingPage = () => {
           line-height: 1.6;
         }
 
-        /* Hero & Header Integration */
+        /* Hero Section */
         .hero {
             text-align: center; 
             padding: 0 0 100px 0;
@@ -161,14 +161,6 @@ const LandingPage = () => {
             box-shadow: 0 15px 35px rgba(147, 62, 199, 0.5);
         }
 
-        /* Comparison Section */
-        .comparison-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            margin-top: 50px;
-        }
-
         /* Sections Styling */
         .sec-features { background: var(--soft-purple); padding: 100px 20px; }
         .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 30px; margin-top: 50px; }
@@ -186,7 +178,6 @@ const LandingPage = () => {
         .price-box { background: white; border-radius: 45px; padding: 80px; text-align: center; border: 2px solid var(--c1); margin: 60px auto; max-width: 600px; box-shadow: 0 40px 100px rgba(0,0,0,0.15); }
         .new-price { font-size: 110px; font-weight: 900; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1; }
 
-        /* About Section Box */
         .about-box { display: flex; align-items: center; gap: 60px; background: white; padding: 70px; border-radius: 45px; box-shadow: 0 20px 60px rgba(0,0,0,0.08); }
         .about-box img { width: 250px; height: 250px; border-radius: 40px; object-fit: cover; border: 5px solid var(--c1); }
 
@@ -196,7 +187,6 @@ const LandingPage = () => {
             .header-title { font-size: 28px; }
             .hero h1 { font-size: 40px; }
             .hero p { font-size: 18px; }
-            .comparison-grid { grid-template-columns: 1fr; }
             .about-box { flex-direction: column; text-align: center; padding: 45px; }
             .about-box img { width: 180px; height: 180px; }
         }
@@ -221,11 +211,11 @@ const LandingPage = () => {
           </div>
         </section>
 
-        {/* ההבדל המוחשי - השוואת כתיבה */}
+        {/* השוואת כתיבה */}
         <section style={{background: '#fff', padding: '100px 20px'}}>
           <div className="wrap">
             <h2 style={{textAlign:'center', fontSize:'42px', fontWeight:'900', marginBottom:'50px'}}>הנה מה שקורה כשמפסיקים "לנחש" פרומפטים:</h2>
-            <div className="comparison-grid">
+            <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px'}} className="comparison-grid">
               <div style={{background: '#f1f5f9', padding: '40px', borderRadius: '32px', border: '2px solid #e2e8f0'}}>
                 <div style={{background: '#94a3b8', color: 'white', padding: '5px 15px', borderRadius: '100px', fontSize: '14px', fontWeight: '800', display: 'inline-block', marginBottom: '20px'}}>ChatGPT רגיל</div>
                 <h4 style={{fontSize: '20px', marginBottom: '15px'}}>פרומפט גנרי: "תכתוב לי הזמנה לשיחת ייעוץ"</h4>
@@ -259,15 +249,15 @@ const LandingPage = () => {
           </div>
         </section>
 
-        {/* מקטע: למה לא פשוט להעתיק תבניות? - מעוצב ומשודרג */}
+        {/* מקטע התנגדויות - מעוצב ומשודרג */}
         <section style={{background: 'var(--dark)', color: 'white', padding: '100px 20px', position: 'relative', overflow: 'hidden'}}>
           <div style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0.1, background: 'radial-gradient(circle at 50% 50%, var(--c1), transparent 70%)'}}></div>
           <div className="wrap" style={{textAlign: 'center', position: 'relative', zIndex: 2}}>
             <h2 style={{fontSize:'42px', fontWeight:'900', marginBottom:'30px', color: 'white'}}>למה לא פשוט להעתיק תבניות חינמיות מהרשת?</h2>
             <p style={{fontSize: '22px', maxWidth: '900px', margin: '0 auto 40px', lineHeight: '1.8'}}>
-              ברשת יש אלפי פרומפטים בחינם, אבל הבעיה פשוטה: הם גנריים. [cite: 5] הם נכתבו במקור באנגלית, עברו תרגום רובוטי ולא לוקחים בחשבון את הניואנסים של הקהל הישראלי, את פסיכולוגיית המכירה או את הקול הייחודי שלכם. [cite: 5, 6]
+              ברשת יש אלפי פרומפטים בחינם, אבל הבעיה פשוטה: הם גנריים. הם נכתבו במקור באנגלית, עברו תרגום רובוטי ולא לוקחים בחשבון את הניואנסים של הקהל הישראלי, את פסיכולוגיית המכירה או את הקול הייחודי שלכם.
               <br/><br/>
-              ב-PromptBook אתם מקבלים נוסחאות שנוסו, זוקקו והותאמו במיוחד כדי ש-ChatGPT יוציא תוצאה שנשמעת כמו קופירייטר אנושי ומקצועי – כבר מהניסיון הראשון. 
+              ב-PromptBook אתם מקבלים נוסחאות שנוסו, זוקקו והותאמו במיוחד כדי ש-ChatGPT יוציא תוצאה שנשמעת כמו קופירייטר אנושי ומקצועי, כבר מהניסיון הראשון.
             </p>
           </div>
         </section>
@@ -291,27 +281,27 @@ const LandingPage = () => {
             <h2 style={{textAlign:'center', fontSize:'42px', fontWeight:'900', marginBottom:'50px'}}>מה אומרים המשתמשים?</h2>
             <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(300px, 1fr))', gap:'30px'}}>
                 <div className="testimonial-card"><div style={{color:'gold', marginBottom:'15px'}}>★★★★★</div>"הכלי הזה חסך לי לפחות 5 שעות כתיבה שבועיות. במקום לשבור את הראש, אני פשוט מעתיקה ומדביקה."<br/><br/><b>- שירן אליהו, מנהלת סושיאל</b></div>
-                <div className="testimonial-card"><div style={{color:'gold', marginBottom:'15px'}}>★★★★★</div>"פנינה, תודה! זה מרגיש כאילו שכרתי קופירייטר צמוד לעסק בשבריר מהמחיר."<br/><br/><b>- רן לוי, מאמן אישי</b></div>
+                <div className="testimonial-card"><div style={{color:'gold', marginBottom:'15px'}}>★★★★★</div>"פנינה, תודה! זה מרגיש כאילו שכרתי קופירייטר צמוד לעסק בעשירית מהמחיר."<br/><br/><b>- רן לוי, מאמן אישי</b></div>
                 <div className="testimonial-card"><div style={{color:'gold', marginBottom:'15px'}}>★★★★★</div>"התוצאות הן עברית נקייה וטבעית. סוף סוף ה-AI מדבר בשפה שמתאימה לקהל הישראלי."<br/><br/><b>- מירב דהן, פרילנסרית</b></div>
             </div>
           </div>
         </section>
 
-        {/* אודות פנינה - משוחזר ומשודרג לפי הקובץ האישי */}
+        {/* אודות פנינה - מעודכן מהקובץ האישי */}
         <section className="about-sec">
           <div className="wrap">
             <div className="about-box">
               <img src="/pnina-profile.jpg" alt="פנינה קריוף" />
               <div>
-                <h2 style={{color:'var(--c1)', fontWeight:'900', fontSize: '32px', marginBottom: '20px'}}>מחברת בין עולמות: טיפול. טכנולוגיה. טרנספורמציה. </h2>
+                <h2 style={{color:'var(--c1)', fontWeight:'900', fontSize: '32px', marginBottom: '20px'}}>מחברת בין עולמות: טיפול. טכנולוגיה. טרנספורמציה.</h2>
                 <p style={{fontSize:'19px', lineHeight: '1.8'}}>
-                  נעים להכיר, אני פנינה. בעשור האחרון ליוויתי עשרות אנשים במסעות של ריפוי, צמיחה והתמרה דרך NLP, טארוט, נומרולוגיה והעיצוב האנושי. [cite: 4]
+                  נעים להכיר, אני פנינה. בעשור האחרון ליוויתי עשרות אנשים במסעות של ריפוי, צמיחה והתמרה דרך NLP, טארוט, נומרולוגיה והעיצוב האנושי.
                   <br/><br/>
-                  אני פונה אליכם – המטפלים, היוצרים, וכל מי שפועל מהלב ומרגיש שהעולם הדיגיטלי רץ קדימה ומשאיר אתכם קצת מאחור. [cite: 4] בינה מלאכותית עשויה להישמע מורכבת או מרוחקת, אבל אני כאן כדי להראות לכם אחרת. [cite: 5]
+                  אני פונה אליכם: המטפלים, היוצרים וכל מי שפועל מהלב ומרגיש שהעולם הדיגיטלי רץ קדימה ומשאיר אתכם קצת מאחור. בינה מלאכותית עשויה להישמע מורכבת או מרוחקת, אבל אני כאן כדי להראות לכם אחרת.
                   <br/><br/>
-                  כ-AI Master שלמדתי מהטובים ביותר (עם עדן ביבס), חקרתי איך הכלים האלו יכולים לשרת אותנו בלי לוותר על מי שאנחנו באמת. [cite: 7, 8] אני מגיעה מהעולם שלכם ומכירה את הדילמות והרגישות. 
+                  כ-AI Master שלמדה מהטובים ביותר, חקרתי איך הכלים האלו יכולים לשרת אותנו בלי לוותר על מי שאנחנו באמת. אני מגיעה מהעולם שלכם ומכירה את הדילמות והרגישות.
                   <br/><br/>
-                  <strong>"אני לא מלמדת טכנולוגיה – אני מלמדת אנשים איך לא לפחד ממנה." [cite: 2, 3, 9]</strong> אני כאן כדי להחזיק לכם את היד עד שתעברו את השער לעולם החדש הזה. [cite: 10]
+                  <strong>"אני לא מלמדת טכנולוגיה – אני מלמדת אנשים איך לא לפחד ממנה ."</strong> אני כאן כדי להחזיק לכם את היד עד שתעברו את השער לעולם החדש הזה.
                 </p>
               </div>
             </div>
