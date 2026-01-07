@@ -66,6 +66,7 @@ const LandingPage = () => {
           line-height: 1.6;
         }
 
+        /* Hero & Header Integration */
         .hero {
             text-align: center; 
             padding: 0 0 100px 0;
@@ -73,14 +74,14 @@ const LandingPage = () => {
             color: white;
             position: relative;
             overflow: hidden;
-            min-height: 600px;
+            min-height: 650px;
         }
         
         .hero::after {
             content: '';
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: radial-gradient(circle at 50% 50%, rgba(147, 62, 199, 0.35) 0%, transparent 80%);
+            background: radial-gradient(circle at 50% 50%, rgba(147, 62, 199, 0.4) 0%, transparent 80%);
             z-index: 1;
         }
 
@@ -88,7 +89,7 @@ const LandingPage = () => {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          padding: 30px 60px;
+          padding: 40px 60px;
           position: relative;
           z-index: 10;
         }
@@ -96,34 +97,34 @@ const LandingPage = () => {
         .header-logo-container {
           display: flex;
           align-items: center;
-          gap: 20px;
+          gap: 25px;
           text-decoration: none;
         }
 
         .header-logo-img {
-          height: 110px; /* לוגו גדול יותר */
+          height: 110px;
           width: auto;
           filter: brightness(0) invert(1);
-          margin-left: 10px;
         }
 
         .header-title {
           color: #ffffff;
           font-weight: 900;
-          font-size: 36px;
+          font-size: 40px;
           letter-spacing: -1px;
         }
 
         .login-btn {
           background: #ffffff;
           color: var(--dark);
-          padding: 14px 32px;
+          padding: 14px 36px;
           border-radius: 100px;
           border: none;
           font-weight: 800;
           font-size: 18px;
           cursor: pointer;
           transition: all 0.3s ease;
+          box-shadow: 0 4px 20px rgba(0,0,0,0.3);
         }
 
         .hero-content {
@@ -155,18 +156,19 @@ const LandingPage = () => {
             border-radius: 100px;
             border: none;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             box-shadow: 0 15px 35px rgba(147, 62, 199, 0.5);
         }
 
-        /* סקשן לפני ואחרי */
-        .comparison-card {
-            background: white;
-            padding: 40px;
-            border-radius: 32px;
-            transition: transform 0.3s;
+        /* Comparison Section */
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 50px;
         }
 
+        /* Sections Styling */
         .sec-features { background: var(--soft-purple); padding: 100px 20px; }
         .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 30px; margin-top: 50px; }
         .feature-card { background: white; padding: 45px 35px; border-radius: 28px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
@@ -180,19 +182,21 @@ const LandingPage = () => {
         .sec-testimonials { background: var(--dark); color: white; padding: 100px 20px; }
         .testimonial-card { background: rgba(255,255,255,0.05); padding: 40px; border-radius: 28px; border: 1px solid rgba(255,255,255,0.1); font-style: italic; }
 
-        .price-box { background: white; border-radius: 45px; padding: 80px; text-align: center; border: 2px solid var(--c1); margin: 60px auto; max-width: 600px; }
+        .price-box { background: white; border-radius: 45px; padding: 80px; text-align: center; border: 2px solid var(--c1); margin: 60px auto; max-width: 600px; box-shadow: 0 40px 100px rgba(0,0,0,0.15); }
         .new-price { font-size: 110px; font-weight: 900; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1; }
 
+        /* About Section Update */
         .about-box { display: flex; align-items: center; gap: 60px; background: white; padding: 70px; border-radius: 45px; box-shadow: 0 20px 60px rgba(0,0,0,0.08); }
         .about-box img { width: 250px; height: 250px; border-radius: 40px; object-fit: cover; border: 5px solid var(--c1); }
 
         @media (max-width: 768px) {
             .landing-header { padding: 25px; flex-direction: column; gap: 20px; }
-            .header-logo-img { height: 70px; margin-left: 0; }
+            .header-logo-img { height: 70px; }
             .header-title { font-size: 28px; }
             .hero h1 { font-size: 40px; }
             .hero p { font-size: 18px; }
-            .comparison-grid { grid-template-columns: 1fr !important; }
+            .comparison-grid { grid-template-columns: 1fr; }
+            .about-box { flex-direction: column; text-align: center; padding: 45px; }
         }
       `}</style>
 
@@ -203,9 +207,7 @@ const LandingPage = () => {
               <img src="/logo.png" alt="PromptBook" className="header-logo-img" />
               <div className="header-title">PromptBook</div>
             </a>
-            <button onClick={() => navigate('/auth')} className="login-btn">
-              כניסה למנויים
-            </button>
+            <button onClick={() => navigate('/auth')} className="login-btn">כניסה למנויים</button>
           </header>
 
           <div className="hero-content">
@@ -217,30 +219,28 @@ const LandingPage = () => {
           </div>
         </section>
 
-        {/* סקשן לפני ואחרי - ההוכחה לסקפטיים */}
+        {/* ההבדל המוחשי - השוואת כתיבה */}
         <section style={{background: '#fff', padding: '100px 20px'}}>
           <div className="wrap">
             <h2 style={{textAlign:'center', fontSize:'42px', fontWeight:'900', marginBottom:'50px'}}>הנה מה שקורה כשמפסיקים "לנחש" פרומפטים:</h2>
-            <div className="comparison-grid" style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px'}}>
-              
+            <div className="comparison-grid">
               <div style={{background: '#f1f5f9', padding: '40px', borderRadius: '32px', border: '2px solid #e2e8f0'}}>
                 <div style={{background: '#94a3b8', color: 'white', padding: '5px 15px', borderRadius: '100px', fontSize: '14px', fontWeight: '800', display: 'inline-block', marginBottom: '20px'}}>ChatGPT רגיל</div>
-                <h4 style={{fontSize: '20px', marginBottom: '15px'}}>פרומפט גנרי: "תכתוב לי פוסט על נעליים"</h4>
+                <h4 style={{fontSize: '20px', marginBottom: '15px'}}>פרומפט גנרי: "תכתוב לי הזמנה לשיחת ייעוץ"</h4>
                 <div style={{color: '#64748b', fontStyle: 'italic', lineHeight: '1.6'}}>
-                  "האם אתם מחפשים נעליים חדשות? בואו לחנות שלנו. יש לנו הרבה דגמים יפים ונוחים לכל המשפחה. האיכות שלנו טובה מאוד והמחירים הוגנים. אנחנו מחכים לכם."
+                  "היי, האם העסק שלך תקוע? אני מזמין אותך לשיחת ייעוץ חינם שבה נבין את הבעיות שלך ונבנה תוכנית עבודה. אני מומחה בתחום עם ניסיון רב ואשמח לעזור לך להצליח. השאירו פרטים כאן למטה."
                 </div>
-                <p style={{marginTop: '20px', color: '#f86173', fontWeight: '700'}}>❌ תוצאה: משעמם, לא אישי, מרגיש כמו תרגום מכונה.</p>
+                <p style={{marginTop: '20px', color: '#f86173', fontWeight: '700'}}>❌ התוצאה: נשמע כמו כולם, יוצר התנגדות מיידית, חסר ערך.</p>
               </div>
 
               <div style={{background: 'var(--soft-purple)', padding: '40px', borderRadius: '32px', border: '2px solid var(--c1)', boxShadow: '0 20px 40px rgba(147, 62, 199, 0.1)'}}>
                 <div style={{background: 'var(--grad)', color: 'white', padding: '5px 15px', borderRadius: '100px', fontSize: '14px', fontWeight: '800', display: 'inline-block', marginBottom: '20px'}}>עם PromptBook</div>
-                <h4 style={{fontSize: '20px', marginBottom: '15px'}}>פרומפט מתוך המערכת: "נוסחת הכאב והתקווה"</h4>
+                <h4 style={{fontSize: '20px', marginBottom: '15px'}}>נוסחת "הזדהות וסמכות" מתוך המערכת</h4>
                 <div style={{color: 'var(--dark)', fontWeight: '600', lineHeight: '1.6'}}>
-                  "תודו שגם לכם נמאס לחזור הביתה עם כאבי רגליים אחרי יום עבודה ארוך... אתם מרגישים שכל צעד הוא מאבק. אבל מה אם הייתם יכולים להרגיש שאתם הולכים על ענן? הדגם החדש שלנו..."
+                  "תגידו, גם אתם מוצאים את עצמכם מסיימים יום עבודה מתיש, מסתכלים על היומן ולא מבינים למה הפעולות שלכם לא הופכות לכסף בבנק? ב-15 דקות של שיחה ממוקדת, אני לא אמכור לכם כלום - אני פשוט אראה לכם איפה בדיוק נוזל לכם הכסף מהעסק..."
                 </div>
-                <p style={{marginTop: '20px', color: '#88aa33', fontWeight: '700'}}>✅ תוצאה: עברית עם "נשמה", פנייה לכאב, כתיבה שמוכרת!</p>
+                <p style={{marginTop: '20px', color: '#88aa33', fontWeight: '700'}}>✅ התוצאה: פנייה לרגש, הצגת מומחיות בלי 'לדחוף', יצירת סקרנות!</p>
               </div>
-
             </div>
           </div>
         </section>
@@ -254,6 +254,18 @@ const LandingPage = () => {
               <div className="feature-card"><span className="icon">⚡</span><h3>חיסכון בזמן</h3><p>כפתור העתקה מהיר לכל פרומפט</p></div>
               <div className="feature-card"><span className="icon">📄</span><h3>ייצוא PDF מלא</h3><p>אפשרות להוריד את כל החוברת</p></div>
             </div>
+          </div>
+        </section>
+
+        {/* למה לא פשוט להשתמש בחינם? */}
+        <section className="sec" style={{padding: '100px 20px'}}>
+          <div className="wrap" style={{textAlign: 'center'}}>
+            <h2 style={{fontSize:'42px', fontWeight:'900', marginBottom:'30px'}}>למה לא פשוט להעתיק תבניות חינמיות מהרשת?</h2>
+            <p style={{fontSize: '22px', maxWidth: '900px', margin: '0 auto 40px'}}>
+              ברשת יש אלפי פרומפטים בחינם, אבל הבעיה היא שהם **גנריים**. הם נכתבו באנגלית, תורגמו לעברית רובוטית, והם לא לוקחים בחשבון את הקהל הישראלי, את הפסיכולוגיה של המכירה או את הקול האישי שלכם.
+              <br/><br/>
+              ב-PromptBook אתם מקבלים נוסחאות שנוסו, זוקקו והותאמו במיוחד כדי ש-ChatGPT יוציא תוצאה שנשמעת כמו קופירייטר אנושי – כבר מהניסיון הראשון.
+            </p>
           </div>
         </section>
 
@@ -282,14 +294,23 @@ const LandingPage = () => {
           </div>
         </section>
 
-        <section className="wrap" style={{padding: '100px 0'}}>
+        {/* אודות פנינה - לפי הקובץ המעודכן */}
+        <section className="about-sec">
+          <div className="wrap">
             <div className="about-box">
-              <img src="/pnina-profile.jpg" alt="פנינה" />
+              <img src="/pnina-profile.jpg" alt="פנינה קריוף" />
               <div>
-                <h2 style={{color:'var(--c1)', fontWeight:'900', fontSize: '36px', marginBottom: '20px'}}>נעים להכיר, פנינה קריוף</h2>
-                <p style={{fontSize:'22px', lineHeight: '1.8'}}>בניתי את PromptBook כי נמאס לי לראות בעלי עסקים נלחמים ב-AI ומקבלים תוצאות בינוניות. המטרה שלי היא שתכתבו הרבה פחות, אבל תמכרו הרבה יותר בעזרת נוסחאות מוכחות ועברית עם נשמה.</p>
+                <h2 style={{color:'var(--c1)', fontWeight:'900', fontSize: '36px', marginBottom: '20px'}}>מחברת בין עולמות: טיפול. טכנולוגיה. טרנספורמציה.</h2>
+                <p style={{fontSize:'20px', lineHeight: '1.8'}}>
+                  שלום, אני פנינה. בעשור האחרון ליוויתי עשרות אנשים במסעות של ריפוי וצמיחה דרך NLP, טארוט, נומרולוגיה והעיצוב האנושי.
+                  <br/><br/>
+                  בניתי את **PromptBook** כי אני לא מלמדת טכנולוגיה – אני מלמדת אנשים איך לא לפחד ממנה. כמטפלת ויוצרת, אני מכירה מקרוב את הנטייה לדחות את ה"טכני" לטובת ה"אנושי", ואני כאן כדי להראות לכם שהם יכולים לעבוד יחד. 
+                  <br/><br/>
+                  כ-AI Master, חקרתי איך כלי הבינה המלאכותית יכולים לשרת אותנו בלי לוותר על הלב והאינטואיציה. המטרה שלי היא לפתוח לכם שער לעולם חדש, להחזיק לכם את היד, ולעזור לכם לכתוב פחות – ולמכור הרבה יותר.
+                </p>
               </div>
             </div>
+          </div>
         </section>
 
         <section id="price-section" className="wrap" style={{textAlign:'center', padding:'100px 20px'}}>
@@ -300,10 +321,8 @@ const LandingPage = () => {
               <span style={{textDecoration:'line-through', fontSize:'40px', color:'#94a3b8', marginLeft: '20px'}}>397 ₪</span>
               <div className="new-price">99 ₪</div>
             </div>
-            <div style={{maxWidth:'350px', margin:'0 auto'}}>
-              <div id="paypal-container-bottom"></div>
-              <p style={{fontSize:'18px', marginTop:'25px', fontWeight:'700', color: '#1e293b'}}>💳 ניתן לשלם באשראי או ב-PayPal</p>
-            </div>
+            <div id="paypal-container-bottom"></div>
+            <p style={{fontSize:'18px', marginTop:'25px', fontWeight:'700', color: '#1e293b'}}>💳 ניתן לשלם באשראי או ב-PayPal</p>
           </div>
         </section>
 
