@@ -66,23 +66,39 @@ const LandingPage = () => {
           padding: 20px;
         }
         
+        /* Header Integrated into Hero */
         .landing-header {
-          padding: 20px;
-          background: rgba(255, 255, 255, 0.95);
-          backdrop-filter: blur(10px);
-          position: sticky;
+          padding: 25px 40px;
+          background: transparent;
+          position: absolute;
           top: 0;
+          left: 0;
+          right: 0;
           z-index: 100;
           display: flex;
           justify-content: space-between;
           align-items: center;
-          border-bottom: 1px solid #e2e8f0;
+        }
+
+        .login-btn {
+          background: transparent;
+          color: white;
+          padding: 8px 22px;
+          border-radius: 100px;
+          border: 1px solid rgba(255, 255, 255, 0.4);
+          fontWeight: 700;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+        .login-btn:hover {
+          background: rgba(255, 255, 255, 0.1);
+          border-color: white;
         }
 
         /* Hero Section - Deep & Vibrant */
         .hero {
             text-align: center; 
-            padding: 100px 20px;
+            padding: 160px 20px 100px;
             background: var(--dark);
             color: white;
             position: relative;
@@ -93,14 +109,14 @@ const LandingPage = () => {
             content: '';
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: radial-gradient(circle at 50% 50%, rgba(147, 62, 199, 0.2) 0%, transparent 70%);
+            background: radial-gradient(circle at 50% 50%, rgba(147, 62, 199, 0.25) 0%, transparent 70%);
         }
 
         .hero h1 {
             position: relative;
             z-index: 1;
             margin: 0 auto 25px;
-            font-size: 60px;
+            font-size: 64px;
             line-height: 1.1;
             font-weight: 900;
             letter-spacing: -1px;
@@ -109,7 +125,7 @@ const LandingPage = () => {
         .hero p {
             position: relative;
             z-index: 1;
-            margin: 0 auto 40px;
+            margin: 0 auto 45px;
             max-width: 800px;
             color: #cbd5e1;
             font-size: 24px;
@@ -120,122 +136,132 @@ const LandingPage = () => {
             z-index: 1;
             background: var(--grad);
             color: white;
-            font-size: 24px;
+            font-size: 26px;
             font-weight: 800;
-            padding: 22px 60px;
+            padding: 24px 70px;
             border-radius: 100px;
             border: none;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 30px rgba(147, 62, 199, 0.4);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 15px 35px rgba(147, 62, 199, 0.4);
         }
         .cta-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 15px 40px rgba(147, 62, 199, 0.6);
+            transform: scale(1.05) translateY(-5px);
+            box-shadow: 0 20px 50px rgba(147, 62, 199, 0.6);
         }
 
-        /* Features Section - Glass Cards */
+        /* Features Section */
         .sec-features {
             background: var(--soft-purple);
-            padding: 80px 20px;
+            padding: 100px 20px;
         }
 
         .feature-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-top: 40px;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            margin-top: 50px;
         }
 
         .feature-card {
             background: white;
-            padding: 30px;
-            border-radius: 20px;
+            padding: 40px 30px;
+            border-radius: 24px;
             text-align: center;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
             border: 1px solid #e2e8f0;
-            transition: transform 0.3s;
+            transition: all 0.3s ease;
         }
-        .feature-card:hover { transform: translateY(-5px); }
-        .feature-card .icon { font-size: 30px; margin-bottom: 15px; display: block; }
-        .feature-card h3 { margin: 0; font-size: 18px; font-weight: 800; color: var(--c1); }
+        .feature-card:hover { transform: translateY(-10px); }
+        .feature-card .icon { font-size: 36px; margin-bottom: 20px; display: block; }
+        .feature-card h3 { margin: 0 0 10px; font-size: 20px; font-weight: 900; color: var(--c1); }
 
         /* Teaser Cards */
-        .sec-teaser { padding: 80px 20px; }
+        .sec-teaser { padding: 100px 20px; }
         .teaser-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
         }
         .card {
             background: white;
             border-radius: 24px;
-            padding: 30px;
-            border-right: 6px solid var(--c1);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+            padding: 35px;
+            border-right: 8px solid var(--c1);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.06);
+            transition: all 0.3s ease;
         }
+        .card:hover { transform: scale(1.02); }
 
-        /* Testimonials - Slanted Background */
+        /* Testimonials */
         .sec-testimonials {
             background: var(--dark);
             color: white;
-            padding: 80px 20px;
+            padding: 100px 20px;
+        }
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
         }
         .testimonial-card {
             background: rgba(255,255,255,0.05);
-            padding: 30px;
-            border-radius: 20px;
+            padding: 35px;
+            border-radius: 24px;
             border: 1px solid rgba(255,255,255,0.1);
-            margin-bottom: 20px;
+            font-style: italic;
         }
 
-        /* Pricing Section */
+        /* Pricing Box */
         .price-box {
           background: white;
           border-radius: 40px;
-          padding: 60px;
+          padding: 70px;
           text-align: center;
           border: 2px solid var(--c1);
           margin: 60px auto;
-          max-width: 550px;
-          box-shadow: 0 40px 100px rgba(0,0,0,0.1);
+          max-width: 580px;
+          box-shadow: 0 40px 100px rgba(0,0,0,0.12);
         }
         .new-price {
-          font-size: 90px;
+          font-size: 100px;
           font-weight: 900;
           background: var(--grad);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
+          line-height: 1;
         }
 
         .about-sec {
             background: var(--bg-light);
-            padding: 80px 20px;
+            padding: 100px 20px;
         }
         .about-box {
             display: flex;
             align-items: center;
-            gap: 40px;
+            gap: 50px;
             background: white;
-            padding: 50px;
+            padding: 60px;
             border-radius: 40px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.05);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.06);
         }
-        .about-box img { width: 180px; height: 180px; border-radius: 30px; object-fit: cover; border: 4px solid var(--c1); }
+        .about-box img { width: 220px; height: 220px; border-radius: 35px; object-fit: cover; border: 4px solid var(--c1); }
 
         @media (max-width: 768px) {
-            .hero h1 { font-size: 40px; }
-            .about-box { flex-direction: column; text-align: center; }
+            .hero h1 { font-size: 42px; }
+            .hero { padding: 140px 20px 80px; }
+            .about-box { flex-direction: column; text-align: center; padding: 40px; }
+            .landing-header { padding: 20px; }
         }
       `}</style>
 
       <div className="landing-page" dir="rtl">
         <header className="landing-header">
-          <div style={{display:'flex', alignItems:'center', gap:'10px'}}>
-            <img src="/logo.png" alt="PromptBook" style={{height: '40px'}} />
-            <div style={{fontWeight:'900', fontSize:'24px', color:'var(--c1)'}}>PromptBook</div>
+          <div style={{display:'flex', alignItems:'center', gap:'12px'}}>
+            <img src="/logo.png" alt="PromptBook" style={{height: '45px'}} />
+            <div style={{fontWeight:'900', fontSize:'26px', color:'white'}}>PromptBook</div>
           </div>
-          <button onClick={() => navigate('/auth')} style={{background:'var(--dark)', color:'white', padding:'10px 25px', borderRadius:'100px', border:'none', fontWeight:'800', cursor:'pointer'}}>כניסה</button>
+          <button onClick={() => navigate('/auth')} className="login-btn">כניסה למנויים</button>
         </header>
 
         <section className="hero">
@@ -248,27 +274,27 @@ const LandingPage = () => {
 
         <section className="sec-features">
           <div className="wrap">
-            <h2 style={{textAlign:'center', fontSize:'36px', fontWeight:'900', marginBottom:'40px'}}>מה מחכה לכם בפנים?</h2>
+            <h2 style={{textAlign:'center', fontSize:'42px', fontWeight:'900', marginBottom:'50px'}}>מה מחכה לכם בפנים?</h2>
             <div className="feature-grid">
               <div className="feature-card">
                 <span className="icon">📱</span>
                 <h3>אפליקציה אינטראקטיבית</h3>
-                <p>10 קטגוריות תוכן בממשק נוח</p>
+                <p>10 קטגוריות תוכן בממשק נוח ומעוצב</p>
               </div>
               <div className="feature-card">
                 <span className="icon">🔍</span>
                 <h3>מנוע חיפוש חכם</h3>
-                <p>סינון מהיר לפי קהל יעד</p>
+                <p>סינון מהיר לפי קהל יעד בלחיצת כפתור</p>
               </div>
               <div className="feature-card">
                 <span className="icon">⚡</span>
                 <h3>חיסכון בזמן</h3>
-                <p>כפתור העתקה מהיר לכל פרומפט</p>
+                <p>כפתור העתקה מהיר לכל פרומפט ישירות ל-AI</p>
               </div>
               <div className="feature-card">
                 <span className="icon">📄</span>
-                <h3>ייצוא PDF</h3>
-                <p>הורדת כל החוברת למחשב</p>
+                <h3>ייצוא PDF מלא</h3>
+                <p>אפשרות להוריד את כל החוברת למחשב</p>
               </div>
             </div>
           </div>
@@ -276,28 +302,34 @@ const LandingPage = () => {
 
         <section className="sec-teaser">
           <div className="wrap">
-            <h2 style={{textAlign:'center', fontSize:'36px', fontWeight:'900', marginBottom:'40px'}}>טעימה מהנוסחאות</h2>
+            <h2 style={{textAlign:'center', fontSize:'42px', fontWeight:'900', marginBottom:'50px'}}>טעימה מהנוסחאות</h2>
             <div className="teaser-grid">
-              <div className="card"><b>כותרת ממירה לדף נחיתה</b><br/>10 וריאציות עם טון רגשי שעובד.</div>
-              <div className="card"><b>פתיח אמפתי קצר</b><br/>נוסחה לזיהוי כאב ופתרון לקהל שלך.</div>
-              <div className="card"><b>קמפיין השקה</b><br/>בניית רצף טיזרים ודחיפות למכירה.</div>
-              <div className="card"><b>פירוק התנגדויות</b><br/>מענה מנצח להתנגדות הגדולה של הלקוח.</div>
-              <div className="card"><b>Retargeting חכם</b><br/>מודעות למבקרים שביקרו ולא רכשו.</div>
-              <div className="card"><b>FAQ ממיר</b><br/>שאלות ותשובות שמסירות חסמי קנייה.</div>
+              <div className="card"><b>כותרת ממירה לדף נחיתה</b><br/><br/>יצירת 10 וריאציות עם טון רגשי שעובד על הקהל הישראלי.</div>
+              <div className="card"><b>פתיח אמפתי קצר</b><br/><br/>נוסחה מדויקת לזיהוי כאב, תקווה ופתרון מהיר.</div>
+              <div className="card"><b>קמפיין השקה של 7 ימים</b><br/><br/>בניית רצף טיזרים, עדויות ודחיפות למכירה.</div>
+              <div className="card"><b>פירוק התנגדויות עומק</b><br/><br/>מענה מנצח להתנגדות הגדולה ביותר של הלקוח שלך.</div>
+              <div className="card"><b>Retargeting חכם</b><br/><br/>3 מודעות רימרקטינג אפקטיביות למבקרים שביקרו ולא רכשו.</div>
+              <div className="card"><b>FAQ ממיר ומניע</b><br/><br/>שאלות ותשובות שמסירות חסמי קנייה וכוללות CTA עדין.</div>
             </div>
           </div>
         </section>
 
         <section className="sec-testimonials">
           <div className="wrap">
-            <h2 style={{textAlign:'center', fontSize:'36px', fontWeight:'900', marginBottom:'40px'}}>מה אומרים המשתמשים?</h2>
-            <div className="testimonial-card">
-              <div style={{color:'gold', marginBottom:'10px'}}>★★★★★</div>
-              "הכלי הזה חסך לי לפחות 5 שעות כתיבה שבועיות. פשוט מעתיקה ומדביקה."<br/><b>- שירן אליהו, מנהלת סושיאל</b>
-            </div>
-            <div className="testimonial-card">
-              <div style={{color:'gold', marginBottom:'10px'}}>★★★★★</div>
-              "מרגיש כאילו שכרתי קופירייטר צמוד לעסק בשבריר מהמחיר."<br/><b>- רן לוי, מאמן אישי</b>
+            <h2 style={{textAlign:'center', fontSize:'42px', fontWeight:'900', marginBottom:'50px'}}>מה אומרים המשתמשים?</h2>
+            <div className="testimonials-grid">
+                <div className="testimonial-card">
+                  <div style={{color:'gold', marginBottom:'15px', fontSize: '20px'}}>★★★★★</div>
+                  "הכלי הזה חסך לי לפחות 5 שעות כתיבה שבועיות. במקום לשבור את הראש, אני פשוט מעתיקה ומדביקה."<br/><br/><b>- שירן אליהו, מנהלת סושיאל</b>
+                </div>
+                <div className="testimonial-card">
+                  <div style={{color:'gold', marginBottom:'15px', fontSize: '20px'}}>★★★★★</div>
+                  "פנינה, תודה! זה מרגיש כאילו שכרתי קופירייטר צמוד לעסק בשבריר מהמחיר."<br/><br/><b>- רן לוי, מאמן אישי</b>
+                </div>
+                <div className="testimonial-card">
+                  <div style={{color:'gold', marginBottom:'15px', fontSize: '20px'}}>★★★★★</div>
+                  "התוצאות הן עברית נקייה וטבעית. סוף סוף ה-AI מדבר בשפה שמתאימה לקהל הישראלי."<br/><br/><b>- מירב דהן, פרילנסרית</b>
+                </div>
             </div>
           </div>
         </section>
@@ -307,29 +339,30 @@ const LandingPage = () => {
             <div className="about-box">
               <img src="/pnina-profile.jpg" alt="פנינה" />
               <div>
-                <h2 style={{color:'var(--c1)', fontWeight:'900'}}>נעים להכיר, פנינה קריוף</h2>
-                <p style={{fontSize:'18px'}}>בניתי את PromptBook כי נמאס לי לראות בעלי עסקים נלחמים ב-AI. המטרה שלי היא שתכתבו הרבה פחות, אבל תמכרו הרבה יותר בעזרת נוסחאות מוכחות.</p>
+                <h2 style={{color:'var(--c1)', fontWeight:'900', fontSize: '32px'}}>נעים להכיר, פנינה קריוף</h2>
+                <p style={{fontSize:'20px', lineHeight: '1.8'}}>בניתי את PromptBook כי נמאס לי לראות בעלי עסקים נלחמים ב-AI ומקבלים תוצאות בינוניות. המטרה שלי היא שתכתבו הרבה פחות, אבל תמכרו הרבה יותר בעזרת נוסחאות מוכחות ועברית עם נשמה.</p>
               </div>
             </div>
           </div>
         </section>
 
-        <section id="price-section" className="wrap" style={{textAlign:'center', padding:'80px 20px'}}>
+        <section id="price-section" className="wrap" style={{textAlign:'center', padding:'100px 20px'}}>
           <div className="price-box">
-            <h2 style={{fontWeight:'900', fontSize:'32px', color:'var(--c1)'}}>מוכנים לשדרג את התוכן?</h2>
-            <div style={{marginTop:'20px'}}>
-              <span style={{textDecoration:'line-through', fontSize:'30px', color:'#94a3b8'}}>397 ₪</span>
+            <h2 style={{fontWeight:'900', fontSize:'36px', color:'var(--c1)', marginBottom: '10px'}}>מוכנים לשדרג את התוכן?</h2>
+            <p style={{fontSize: '20px', color: '#64748b', marginBottom: '30px'}}>השקעה חד פעמית לגישה מלאה לכל החיים</p>
+            <div style={{marginBottom:'30px'}}>
+              <span style={{textDecoration:'line-through', fontSize:'35px', color:'#94a3b8', marginLeft: '15px'}}>397 ₪</span>
               <div className="new-price">99 ₪</div>
             </div>
-            <div style={{maxWidth:'300px', margin:'20px auto'}}>
+            <div style={{maxWidth:'350px', margin:'0 auto'}}>
               <div id="paypal-container-bottom"></div>
-              <p style={{fontSize:'14px', marginTop:'15px', fontWeight:'700'}}>💳 ניתן לשלם באשראי או ב-PayPal</p>
+              <p style={{fontSize:'16px', marginTop:'20px', fontWeight:'700', color: '#1e293b'}}>💳 ניתן לשלם באשראי או ב-PayPal</p>
             </div>
           </div>
         </section>
 
-        <footer style={{textAlign:'center', padding:'40px', background:'#f1f5f9', color:'#64748b'}}>
-          © 2026 PromptBook by Pnina Karayoff | <a href="/terms" style={{color:'var(--c1)'}}>תקנון</a>
+        <footer style={{textAlign:'center', padding:'60px 20px', background:'#f8fafc', color:'#64748b', borderTop: '1px solid #e2e8f0'}}>
+          © 2026 PromptBook by Pnina Karayoff | <a href="/terms" style={{color:'var(--c1)', fontWeight: '700', textDecoration: 'none'}}>תקנון</a> | <a href="/privacy" style={{color:'var(--c1)', fontWeight: '700', textDecoration: 'none'}}>פרטיות</a>
         </footer>
       </div>
     </>
