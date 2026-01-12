@@ -65,33 +65,24 @@ const LandingPage = () => {
           color: var(--dark);
           line-height: 1.6;
         }
-
-        /* Hero & Header */
-        .hero {
-            text-align: center; 
-            padding: 0 0 100px 0;
-            background: var(--dark);
-            color: white;
-            position: relative;
-            overflow: hidden;
-            min-height: 650px;
+        
+        .wrap {
+          max-width: 1100px;
+          margin: 0 auto;
+          padding: 20px;
         }
         
-        .hero::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: radial-gradient(circle at 50% 50%, rgba(147, 62, 199, 0.4) 0%, transparent 80%);
-            z-index: 1;
-        }
-
         .landing-header {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          padding: 40px 60px;
           display: flex;
           justify-content: space-between;
           align-items: center;
-          padding: 40px 60px;
-          position: relative;
-          z-index: 10;
+          z-index: 100;
+          background: transparent;
         }
 
         .header-logo-container {
@@ -122,25 +113,43 @@ const LandingPage = () => {
           border-radius: 100px;
           border: none;
           font-weight: 800;
-          font-size: 18px;
+          font-size: 16px;
           cursor: pointer;
           transition: all 0.3s ease;
+          box-shadow: 0 4px 20px rgba(0,0,0,0.3);
         }
 
-        .hero-content {
-          position: relative;
-          z-index: 10;
-          padding: 60px 20px;
+        .hero {
+            text-align: center; 
+            padding: 180px 20px 100px;
+            background: var(--dark);
+            color: white;
+            position: relative;
+            overflow: hidden;
+            min-height: 550px;
+        }
+        
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(147, 62, 199, 0.4) 0%, transparent 80%);
+            z-index: 1;
         }
 
         .hero h1 {
+            position: relative;
+            z-index: 1;
             margin: 0 auto 25px;
             font-size: 68px;
             line-height: 1.1;
             font-weight: 900;
+            letter-spacing: -1px;
         }
         
         .hero p {
+            position: relative;
+            z-index: 1;
             margin: 0 auto 45px;
             max-width: 850px;
             color: #cbd5e1;
@@ -148,6 +157,8 @@ const LandingPage = () => {
         }
 
         .cta-btn {
+            position: relative;
+            z-index: 1;
             background: var(--grad);
             color: white;
             font-size: 28px;
@@ -156,52 +167,45 @@ const LandingPage = () => {
             border-radius: 100px;
             border: none;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             box-shadow: 0 15px 35px rgba(147, 62, 199, 0.5);
-        }
-
-        /* Comparison Section */
-        .comparison-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            margin-top: 50px;
         }
 
         .sec-features { background: var(--soft-purple); padding: 100px 20px; }
         .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 30px; margin-top: 50px; }
-        .feature-card { background: white; padding: 45px 35px; border-radius: 28px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
+        .feature-card { background: white; padding: 45px 35px; border-radius: 28px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; transition: all 0.3s ease; }
+        .feature-card:hover { transform: translateY(-10px); }
         .feature-card .icon { font-size: 42px; margin-bottom: 25px; display: block; }
         .feature-card h3 { margin: 0 0 12px; font-size: 22px; font-weight: 900; color: var(--c1); }
 
         .sec-teaser { padding: 100px 20px; }
         .teaser-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; }
-        .card { background: white; border-radius: 28px; padding: 40px; border-right: 10px solid var(--c1); box-shadow: 0 20px 40px rgba(0,0,0,0.06); }
+        .card { background: white; border-radius: 24px; padding: 35px; border-right: 10px solid var(--c1); box-shadow: 0 20px 40px rgba(0,0,0,0.06); }
 
         .sec-testimonials { background: var(--dark); color: white; padding: 100px 20px; }
-        .testimonial-card { background: rgba(255,255,255,0.05); padding: 40px; border-radius: 28px; border: 1px solid rgba(255,255,255,0.1); font-style: italic; }
+        .testimonial-card { background: rgba(255,255,255,0.05); padding: 35px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.1); font-style: italic; }
 
-        .price-box { background: white; border-radius: 45px; padding: 80px; text-align: center; border: 2px solid var(--c1); margin: 60px auto; max-width: 600px; box-shadow: 0 40px 100px rgba(0,0,0,0.15); }
-        .new-price { font-size: 110px; font-weight: 900; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1; }
+        .price-box { background: white; border-radius: 40px; padding: 70px; text-align: center; border: 2px solid var(--c1); margin: 60px auto; max-width: 580px; box-shadow: 0 40px 100px rgba(0,0,0,0.12); }
+        .new-price { font-size: 100px; font-weight: 900; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1; }
 
-        .about-box { display: flex; align-items: center; gap: 60px; background: white; padding: 70px; border-radius: 45px; box-shadow: 0 20px 60px rgba(0,0,0,0.08); }
-        .about-box img { width: 250px; height: 250px; border-radius: 40px; object-fit: cover; border: 5px solid var(--c1); }
+        .about-sec { background: var(--bg-light); padding: 100px 20px; }
+        .about-box { display: flex; align-items: center; gap: 60px; background: white; padding: 60px; border-radius: 40px; box-shadow: 0 20px 60px rgba(0,0,0,0.06); }
+        .about-box img { width: 220px; height: 220px; border-radius: 35px; object-fit: cover; border: 4px solid var(--c1); }
 
-        /* FAQ Styling */
         .faq-item { margin-bottom: 15px; background: white; border-radius: 20px; border: 1px solid #e2e8f0; overflow: hidden; }
         .faq-item summary { padding: 25px; cursor: pointer; font-weight: 800; color: var(--c1); list-style: none; position: relative; font-size: 20px; }
         .faq-item summary:after { content: "▼"; position: absolute; left: 25px; font-size: 14px; color: var(--c2); }
         .faq-item[open] summary:after { content: "▲"; }
         .faq-content { padding: 0 25px 25px; color: #475569; font-size: 18px; }
 
+        footer { text-align: center; padding: 60px 20px; background: #f8fafc; color: #64748b; border-top: 1px solid #e2e8f0; }
+        footer a { color: var(--c1); text-decoration: none; margin: 0 15px; font-weight: 700; }
+
         @media (max-width: 768px) {
+            .hero h1 { font-size: 42px; }
+            .hero { padding: 140px 20px 80px; }
+            .about-box { flex-direction: column; text-align: center; padding: 40px; }
             .landing-header { padding: 25px; flex-direction: column; gap: 20px; }
-            .header-logo-img { height: 70px; margin-left: 0; }
-            .header-title { font-size: 28px; }
-            .hero h1 { font-size: 40px; }
-            .comparison-grid { grid-template-columns: 1fr; }
-            .about-box { flex-direction: column; text-align: center; padding: 45px; }
-            .about-box img { width: 180px; height: 180px; }
         }
       `}</style>
 
@@ -224,11 +228,11 @@ const LandingPage = () => {
           </div>
         </section>
 
-        {/* ההבדל המוחשי */}
+        {/* השוואת כתיבה */}
         <section style={{background: '#fff', padding: '100px 20px'}}>
           <div className="wrap">
             <h2 style={{textAlign:'center', fontSize:'42px', fontWeight:'900', marginBottom:'50px'}}>הנה מה שקורה כשמפסיקים "לנחש" פרומפטים:</h2>
-            <div className="comparison-grid">
+            <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px'}}>
               <div style={{background: '#f1f5f9', padding: '40px', borderRadius: '32px', border: '2px solid #e2e8f0'}}>
                 <div style={{background: '#94a3b8', color: 'white', padding: '5px 15px', borderRadius: '100px', fontSize: '14px', fontWeight: '800', display: 'inline-block', marginBottom: '20px'}}>ChatGPT רגיל</div>
                 <h4 style={{fontSize: '20px', marginBottom: '15px'}}>פרומפט גנרי: "תכתוב לי הזמנה לשיחת ייעוץ"</h4>
@@ -262,7 +266,7 @@ const LandingPage = () => {
           </div>
         </section>
 
-        {/* התנגדויות - עיצוב יוקרתי */}
+        {/* התנגדויות */}
         <section style={{background: 'var(--dark)', color: 'white', padding: '100px 20px', position: 'relative', overflow: 'hidden'}}>
           <div style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0.1, background: 'radial-gradient(circle at 50% 50%, var(--c1), transparent 70%)'}}></div>
           <div className="wrap" style={{textAlign: 'center', position: 'relative', zIndex: 2}}>
@@ -298,46 +302,33 @@ const LandingPage = () => {
           </div>
         </section>
 
-        {/* אודות פנינה - הטקסט המלא מהקובץ */}
+        {/* אודות פנינה - הטקסט המלא מהקובץ [cite: 1, 2, 3, 4, 7] */}
         <section className="about-sec">
           <div className="wrap">
             <div className="about-box">
               <img src="/pnina-profile.jpg" alt="פנינה קריוף" />
               <div>
-                <h2 style={{color:'var(--c1)', fontWeight:'900', fontSize: '32px', marginBottom: '20px'}}>מחברת בין עולמות: טיפול. טכנולוגיה. טרנספורמציה.</h2>
+                <h2 style={{color:'var(--c1)', fontWeight:'900', fontSize: '32px', marginBottom: '20px'}}>מחברות בין עולמות: טיפול. טכנולוגיה. טרנספורמציה. [cite: 1]</h2>
                 <p style={{fontSize:'19px', lineHeight: '1.8'}}>
-                  נעים להכיר, אני פנינה. בעשור האחרון ליוויתי עשרות אנשים במסעות של ריפוי, צמיחה והתמרה דרך NLP, טארוט, נומרולוגיה והעיצוב האנושי. אני פונה אליכם – המטפלים, היוצרים וכל מי שפועל מהלב ומרגיש שהעולם הדיגיטלי רץ קדימה ומשאיר אתכם קצת מאחור. 
+                  נעים להכיר, אני פנינה. בעשור האחרון ליוויתי עשרות אנשים במסעות של ריפוי, צמיחה והתמרה דרך NLP, טארוט, נומרולוגיה והעיצוב האנושי. [cite: 4] אני פונה אליכם – המטפלים, היוצרים וכל מי שפועל מהלב ומרגיש שהעולם הדיגיטלי רץ קדימה ומשאיר אתכם קצת מאחור. 
                   <br/><br/>
-                  כ-AI Master שלמדה מהטובים ביותר, חקרתי איך הכלים האלו יכולים לשרת אותנו בלי לוותר על מי שאנחנו באמת. אני מגיעה מהעולם שלכם ומכירה את הדילמות והרגישות.
+                  כ-AI Master שלמדה מהטובים ביותר (עם עדן ביבס [cite: 7]), חקרתי איך הכלים האלו יכולים לשרת אותנו בלי לוותר על מי שאנחנו באמת. אני מגיעה מהעולם שלכם ומכירה את הדילמות והרגישות.
                   <br/><br/>
-                  <strong>"אני לא מלמדת טכנולוגיה – אני מלמדת אנשים איך לא לפחד ממנה."</strong> אני כאן כדי להחזיק לכם את היד עד שתעברו את השער לעולם החדש הזה.
+                  <strong>"אני לא מלמדת טכנולוגיה [cite: 2] – אני מלמדת אנשים איך לא לפחד ממנה[cite: 3]."</strong> אני כאן כדי להחזיק לכם את היד עד שתעברו את השער לעולם החדש הזה.
                 </p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* מקטע שאלות ותשובות */}
         <section className="sec" style={{padding: '100px 20px', background: '#f8fafc'}}>
           <div className="wrap">
             <h2 style={{textAlign:'center', fontSize:'42px', fontWeight:'900', marginBottom:'50px'}}>שאלות נפוצות</h2>
             <div style={{maxWidth: '800px', margin: '0 auto'}}>
-              <details className="faq-item">
-                <summary>איך מקבלים גישה למערכת?</summary>
-                <div className="faq-content">מיד לאחר סיום התשלום ב-PayPal או באשראי, תועברו באופן אוטומטי לדף הכניסה של האפליקציה ותקבלו את פרטי הגישה שלכם למייל.</div>
-              </details>
-              <details className="faq-item">
-                <summary>האם זה מתאים גם למי שלא מבין כלום במחשבים?</summary>
-                <div className="faq-content">בהחלט! בניתי את המערכת כך שתהיה פשוטה ואינטואיטיבית. אתם פשוט בוחרים קטגוריה, לוחצים על "העתק" ומדביקים ב-ChatGPT. אין צורך בידע טכני מוקדם.</div>
-              </details>
-              <details className="faq-item">
-                <summary>האם הכלי עובד מהנייד?</summary>
-                <div className="faq-content">כן, האפליקציה מותאמת באופן מלא לסמארטפונים וטאבלטים, כך שתוכלו לכתוב תוכן מכל מקום ובכל זמן.</div>
-              </details>
-              <details className="faq-item">
-                <summary>האם אקבל חשבונית?</summary>
-                <div className="faq-content">בוודאי. חשבונית מס/קבלה נשלחת באופן אוטומטי לכתובת המייל איתה ביצעתם את הרכישה מיד עם סיום התשלום.</div>
-              </details>
+              <details className="faq-item"><summary>איך מקבלים גישה למערכת?</summary><div className="faq-content">מיד לאחר סיום התשלום, תועברו באופן אוטומטי לדף הכניסה של האפליקציה ותקבלו את פרטי הגישה למייל.</div></details>
+              <details className="faq-item"><summary>האם זה מתאים גם למי שלא מבין כלום במחשבים?</summary><div className="faq-content">בהחלט! בניתי את המערכת כך שתהיה פשוטה ואינטואיטיבית. אתם פשוט בוחרים קטגוריה, לוחצים על "העתק" ומדביקים.</div></details>
+              <details className="faq-item"><summary>האם הכלי עובד מהנייד?</summary><div className="faq-content">כן, האפליקציה מותאמת באופן מלא לסמארטפונים וטאבלטים.</div></details>
+              <details className="faq-item"><summary>האם אקבל חשבונית?</summary><div className="faq-content">בוודאי. חשבונית מס/קבלה נשלחת באופן אוטומטי למייל מיד עם סיום התשלום.</div></details>
             </div>
           </div>
         </section>
@@ -355,8 +346,11 @@ const LandingPage = () => {
           </div>
         </section>
 
-        <footer style={{textAlign:'center', padding:'80px 20px', background:'#f8fafc', color:'#64748b', borderTop: '1px solid #e2e8f0'}}>
-          © 2026 PromptBook by Pnina Karayoff | <a href="/terms" style={{color:'var(--c1)', fontWeight: '700', textDecoration: 'none'}}>תקנון</a> | <a href="/privacy" style={{color:'var(--c1)', fontWeight: '700', textDecoration: 'none'}}>פרטיות</a>
+        <footer>
+          © 2026 PromptBook by Pnina Karayoff | 
+          <a href="/terms" style={{color:'var(--c1)', fontWeight: '700', textDecoration: 'none'}}>תקנון</a> | 
+          <a href="/privacy" style={{color:'var(--c1)', fontWeight: '700', textDecoration: 'none'}}>פרטיות</a> | 
+          <a href="/accessibility" style={{color:'var(--c1)', fontWeight: '700', textDecoration: 'none'}}>הצהרת נגישות</a>
         </footer>
       </div>
     </>
