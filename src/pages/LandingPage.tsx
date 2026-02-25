@@ -5,7 +5,7 @@ const LandingPage = () => {
   const paypalRan = useRef(false);
   const navigate = useNavigate();
 
-  // פונקציה שגורמת לכפתור ה-CTA להוריד את הגולש למטה לתשלום
+  // פונקציית הגלילה למטה לתשלום
   const scrollToPrice = () => {
     const element = document.getElementById("price-section");
     if (element) {
@@ -43,7 +43,7 @@ const LandingPage = () => {
   return (
     <>
       <style>{`
-        /* איפוס כללי למניעת רווחים ופסים לבנים */
+        /* איפוס למניעת רווחים מיותרים */
         html, body {
           margin: 0 !important;
           padding: 0 !important;
@@ -69,7 +69,7 @@ const LandingPage = () => {
           line-height: 1.6;
         }
 
-        /* Hero Section עם הדר משולב */
+        /* Hero Section */
         .hero {
             text-align: center; 
             padding: 0 0 100px 0;
@@ -80,12 +80,14 @@ const LandingPage = () => {
             min-height: 650px;
         }
         
+        /* הגרדיאנט ברקע - מוגדר לא להפריע ללחיצות */
         .hero::after {
             content: '';
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
             background: radial-gradient(circle at 50% 50%, rgba(147, 62, 199, 0.4) 0%, transparent 80%);
             z-index: 1;
+            pointer-events: none; /* קריטי: מאפשר הקלקה על מה שמתחת */
         }
 
         .landing-header {
@@ -94,7 +96,7 @@ const LandingPage = () => {
           align-items: center;
           padding: 40px 60px;
           position: relative;
-          z-index: 10;
+          z-index: 100; /* מעל הכל */
         }
 
         .header-logo-container {
@@ -102,12 +104,14 @@ const LandingPage = () => {
           align-items: center;
           gap: 25px;
           text-decoration: none;
+          z-index: 110;
         }
 
         .header-logo-img {
-          height: 120px; /* לוגו גדול וברור */
+          height: 110px;
           width: auto;
-          filter: brightness(0) invert(1); /* הופך לוגו כהה ללבן נקי */
+          filter: brightness(0) invert(1);
+          margin-left: 10px;
         }
 
         .header-title {
@@ -127,12 +131,12 @@ const LandingPage = () => {
           font-size: 18px;
           cursor: pointer;
           transition: all 0.3s ease;
-          box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+          z-index: 110;
         }
 
         .hero-content {
           position: relative;
-          z-index: 10;
+          z-index: 50; /* מעל שכבת ה-after */
           padding: 60px 20px;
         }
 
@@ -158,9 +162,24 @@ const LandingPage = () => {
             padding: 24px 80px;
             border-radius: 100px;
             border: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            cursor: pointer !important;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             box-shadow: 0 15px 35px rgba(147, 62, 199, 0.5);
+            position: relative;
+            z-index: 60;
+            display: inline-block;
+        }
+        .cta-btn:hover {
+            transform: scale(1.05) translateY(-5px);
+            box-shadow: 0 20px 50px rgba(147, 62, 199, 0.7);
+        }
+
+        /* Comparison Section */
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 50px;
         }
 
         .sec-features { background: var(--soft-purple); padding: 100px 20px; }
@@ -168,18 +187,31 @@ const LandingPage = () => {
         .feature-card { background: white; padding: 45px 35px; border-radius: 28px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
         .feature-card .icon { font-size: 42px; margin-bottom: 25px; display: block; }
 
-        .price-box { background: white; border-radius: 45px; padding: 80px; text-align: center; border: 2px solid var(--c1); margin: 60px auto; max-width: 600px; box-shadow: 0 40px 100px rgba(0,0,0,0.12); }
+        .sec-teaser { padding: 100px 20px; }
+        .teaser-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; }
+        .card { background: white; border-radius: 28px; padding: 40px; border-right: 10px solid var(--c1); box-shadow: 0 20px 40px rgba(0,0,0,0.06); }
+
+        .sec-testimonials { background: var(--dark); color: white; padding: 100px 20px; }
+        .testimonial-card { background: rgba(255,255,255,0.05); padding: 40px; border-radius: 28px; border: 1px solid rgba(255,255,255,0.1); font-style: italic; }
+
+        .price-box { background: white; border-radius: 45px; padding: 80px; text-align: center; border: 2px solid var(--c1); margin: 60px auto; max-width: 600px; box-shadow: 0 40px 100px rgba(0,0,0,0.15); }
         .new-price { font-size: 110px; font-weight: 900; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1; }
+
+        .about-box { display: flex; align-items: center; gap: 60px; background: white; padding: 70px; border-radius: 45px; box-shadow: 0 20px 60px rgba(0,0,0,0.08); }
+        .about-box img { width: 250px; height: 250px; border-radius: 40px; object-fit: cover; border: 5px solid var(--c1); }
 
         .faq-item { margin-bottom: 15px; background: white; border-radius: 20px; border: 1px solid #e2e8f0; overflow: hidden; }
         .faq-item summary { padding: 25px; cursor: pointer; font-weight: 800; color: var(--c1); list-style: none; position: relative; font-size: 20px; }
 
         @media (max-width: 768px) {
             .landing-header { padding: 25px; flex-direction: column; gap: 20px; }
-            .header-logo-img { height: 80px; }
+            .header-logo-img { height: 70px; margin-left: 0; }
             .header-title { font-size: 28px; }
             .hero h1 { font-size: 40px; }
-            .about-box { flex-direction: column; text-align: center; }
+            .hero p { font-size: 18px; }
+            .comparison-grid { grid-template-columns: 1fr; }
+            .about-box { flex-direction: column; text-align: center; padding: 45px; }
+            .about-box img { width: 180px; height: 180px; }
         }
       `}</style>
 
@@ -197,7 +229,6 @@ const LandingPage = () => {
             <div className="wrap">
               <h1>מספיק לעבוד בשביל ה-AI:<br/>תנו למנוע של PromptBook לכתוב עבורכם</h1>
               <p>במקום להסתבך עם הגדרות ולהילחם בניסוחים רובוטיים - קבלו גישה לממשק אינטראקטיבי עם 101 נוסחאות קופירייטינג מוכנות מראש.</p>
-              {/* תיקון: הכפתור הזה עכשיו מוביל ישירות למקטע התשלום */}
               <button onClick={scrollToPrice} className="cta-btn">אני רוצה לכתוב פחות ולמכור יותר ↓</button>
             </div>
           </div>
@@ -207,7 +238,7 @@ const LandingPage = () => {
         <section style={{background: '#fff', padding: '100px 20px'}}>
           <div className="wrap">
             <h2 style={{textAlign:'center', fontSize:'42px', fontWeight:'900', marginBottom:'50px'}}>הנה מה שקורה כשמפסיקים "לנחש" פרומפטים:</h2>
-            <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px'}}>
+            <div className="comparison-grid">
               <div style={{background: '#f1f5f9', padding: '40px', borderRadius: '32px', border: '2px solid #e2e8f0'}}>
                 <div style={{background: '#94a3b8', color: 'white', padding: '5px 15px', borderRadius: '100px', fontSize: '14px', fontWeight: '800', display: 'inline-block', marginBottom: '20px'}}>ChatGPT רגיל</div>
                 <h4 style={{fontSize: '20px', marginBottom: '15px'}}>פרומפט גנרי: "תכתוב לי הזמנה לשיחת ייעוץ"</h4>
@@ -241,8 +272,9 @@ const LandingPage = () => {
           </div>
         </section>
 
-        {/* התנגדויות - ללא כוכביות ומקפים ארוכים */}
+        {/* התנגדויות */}
         <section style={{background: 'var(--dark)', color: 'white', padding: '100px 20px', position: 'relative', overflow: 'hidden'}}>
+          <div style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0.1, background: 'radial-gradient(circle at 50% 50%, var(--c1), transparent 70%)'}}></div>
           <div className="wrap" style={{textAlign: 'center', position: 'relative', zIndex: 2}}>
             <h2 style={{fontSize:'42px', fontWeight:'900', marginBottom:'30px', color: 'white'}}>למה לא פשוט להעתיק תבניות חינמיות מהרשת?</h2>
             <p style={{fontSize: '22px', maxWidth: '900px', margin: '0 auto 40px', lineHeight: '1.8'}}>
@@ -251,26 +283,63 @@ const LandingPage = () => {
           </div>
         </section>
 
-        {/* אודות פנינה - הטקסט המדויק מהקובץ שלך */}
+        <section className="sec-teaser">
+          <div className="wrap">
+            <h2 style={{textAlign:'center', fontSize:'42px', fontWeight:'900', marginBottom:'50px'}}>טעימה מהנוסחאות</h2>
+            <div className="teaser-grid">
+              <div className="card"><b>כותרת ממירה לדף נחיתה</b><br/><br/>יצירת 10 וריאציות עם טון רגשי שעובד על הקהל הישראלי.</div>
+              <div className="card"><b>פתיח אמפתי קצר</b><br/><br/>נוסחה מדויקת לזיהוי כאב, תקווה ופתרון מהיר.</div>
+              <div className="card"><b>קמפיין השקה של 7 ימים</b><br/><br/>בניית רצף טיזרים, עדויות ודחיפות למכירה.</div>
+              <div className="card"><b>פירוק התנגדויות עומק</b><br/><br/>מענה מנצח להתנגדות הגדולה ביותר של הלקוח שלך.</div>
+              <div className="card"><b>Retargeting חכם</b><br/><br/>3 מודעות רימרקטינג אפקטיביות למבקרים שלא רכשו.</div>
+              <div className="card"><b>FAQ ממיר ומניע</b><br/><br/>שאלות ותשובות שמסירות חסמי קנייה וכוללות CTA עדין.</div>
+            </div>
+          </div>
+        </section>
+
+        <section className="sec-testimonials">
+          <div className="wrap">
+            <h2 style={{textAlign:'center', fontSize:'42px', fontWeight:'900', marginBottom:'50px'}}>מה אומרים המשתמשים?</h2>
+            <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(300px, 1fr))', gap:'30px'}}>
+                <div className="testimonial-card"><div style={{color:'gold', marginBottom:'15px'}}>★★★★★</div>"הכלי הזה חסך לי לפחות 5 שעות כתיבה שבועיות. במקום לשבור את הראש, אני פשוט מעתיקה ומדביקה."<br/><br/><b>- שירן אליהו, מנהלת סושיאל</b></div>
+                <div className="testimonial-card"><div style={{color:'gold', marginBottom:'15px'}}>★★★★★</div>"פנינה, תודה! זה מרגיש כאילו שכרתי קופירייטר צמוד לעסק בשבריר מהמחיר."<br/><br/><b>- רן לוי, מאמן אישי</b></div>
+                <div className="testimonial-card"><div style={{color:'gold', marginBottom:'15px'}}>★★★★★</div>"התוצאות הן עברית נקייה וטבעית. סוף סוף ה-AI מדבר בשפה שמתאימה לקהל הישראלי."<br/><br/><b>- מירב דהן, פרילנסרית</b></div>
+            </div>
+          </div>
+        </section>
+
+        {/* אודות פנינה */}
         <section style={{padding: '100px 20px', background: '#f8fafc'}}>
           <div className="wrap">
             <div style={{display: 'flex', alignItems: 'center', gap: '60px', background: 'white', padding: '60px', borderRadius: '45px', boxShadow: '0 20px 60px rgba(0,0,0,0.06)'}} className="about-box">
-              <img src="/pnina-profile.jpg" alt="פנינה קריוף" style={{width: '250px', height: '250px', borderRadius: '40px', object-fit: 'cover', border: '5px solid var(--c1)'}} />
+              <img src="/pnina-profile.jpg" alt="פנינה קריוף" style={{width: '250px', height: '250px', borderRadius: '40px', objectFit: 'cover', border: '5px solid var(--c1)'}} />
               <div>
                 <h2 style={{color:'var(--c1)', fontWeight:'900', fontSize: '32px', marginBottom: '20px'}}>מחברות בין עולמות: טיפול. טכנולוגיה. טרנספורמציה.</h2>
                 <p style={{fontSize:'19px', lineHeight: '1.8'}}>
-                  נעים להכיר, אני פנינה[cite: 4]. בעשור האחרון ליוויתי עשרות אנשים במסעות של ריפוי, צמיחה והתמרה דרך NLP, טארוט, נומרולוגיה והעיצוב האנושי[cite: 4]. אני פונה אליכם המטפלים, היוצרים וכל מי שפועל מהלב ומרגיש שהעולם הדיגיטלי רץ קדימה ומשאיר אתכם קצת מאחור[cite: 4].
+                  נעים להכיר, אני פנינה. בעשור האחרון ליוויתי עשרות אנשים במסעות של ריפוי, צמיחה והתמרה דרך NLP, טארוט, נומרולוגיה והעיצוב האנושי. אני פונה אליכם – המטפלים, היוצרים וכל מי שפועל מהלב ומרגיש שהעולם הדיגיטלי רץ קדימה ומשאיר אתכם קצת מאחור.
                   <br/><br/>
-                  כ-AI Master שלמדה מהטובים ביותר, חקרתי איך הכלים האלו יכולים לשרת אותנו בלי לוותר על מי שאנחנו באמת[cite: 7]. אני מגיעה מהעולם שלכם ומכירה את הדילמות והרגישות[cite: 6]. 
+                  כ-AI Master שלמדה מהטובים ביותר[cite: 7], חקרתי איך הכלים האלו יכולים לשרת אותנו בלי לוותר על מי שאנחנו באמת. אני מגיעה מהעולם שלכם ומכירה את הדילמות והרגישות. 
                   <br/><br/>
-                  <strong>"אני לא מלמדת טכנולוגיה – אני מלמדת אנשים איך לא לפחד ממנה"</strong>[cite: 2, 9]. אני כאן כדי להחזיק לכם את היד עד שתעברו את השער לעולם החדש הזה[cite: 10].
+                  <strong>"אני לא מלמדת טכנולוגיה – אני מלמדת אנשים איך לא לפחד ממנה"</strong>. אני כאן כדי להחזיק לכם את היד עד שתעברו את השער לעולם החדש הזה.
                 </p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* מקטע תשלום עם ID תואם לכפתור */}
+        <section className="sec" style={{padding: '100px 20px', background: '#f8fafc'}}>
+          <div className="wrap">
+            <h2 style={{textAlign:'center', fontSize:'42px', fontWeight:'900', marginBottom:'50px'}}>שאלות נפוצות</h2>
+            <div style={{maxWidth: '800px', margin: '0 auto'}}>
+              <details className="faq-item"><summary>איך מקבלים גישה למערכת?</summary><div style={{padding:'0 25px 25px'}}>מיד לאחר סיום התשלום, תועברו באופן אוטומטי לדף הכניסה של האפליקציה ותקבלו את פרטי הגישה למייל.</div></details>
+              <details className="faq-item"><summary>האם זה מתאים גם למי שלא מבין כלום במחשבים?</summary><div style={{padding:'0 25px 25px'}}>בהחלט! בניתי את המערכת כך שתהיה פשוטה ואינטואיטיבית. אתם פשוט בוחרים קטגוריה, לוחצים על "העתק" ומדביקים.</div></details>
+              <details className="faq-item"><summary>האם הכלי עובד מהנייד?</summary><div style={{padding:'0 25px 25px'}}>כן, האפליקציה מותאמת באופן מלא לסמארטפונים וטאבלטים.</div></details>
+              <details className="faq-item"><summary>האם אקבל חשבונית?</summary><div style={{padding:'0 25px 25px'}}>בוודאי. חשבונית מס/קבלה נשלחת באופן אוטומטי למייל מיד עם סיום התשלום.</div></details>
+            </div>
+          </div>
+        </section>
+
+        {/* מקטע תשלום */}
         <section id="price-section" className="wrap" style={{textAlign:'center', padding:'100px 20px'}}>
           <div className="price-box">
             <h2 style={{fontWeight:'900', fontSize:'42px', color:'var(--c1)', marginBottom: '15px'}}>מוכנים לשדרג את התוכן?</h2>
