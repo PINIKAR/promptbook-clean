@@ -28,6 +28,7 @@
     <style>
         body { background-color: #0A0A0A; color: #F8F5F1; scroll-behavior: smooth; font-family: 'Assistant', sans-serif; }
         .h-black { font-family: 'Heebo', sans-serif; font-weight: 900; line-height: 1.1; }
+        
         .btn-premium {
             background: linear-gradient(135deg, #C5A059 0%, #E2C792 100%);
             color: #000000 !important;
@@ -36,11 +37,9 @@
             transition: all 0.3s ease;
         }
         .btn-premium:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(197, 160, 89, 0.6); }
+
         .sec-card { background: #161616; border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 2rem; }
         .text-gradient { background: linear-gradient(to left, #C5A059, #E2C792); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        
-        .promo-bar { background: linear-gradient(90deg, #C5A059, #E2C792, #C5A059); background-size: 200% auto; animation: shine 3s linear infinite; }
-        @keyframes shine { to { background-position: 200% center; } }
         
         details summary::-webkit-details-marker { display: none; }
         details[open] summary i { transform: rotate(180deg); }
@@ -49,29 +48,27 @@
 <body class="antialiased text-right">
 
     <header class="fixed top-0 left-0 w-full z-[9999] bg-premiumDark/90 backdrop-blur-md border-b border-white/5">
-        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center flex-row-reverse">
-            <div class="bg-white p-2 rounded-lg"><img src="logo.png" alt="לב לבינה" class="h-8 w-auto"></div>
-            <a href="https://pnina-karayoff.com/" class="text-gold border border-gold px-6 py-2 rounded-full font-bold text-sm hover:bg-gold/10 transition-all">חזרה לאתר</a>
+        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-center">
+            <div class="bg-white p-2 rounded-lg shadow-lg">
+                <img src="logo.png" alt="לב לבינה" class="h-8 w-auto">
+            </div>
         </div>
     </header>
 
-    <div class="pt-20">
-        <div class="promo-bar text-black text-center py-3 font-bold text-sm md:text-base px-4">
-            🔥 מבצע השקה לזמן מוגבל: 101 הפרומפטים ב-68% הנחה! נגמר בעוד: <span id="timer" class="font-black">00:00:00</span>
-        </div>
-    </div>
-
-    <main class="container mx-auto px-6 max-w-5xl">
+    <main class="container mx-auto px-6 max-w-5xl pt-32">
         
-        <section class="py-24 text-center">
-            <h1 class="h-black text-4xl md:text-7xl mb-8 leading-tight">הקץ לטקסטים רובוטיים:<br><span class="text-gradient">101 הפרומפטים שמוסיפים נשמה ל-AI שלך</span></h1>
+        <section class="py-20 text-center">
+            <h1 class="h-black text-4xl md:text-7xl mb-8 leading-tight">
+                הקץ לטקסטים רובוטיים:<br>
+                <span class="text-gradient">101 הפרומפטים שמוסיפים נשמה ל-AI שלך</span>
+            </h1>
             <p class="text-xl text-gray-400 mb-12 max-w-3xl mx-auto font-light leading-relaxed">
-                אם ה-AI כותב לכם טקסטים קרים שפשוט לא ממירים, אתם לא לבד. נמאס לתרגם את ChatGPT? קבלו 101 נוסחאות מוכנות לכתיבה שיווקית בעברית טבעית.
+                אם ה-AI כותב לכם טקסטים קרים שפשוט לא ממירים, אתם לא לבד. נמאס לתרגם את ChatGPT? קבלו 101 נוסחאות מוכנות לכתיבה שיווקית בעברית טבעית שבאמת מוכרת.
             </p>
             <a href="https://pay.grow.link/fa809627661a36b1e870698bcda309c3-MzE1NTYwOA" class="btn-premium px-12 py-6 rounded-2xl text-2xl mb-6 inline-flex shadow-2xl">
                 <i class="fas fa-bolt mr-3"></i> קבלו גישה מיידית - רק 99 ₪
             </a>
-            <p class="text-gray-500 text-sm italic">💳 תשלום מאובטח | גישה מיידית | ללא מנוי חודשי</p>
+            <p class="text-gray-500 text-sm italic">💳 תשלום מאובטח | גישה מיידית לאפליקציה | ללא מנוי חודשי</p>
         </section>
 
         <section class="py-16">
@@ -97,19 +94,37 @@
         </section>
 
         <section class="py-16">
+            <h2 class="h-black text-3xl mb-12 text-gold">טעימה מהכלי</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="sec-card p-6 border-t-2 border-gold/30 text-right">
+                    <h4 class="font-bold mb-3 text-white">כותרת ממירה לדף נחיתה</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed">יצירת 10 וריאציות עם הבטחת תוצאה וטון רגשי.</p>
+                </div>
+                <div class="sec-card p-6 border-t-2 border-gold/30 text-right">
+                    <h4 class="font-bold mb-3 text-white">פתיח אמפתי קצר</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed">נוסחה של 70 מילים לזיהוי כאב, תקווה ופתרון.</p>
+                </div>
+                <div class="sec-card p-6 border-t-2 border-gold/30 text-right">
+                    <h4 class="font-bold mb-3 text-white">קמפיין 7 ימים להשקה</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed">בניית רצף 7 ימי טיזר, עדות ודחיפות.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-16">
             <h2 class="h-black text-3xl md:text-5xl text-center mb-16 text-white font-heebo">מה אומרים מי שכבר כותבים אחרת</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-right">
                 <div class="sec-card p-8 italic text-gray-400 text-sm border-gold/10">
                     "הכלי הזה חסך לי לפחות 5 שעות כתיבה שבועיות. במקום לשבור את הראש, אני פשוט מעתיקה ומדביקה."
-                    <p class="mt-4 font-bold text-white not-italic text-left">- יעל כץ, מנהלת סושיאל</p>
+                    <p class="mt-4 font-bold text-white not-italic text-left">- יעל כץ</p>
                 </div>
                 <div class="sec-card p-8 italic text-gray-400 text-sm border-gold/30">
                     "זה מרגיש כאילו שכרתי קופירייטר צמוד לעסק, אבל שילמתי פחות משיחת ייעוץ אחת."
-                    <p class="mt-4 font-bold text-white not-italic text-left">- רן לוי, מאמן אישי</p>
+                    <p class="mt-4 font-bold text-white not-italic text-left">- רן לוי</p>
                 </div>
                 <div class="sec-card p-8 italic text-gray-400 text-sm border-gold/10">
                     "התוצאות הן עברית נקייה וטבעית. סוף סוף ה-AI מדבר בשפה שמתאימה לקהל הישראלי."
-                    <p class="mt-4 font-bold text-white not-italic text-left">- מירב דהן, פרילנסרית</p>
+                    <p class="mt-4 font-bold text-white not-italic text-left">- מירב דהן</p>
                 </div>
             </div>
         </section>
@@ -119,7 +134,7 @@
             <div class="mb-10 text-center">
                 <span class="text-gray-600 text-3xl line-through block mb-2">397 ₪</span>
                 <span class="text-8xl font-black text-gold">99 ₪</span>
-                <p class="text-goldLight font-bold mt-4 text-xl">חוסכים 298 ₪ - הצעה לזמן מוגבל!</p>
+                <p class="text-goldLight font-bold mt-4 text-xl">חוסכים 298 ₪ - ההצעה לזמן מוגבל!</p>
             </div>
             <a href="https://pay.grow.link/fa809627661a36b1e870698bcda309c3-MzE1NTYwOA" class="btn-premium px-16 py-7 rounded-3xl text-3xl">
                  אני רוצה גישה עכשיו <i class="fas fa-arrow-left mr-3"></i>
@@ -137,7 +152,7 @@
                     <p class="text-gray-300 leading-relaxed text-lg">
                         שלום, אני פנינה. כמוך, הייתי מתוסכלת מהפער בין כוחו של ה-AI לצורך האותנטי שלנו:<br>
                         <strong class="text-white">לכתוב תוכן שהוא גם חכם וגם מרגש.</strong><br><br>
-                        את <strong>PromptBook</strong> בניתי כדי לגשר על הפער הזה – זו שיטה שמשלבת אסטרטגיה, עיצוב (UI/UX), וטכנולוגיה, שהופכת אותך לקופירייטר/ית עם רגש. המטרה שלי? שתכתבו פחות, ותמכרו יותר.
+                        את <strong>PromptBook</strong> בניתי כדי לגשר על הפער הזה – זו שיטה שמשלבת אסטרטגיה, עיצוב (UI/UX), וטכנולוגיה, שהופכת אותך לקופירייטר/ית עם רגש. המטרה שלי? שתכתבו פחות, ותמכור הרבה יותר.
                     </p>
                 </div>
             </div>
@@ -150,18 +165,5 @@
         <p class="text-gray-600 text-xs text-center">&copy; 2026 PromptBook by Pnina Karayoff. כל הזכויות שמורות.</p>
     </footer>
 
-    <script>
-        const deadline = new Date(Date.now() + 48 * 60 * 60 * 1000).getTime();
-        function updateTimer() {
-            const now = Date.now();
-            const diff = Math.max(0, deadline - now);
-            const h = Math.floor(diff / (1000 * 60 * 60)) % 24;
-            const m = Math.floor(diff / (1000 * 60)) % 60;
-            const s = Math.floor(diff / 1000) % 60;
-            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-            document.getElementById('timer').textContent = `${d} ימים ו-${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-        }
-        setInterval(updateTimer, 1000); updateTimer();
-    </script>
 </body>
 </html>
