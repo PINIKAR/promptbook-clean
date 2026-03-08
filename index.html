@@ -4,18 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/png" href="/logo.png" />
+    <title>PromptBook - 101 פרומפטים בעברית | פנינה קריוף</title>
     
-    <title>PromptBook - הפכי את ה-AI לקופירייטר אישי | פנינה קריוף</title>
-    <meta name="description" content="101 פרומפטים מדוייקים לכתיבה שיווקית בעברית. דפי נחיתה, פוסטים ומיילים בקליק." />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://101promptbook.pnina-karayoff.com/" />
-    <meta property="og:title" content="PromptBook - הכלי לכתיבה שיווקית עם AI" />
-    <meta property="og:description" content="נמאס לך לתרגם את ChatGPT? קבלי 101 נוסחאות מוכנות לכתיבה שיווקית בעברית טבעית." />
-    <meta property="og:image" content="https://101promptbook.pnina-karayoff.com/logo.png" />
-
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;600;700;800&family=Heebo:wght@900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <script src="https://cdn.tailwindcss.com"></script>
 
     <script>
         tailwind.config = {
@@ -34,25 +27,18 @@
 
     <style>
         body { background-color: #0A0A0A; color: #F8F5F1; scroll-behavior: smooth; font-family: 'Assistant', sans-serif; }
-        .h-black { font-family: 'Heebo', sans-serif; font-weight: 900; }
-        
-        .btn-grow {
+        .h-black { font-family: 'Heebo', sans-serif; font-weight: 900; line-height: 1.1; }
+        .btn-premium {
             background: linear-gradient(135deg, #C5A059 0%, #E2C792 100%);
             color: #000000 !important;
-            font-weight: 800;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-weight: 900;
             box-shadow: 0 10px 25px rgba(197, 160, 89, 0.4);
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            width: 100%;
-            max-width: 450px;
+            transition: all 0.3s ease;
         }
-        .btn-grow:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(197, 160, 89, 0.6); }
-
+        .btn-premium:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(197, 160, 89, 0.6); }
         .sec-card { background: #161616; border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 2rem; }
         .text-gradient { background: linear-gradient(to left, #C5A059, #E2C792); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
         .promo-bar { background: linear-gradient(90deg, #C5A059, #E2C792, #C5A059); background-size: 200% auto; animation: shine 3s linear infinite; }
         @keyframes shine { to { background-position: 200% center; } }
         
@@ -62,38 +48,30 @@
 </head>
 <body class="antialiased text-right">
 
-    <header style="position: fixed; top: 0; left: 0; width: 100%; z-index: 9999; background: rgba(10, 10, 10, 0.9); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(197, 160, 89, 0.1);">
-        <div style="max-width: 1200px; margin: 0 auto; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; flex-direction: row-reverse;">
-            <a href="https://pnina-karayoff.com/" style="background: white; padding: 5px 12px; border-radius: 10px; display: block;">
-                <img src="logo.png" alt="לב לבינה" style="height: 35px; width: auto;">
-            </a>
-            <a href="https://pnina-karayoff.com/" style="color: #C5A059; text-decoration: none; font-weight: 700; font-size: 14px; border: 1px solid #C5A059; padding: 8px 20px; border-radius: 50px;">
-                <i class="fas fa-arrow-right" style="margin-left: 8px;"></i> חזרה לאתר
-            </a>
+    <header class="fixed top-0 left-0 w-full z-[9999] bg-premiumDark/90 backdrop-blur-md border-b border-white/5">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center flex-row-reverse">
+            <div class="bg-white p-2 rounded-lg"><img src="logo.png" alt="לב לבינה" class="h-8 w-auto"></div>
+            <a href="https://pnina-karayoff.com/" class="text-gold border border-gold px-6 py-2 rounded-full font-bold text-sm hover:bg-gold/10 transition-all">חזרה לאתר</a>
         </div>
     </header>
 
     <div class="pt-20">
         <div class="promo-bar text-black text-center py-3 font-bold text-sm md:text-base px-4">
-            🔥 מבצע בלעדי לזמן מוגבל! כל הידע בפרומפטבוק ב-68% הנחה! נגמר בעוד: <span id="timer" class="font-black">00:00:00</span>
+            🔥 מבצע השקה לזמן מוגבל: 101 הפרומפטים ב-68% הנחה! נגמר בעוד: <span id="timer" class="font-black">00:00:00</span>
         </div>
     </div>
 
     <main class="container mx-auto px-6 max-w-5xl">
         
-        <section class="py-20 text-center relative">
-            <h1 class="h-black text-4xl md:text-7xl mb-8 leading-tight">
-                הקץ לטקסטים רובוטיים:<br>
-                <span class="text-gradient">101 פרומפטים עם נשמה</span>
-            </h1>
+        <section class="py-24 text-center">
+            <h1 class="h-black text-4xl md:text-7xl mb-8 leading-tight">הקץ לטקסטים רובוטיים:<br><span class="text-gradient">101 הפרומפטים שמוסיפים נשמה ל-AI שלך</span></h1>
             <p class="text-xl text-gray-400 mb-12 max-w-3xl mx-auto font-light leading-relaxed">
-                אם ה-AI כותב לכם טקסטים קרים שפשוט לא ממירים, אתם לא לבד. הפכתי את הניסיון שלי לכלי שמוסיף רגש ואסטרטגיה לכל מילה.
+                אם ה-AI כותב לכם טקסטים קרים שפשוט לא ממירים, אתם לא לבד. נמאס לתרגם את ChatGPT? קבלו 101 נוסחאות מוכנות לכתיבה שיווקית בעברית טבעית.
             </p>
-
-            <a href="https://pay.grow.link/fa809627661a36b1e870698bcda309c3-MzE1NTYwOA" class="btn-grow py-6 px-10 rounded-2xl text-2xl mb-6 shadow-2xl">
-                <i class="fas fa-bolt"></i> קבלו גישה מיידית - רק 99 ₪
+            <a href="https://pay.grow.link/fa809627661a36b1e870698bcda309c3-MzE1NTYwOA" class="btn-premium px-12 py-6 rounded-2xl text-2xl mb-6 inline-flex shadow-2xl">
+                <i class="fas fa-bolt mr-3"></i> קבלו גישה מיידית - רק 99 ₪
             </a>
-            <p class="text-gray-500 text-sm italic">💳 תשלום מאובטח דרך Grow | גישה מיידית | ללא מנוי חודשי</p>
+            <p class="text-gray-500 text-sm italic">💳 תשלום מאובטח | גישה מיידית | ללא מנוי חודשי</p>
         </section>
 
         <section class="py-16">
@@ -118,40 +96,62 @@
             </div>
         </section>
 
-        <section class="py-20 text-center sec-card border-gold/20 shadow-[0_0_60px_rgba(197,160,89,0.1)] mb-20">
-            <h2 class="h-black text-4xl mb-6">הצעה מיוחדת לזמן מוגבל! 💰</h2>
-            <p class="text-lg text-gray-400 mb-10">זה הזמן לשדרג את הכתיבה שלכם. קבלו גישה לכל הידע במחיר חד פעמי:</p>
-            <div class="mb-12">
+        <section class="py-16">
+            <h2 class="h-black text-3xl md:text-5xl text-center mb-16 text-white font-heebo">מה אומרים מי שכבר כותבים אחרת</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-right">
+                <div class="sec-card p-8 italic text-gray-400 text-sm border-gold/10">
+                    "הכלי הזה חסך לי לפחות 5 שעות כתיבה שבועיות. במקום לשבור את הראש, אני פשוט מעתיקה ומדביקה."
+                    <p class="mt-4 font-bold text-white not-italic text-left">- יעל כץ, מנהלת סושיאל</p>
+                </div>
+                <div class="sec-card p-8 italic text-gray-400 text-sm border-gold/30">
+                    "זה מרגיש כאילו שכרתי קופירייטר צמוד לעסק, אבל שילמתי פחות משיחת ייעוץ אחת."
+                    <p class="mt-4 font-bold text-white not-italic text-left">- רן לוי, מאמן אישי</p>
+                </div>
+                <div class="sec-card p-8 italic text-gray-400 text-sm border-gold/10">
+                    "התוצאות הן עברית נקייה וטבעית. סוף סוף ה-AI מדבר בשפה שמתאימה לקהל הישראלי."
+                    <p class="mt-4 font-bold text-white not-italic text-left">- מירב דהן, פרילנסרית</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-20 text-center sec-card border-gold/20 shadow-2xl mb-24 px-6">
+            <h2 class="h-black text-4xl mb-6">מבצע השקה 💰</h2>
+            <div class="mb-10 text-center">
                 <span class="text-gray-600 text-3xl line-through block mb-2">397 ₪</span>
                 <span class="text-8xl font-black text-gold">99 ₪</span>
-                <p class="text-goldLight font-bold mt-4 text-xl">חוסכים 298 ₪ - המבצע מסתיים בקרוב!</p>
+                <p class="text-goldLight font-bold mt-4 text-xl">חוסכים 298 ₪ - הצעה לזמן מוגבל!</p>
             </div>
-            
-            <a href="https://pay.grow.link/fa809627661a36b1e870698bcda309c3-MzE1NTYwOA" class="btn-grow py-7 px-16 rounded-3xl text-3xl">
-                 כן, אני רוצה גישה עכשיו! <i class="fas fa-arrow-left mr-3"></i>
+            <a href="https://pay.grow.link/fa809627661a36b1e870698bcda309c3-MzE1NTYwOA" class="btn-premium px-16 py-7 rounded-3xl text-3xl">
+                 אני רוצה גישה עכשיו <i class="fas fa-arrow-left mr-3"></i>
             </a>
         </section>
 
         <section class="py-24 flex flex-col md:flex-row items-center gap-12 border-t border-white/5">
-            <img src="pnina-profile.jpg" alt="פנינה קריוף" class="w-48 h-48 rounded-full border-4 border-gold p-1 bg-black shadow-2xl object-cover" />
-            <div class="text-right">
-                <h2 class="h-black text-3xl mb-4 text-gold">פנינה קריוף - לב לבינה</h2>
-                <p class="text-gray-400 leading-relaxed text-lg">
-                    היי, אני פנינה. בניתי את PromptBook כדי לגשר על הפער בין כוחו של ה-AI לצורך האותנטי שלנו: **לכתוב תוכן שהוא גם חכם וגם מרגש.**
-                </p>
+            <div class="relative">
+                <div class="absolute -inset-1 bg-gold rounded-full blur opacity-20"></div>
+                <img src="pnina-profile.jpg" alt="פנינה קריוף" class="relative w-56 h-56 rounded-full border-4 border-gold p-1 bg-black object-cover shadow-2xl" />
+            </div>
+            <div class="flex-1 text-right">
+                <h2 class="h-black text-4xl mb-6 text-gold">עליי - פנינה קריוף</h2>
+                <div class="bg-premiumGray/50 p-8 rounded-[2rem] border border-white/5">
+                    <p class="text-gray-300 leading-relaxed text-lg">
+                        שלום, אני פנינה. כמוך, הייתי מתוסכלת מהפער בין כוחו של ה-AI לצורך האותנטי שלנו:<br>
+                        <strong class="text-white">לכתוב תוכן שהוא גם חכם וגם מרגש.</strong><br><br>
+                        את <strong>PromptBook</strong> בניתי כדי לגשר על הפער הזה – זו שיטה שמשלבת אסטרטגיה, עיצוב (UI/UX), וטכנולוגיה, שהופכת אותך לקופירייטר/ית עם רגש. המטרה שלי? שתכתבו פחות, ותמכרו יותר.
+                    </p>
+                </div>
             </div>
         </section>
+
     </main>
 
-    <footer class="bg-black py-12 text-center border-t border-white/5 text-gray-500 text-xs">
-        <p class="mb-6 italic text-sm text-center">"אני לא מלמדת טכנולוגיה - אני מלמדת איך להרגיש איתה בבית"</p>
-        <p class="text-center">&copy; 2026 לב לבינה | פנינה קריוף. כל הזכויות שמורות.</p>
+    <footer class="bg-black py-16 text-center border-t border-white/5">
+        <p class="text-gray-500 italic text-lg mb-8 text-center">"אני לא מלמדת טכנולוגיה - אני מלמדת איך להרגיש איתה בבית"</p>
+        <p class="text-gray-600 text-xs text-center">&copy; 2026 PromptBook by Pnina Karayoff. כל הזכויות שמורות.</p>
     </footer>
 
     <script>
-        // טיימר דינמי - 48 שעות מהרגע שהגולש נכנס (או תאריך ספציפי)
         const deadline = new Date(Date.now() + 48 * 60 * 60 * 1000).getTime();
-        const timerEl = document.getElementById('timer');
         function updateTimer() {
             const now = Date.now();
             const diff = Math.max(0, deadline - now);
@@ -159,10 +159,9 @@
             const m = Math.floor(diff / (1000 * 60)) % 60;
             const s = Math.floor(diff / 1000) % 60;
             const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-            timerEl.textContent = `${d} ימים ו-${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+            document.getElementById('timer').textContent = `${d} ימים ו-${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
         }
-        setInterval(updateTimer, 1000);
-        updateTimer();
+        setInterval(updateTimer, 1000); updateTimer();
     </script>
 </body>
 </html>
